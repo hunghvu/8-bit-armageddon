@@ -1,0 +1,23 @@
+{
+  "name": "worms-like",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "server": "browser-sync start --server source --files source"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/obver-se/worms-like.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/obver-se/worms-like/issues"
+  },
+  "homepage": "https://github.com/obver-se/worms-like#readme",
+  "dependencies": {
+    "browser-sync": "^2.26.13",
+    "mocha": "^8.2.1"
+  }
+}
