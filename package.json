@@ -9,13 +9,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/obver-se/worms-like.git"
+    "url": "git+https://github.com/hunghvu/tcss491-web-game"
   },
   "author": "",
   "bugs": {
-    "url": "https://github.com/obver-se/worms-like/issues"
+    "url": "https://github.com/hunghvu/tcss491-web-game/issues"
   },
-  "homepage": "https://github.com/obver-se/worms-like#readme",
+  "homepage": "https://github.com/hunghvu/tcss491-web-game#readme",
   "dependencies": {
     "browser-sync": "^2.26.13",
     "mocha": "^8.2.1"
