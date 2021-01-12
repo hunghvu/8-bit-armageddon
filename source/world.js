@@ -105,15 +105,24 @@ class World {
   }
 
   draw(ctx, w, h) {
-    // Draw the map foreground
+    // Clear the screen without worrying about transforms
     ctx.clearRect(0, 0, w, h);
-    ctx.drawImage(this.map.mapCanvas, - this.camera.x + w / 2, -this.camera.y + h / 2);
+
+    // Transform the renderer based on the camera object
+    ctx.save();
+    ctx.translate(-this.camera.x + w / 2, -this.camera.y + h / 2);
+
+    // Draw the map foreground
+    ctx.drawImage(this.map.mapCanvas, 0, 0);
     
     // Draw the rectangle player
     ctx.fillStyle = "white";
-    ctx.fillRect(this.player.x - this.camera.x + w / 2, 
-                 this.player.y - this.camera.y + h / 2, 
+    ctx.fillRect(this.player.x, 
+                 this.player.y, 
                  this.player.w, this.player.h);
+
+    // Untransform ctx
+    ctx.restore();
   }
 
   updatePlayer(deltaT) {
