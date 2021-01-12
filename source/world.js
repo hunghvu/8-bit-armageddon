@@ -125,75 +125,75 @@ class World {
     ctx.restore();
   }
 
-  updatePlayer(deltaT) {
+  updateActor(deltaT, actor) {
     // If the player is moved down 1px and it collides with something 
     // that means the player is on the ground.
-    this.player.y += 1;
-    if (this.map.collideWithRectangle(this.player)) {
-      this.player.onGround = true;
+    actor.y += 1;
+    if (this.map.collideWithRectangle(actor)) {
+      actor.onGround = true;
     } else {
-      this.player.onGround = false;
+      actor.onGround = false;
     }
-    this.player.y -= 1;
+    actor.y -= 1;
 
-    if (this.controls.jump && this.player.onGround) {
-      this.player.vel.y = -10;
+    if (this.controls.jump && actor.onGround) {
+      actor.vel.y = -10;
     }
 
     // If the player move in either direction
     if (this.controls.left && !this.controls.right) {
-      this.player.vel.x = -2;
+      actor.vel.x = -2;
     } else if (!this.controls.left && this.controls.right) {
-      this.player.vel.x = 2;
+      actor.vel.x = 2;
     } else {
       // Stop the player and any acceleration in the x direction
-      this.player.vel.x = 0;
-      this.player.acc.x = 0;
+      actor.vel.x = 0;
+      actor.acc.x = 0;
     }
 
-    let movement = this.player.desiredMovement();
+    let movement = actor.desiredMovement();
     
     // Handle x direction movement
     while (movement.x > 1) {
-      this.player.x += 1;
+      actor.x += 1;
       movement.x -= 1;
 
-      if (this.map.collideWithRectangle(this.player)) {
+      if (this.map.collideWithRectangle(actor)) {
         // Can we just move the player up to get over a curb?
         let step = 0
         for (; step < 3; step++) {
-          this.player.y -= 1;
+          actor.y -= 1;
           // If we are no longer colliding then stop going up
-          if (!this.map.collideWithRectangle(this.player)) {
+          if (!this.map.collideWithRectangle(actor)) {
             break;
           }
         }
         // If we never got up the curb then the curb is too steep
-        if (this.map.collideWithRectangle(this.player)) {
-          this.player.y += step;
-          this.player.x -= 1;
+        if (this.map.collideWithRectangle(actor)) {
+          actor.y += step;
+          actor.x -= 1;
           break;
         }
       }
     }
     while (movement.x < -1) {
-      this.player.x -= 1;
+      actor.x -= 1;
       movement.x += 1;
       
-      if (this.map.collideWithRectangle(this.player)) {
+      if (this.map.collideWithRectangle(actor)) {
         // Can we just move the player up to get over a curb?
         let step = 0
         for (; step < 3; step++) {
-          this.player.y -= 1;
+          actor.y -= 1;
           // If we are no longer colliding then stop going up
-          if (!this.map.collideWithRectangle(this.player)) {
+          if (!this.map.collideWithRectangle(actor)) {
             break;
           }
         }
         // If we never got up the curb then the curb is too steep
-        if (this.map.collideWithRectangle(this.player)) {
-          this.player.y += step;
-          this.player.x += 1;
+        if (this.map.collideWithRectangle(actor)) {
+          actor.y += step;
+          actor.x += 1;
           break;
         }
       }
@@ -201,22 +201,22 @@ class World {
     
     // Handle y direction movement
     while (movement.y < -1) {
-      this.player.y -= 1;
+      actor.y -= 1;
       movement.y += 1;
       
-      if (this.map.collideWithRectangle(this.player)) {
-        this.player.y += 1;
-        this.player.vel.y = 0;
+      if (this.map.collideWithRectangle(actor)) {
+        actor.y += 1;
+        actor.vel.y = 0;
         break;
       }
     }
     while (movement.y > 1) {
-      this.player.y += 1;
+      actor.y += 1;
       movement.y -= 1;
       
-      if (this.map.collideWithRectangle(this.player)) {
-        this.player.y -= 1;
-        this.player.vel.y = 0;
+      if (this.map.collideWithRectangle(actor)) {
+        actor.y -= 1;
+        actor.vel.y = 0;
         break;
       }
     }
@@ -224,7 +224,7 @@ class World {
 
   update(deltaT) {
     
-    this.updatePlayer(deltaT);
+    this.updateActor(deltaT, this.player);
     
     // Set the cameras target to be the players position
     this.camera.target.x = this.player.center.x;
