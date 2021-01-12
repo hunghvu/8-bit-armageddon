@@ -66,8 +66,23 @@ class Camera extends Point {
     super(x, y);
     // the target is the point that the camera is to be moved to
     this.target = new Point(x, y);
+    
+    // Allow the zoom to be changed and move to
     this.zoom = zoom;
+    this.targetZoom = zoom;
     this.speed = 1;
+    this.MAX_ZOOM = 4; // Four times zoom in
+    this.MIN_ZOOM = 0.25; // Four times zoom out
+  }
+
+  zoomOut() {
+    this.targetZoom *= 2;
+    this.targetZoom = Math.min(this.targetZoom, this.MAX_ZOOM);
+  }
+
+  zoomIn() {
+    this.targetZoom /= 2;
+    this.targetZoom = Math.max(this.targetZoom, this.MIN_ZOOM);
   }
 
   // The larger the speed the slower the camera movement
@@ -77,11 +92,35 @@ class Camera extends Point {
     // This fuction needs to be called multiple times between frames.
     let xSpeed = (this.x - this.target.x) / speed;
     let xDifference = this.x - this.target.x;
-    this.x -= xSpeed;
+    // If the difference between the disired position and the real 
+    // position is less than 1/100th then just snap to it.
+    if (Math.abs(xDifference) < 0.01) {
+      this.x = this.target.x;
+    } else {
+      this.x -= xSpeed;
+    }
 
     let ySpeed = (this.y - this.target.y) / speed;
     let yDifference = this.y - this.target.y;
-    this.y -= ySpeed;
+    // If the difference between the disired position and the real 
+    // position is less than 1/100th then just snap to it.
+    if (Math.abs(yDifference) < 0.01) {
+      this.y = this.target.y;
+    } else {
+      this.y -= ySpeed;
+    }
+
+    // Update the zoom level
+    
+    let zoomSpeed = (this.zoom - this.targetZoom) / speed;
+    let zoomDifference = this.zoom - this.targetZoom;
+    // If the difference between the disired zoom and the real 
+    // zoom is less than 1/100th then just snap to it.
+    if (Math.abs(zoomDifference) < 0.01) {
+      this.zoom = this.targetZoom;
+    } else {
+      this.zoom -= zoomSpeed;
+    }
   }
 
   snapToTarget() {
@@ -110,7 +149,8 @@ class World {
 
     // Transform the renderer based on the camera object
     ctx.save();
-    ctx.translate(-this.camera.x + w / 2, -this.camera.y + h / 2);
+    ctx.scale(this.camera.zoom, this.camera.zoom);
+    ctx.translate((-this.camera.x + w / (2 * this.camera.zoom)), (-this.camera.y + h / (2 * this.camera.zoom)));
 
     // Draw the map foreground
     ctx.drawImage(this.map.mapCanvas, 0, 0);
@@ -123,6 +163,40 @@ class World {
 
     // Untransform ctx
     ctx.restore();
+  }
+
+  update(deltaT) {
+    this.updateInputs(this.player);
+    this.updateActor(deltaT, this.player);
+    
+    // Set the cameras target to be the players position
+    this.camera.target.x = this.player.center.x;
+    this.camera.target.y = this.player.center.y;
+
+    this.camera.glideToTarget(8);
+    console.log(this.controls.scrollDelta);
+    this.controls.reset();
+  }
+
+  updateInputs(currentPlayer) {
+    // If the player move in either direction
+    if (this.controls.left && !this.controls.right) {
+      currentPlayer.vel.x = -2;
+    } else if (!this.controls.left && this.controls.right) {
+      currentPlayer.vel.x = 2;
+    } else {
+      // Stop the player and any acceleration in the x direction 
+      // if they don't want to move.
+      currentPlayer.vel.x = 0;
+      currentPlayer.acc.x = 0;
+    }
+
+    // If the user scrolls then zoom in or out
+    if (this.controls.scrollDelta > 0) {
+      this.camera.zoomIn();
+    } else if (this.controls.scrollDelta < 0) {
+      this.camera.zoomOut();
+    }
   }
 
   updateActor(deltaT, actor) {
@@ -138,17 +212,6 @@ class World {
 
     if (this.controls.jump && actor.onGround) {
       actor.vel.y = -10;
-    }
-
-    // If the player move in either direction
-    if (this.controls.left && !this.controls.right) {
-      actor.vel.x = -2;
-    } else if (!this.controls.left && this.controls.right) {
-      actor.vel.x = 2;
-    } else {
-      // Stop the player and any acceleration in the x direction
-      actor.vel.x = 0;
-      actor.acc.x = 0;
     }
 
     let movement = actor.desiredMovement();
@@ -220,16 +283,5 @@ class World {
         break;
       }
     }
-  }
-
-  update(deltaT) {
-    
-    this.updateActor(deltaT, this.player);
-    
-    // Set the cameras target to be the players position
-    this.camera.target.x = this.player.center.x;
-    this.camera.target.y = this.player.center.y;
-
-    this.camera.glideToTarget(8);
   }
 }
