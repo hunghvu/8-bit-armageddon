@@ -66,8 +66,23 @@ class Camera extends Point {
     super(x, y);
     // the target is the point that the camera is to be moved to
     this.target = new Point(x, y);
+    
+    // Allow the zoom to be changed and move to
     this.zoom = zoom;
+    this.targetZoom = zoom;
     this.speed = 1;
+    this.MAX_ZOOM = 4; // Four times zoom in
+    this.MIN_ZOOM = 0.25; // Four times zoom out
+  }
+
+  zoomOut() {
+    this.targetZoom *= 2;
+    this.targetZoom = Math.min(this.targetZoom, this.MAX_ZOOM);
+  }
+
+  zoomIn() {
+    this.targetZoom /= 2;
+    this.targetZoom = Math.max(this.targetZoom, this.MIN_ZOOM);
   }
 
   // The larger the speed the slower the camera movement
@@ -77,11 +92,35 @@ class Camera extends Point {
     // This fuction needs to be called multiple times between frames.
     let xSpeed = (this.x - this.target.x) / speed;
     let xDifference = this.x - this.target.x;
-    this.x -= xSpeed;
+    // If the difference between the disired position and the real 
+    // position is less than 1/100th then just snap to it.
+    if (Math.abs(xDifference) < 0.01) {
+      this.x = this.target.x;
+    } else {
+      this.x -= xSpeed;
+    }
 
     let ySpeed = (this.y - this.target.y) / speed;
     let yDifference = this.y - this.target.y;
-    this.y -= ySpeed;
+    // If the difference between the disired position and the real 
+    // position is less than 1/100th then just snap to it.
+    if (Math.abs(yDifference) < 0.01) {
+      this.y = this.target.y;
+    } else {
+      this.y -= ySpeed;
+    }
+
+    // Update the zoom level
+    
+    let zoomSpeed = (this.zoom - this.targetZoom) / speed;
+    let zoomDifference = this.zoom - this.targetZoom;
+    // If the difference between the disired zoom and the real 
+    // zoom is less than 1/100th then just snap to it.
+    if (Math.abs(zoomDifference) < 0.01) {
+      this.zoom = this.targetZoom;
+    } else {
+      this.zoom -= zoomSpeed;
+    }
   }
 
   snapToTarget() {
@@ -105,86 +144,119 @@ class World {
   }
 
   draw(ctx, w, h) {
-    // Draw the map foreground
+    // Clear the screen without worrying about transforms
     ctx.clearRect(0, 0, w, h);
-    ctx.drawImage(this.map.mapCanvas, - this.camera.x + w / 2, -this.camera.y + h / 2);
+
+    // Transform the renderer based on the camera object
+    ctx.save();
+    ctx.scale(this.camera.zoom, this.camera.zoom);
+    ctx.translate((-this.camera.x + w / (2 * this.camera.zoom)), (-this.camera.y + h / (2 * this.camera.zoom)));
+
+    // Draw the map foreground
+    ctx.drawImage(this.map.mapCanvas, 0, 0);
     
     // Draw the rectangle player
     ctx.fillStyle = "white";
-    ctx.fillRect(this.player.x - this.camera.x + w / 2, 
-                 this.player.y - this.camera.y + h / 2, 
+    ctx.fillRect(this.player.x, 
+                 this.player.y, 
                  this.player.w, this.player.h);
+
+    // Untransform ctx
+    ctx.restore();
   }
 
-  updatePlayer(deltaT) {
-    // If the player is moved down 1px and it collides with something 
-    // that means the player is on the ground.
-    this.player.y += 1;
-    if (this.map.collideWithRectangle(this.player)) {
-      this.player.onGround = true;
-    } else {
-      this.player.onGround = false;
-    }
-    this.player.y -= 1;
+  update(deltaT) {
+    this.updateInputs(this.player);
+    this.updateActor(deltaT, this.player);
+    
+    // Set the cameras target to be the players position
+    this.camera.target.x = this.player.center.x;
+    this.camera.target.y = this.player.center.y;
 
-    if (this.controls.jump && this.player.onGround) {
-      this.player.vel.y = -10;
-    }
+    this.camera.glideToTarget(8);
+    console.log(this.controls.scrollDelta);
+    this.controls.reset();
+  }
 
+  updateInputs(currentPlayer) {
     // If the player move in either direction
     if (this.controls.left && !this.controls.right) {
-      this.player.vel.x = -2;
+      currentPlayer.vel.x = -2;
     } else if (!this.controls.left && this.controls.right) {
-      this.player.vel.x = 2;
+      currentPlayer.vel.x = 2;
     } else {
-      // Stop the player and any acceleration in the x direction
-      this.player.vel.x = 0;
-      this.player.acc.x = 0;
+      // Stop the player and any acceleration in the x direction 
+      // if they don't want to move.
+      currentPlayer.vel.x = 0;
+      currentPlayer.acc.x = 0;
     }
 
-    let movement = this.player.desiredMovement();
+    // If the user scrolls then zoom in or out
+    if (this.controls.scrollDelta > 0) {
+      this.camera.zoomIn();
+    } else if (this.controls.scrollDelta < 0) {
+      this.camera.zoomOut();
+    }
+  }
+
+  updateActor(deltaT, actor) {
+    // If the player is moved down 1px and it collides with something 
+    // that means the player is on the ground.
+    actor.y += 1;
+    if (this.map.collideWithRectangle(actor)) {
+      actor.onGround = true;
+    } else {
+      actor.onGround = false;
+    }
+    actor.y -= 1;
+
+    if (this.controls.jump && actor.onGround) {
+      actor.vel.y = -10;
+    }
+
+    let movement = actor.desiredMovement();
     
     // Handle x direction movement
     while (movement.x > 1) {
-      this.player.x += 1;
+      actor.x += 1;
       movement.x -= 1;
 
-      if (this.map.collideWithRectangle(this.player)) {
+      if (this.map.collideWithRectangle(actor)) {
         // Can we just move the player up to get over a curb?
         let step = 0
         for (; step < 3; step++) {
-          this.player.y -= 1;
+          actor.y -= 1;
           // If we are no longer colliding then stop going up
-          if (!this.map.collideWithRectangle(this.player)) {
+          if (!this.map.collideWithRectangle(actor)) {
             break;
           }
         }
         // If we never got up the curb then the curb is too steep
-        if (this.map.collideWithRectangle(this.player)) {
-          this.player.y += step;
-          this.player.x -= 1;
+        if (this.map.collideWithRectangle(actor)) {
+          actor.y += step;
+          actor.x -= 1;
           break;
         }
       }
     }
     while (movement.x < -1) {
-      this.player.x -= 1;
+      actor.x -= 1;
       movement.x += 1;
       
-      if (this.map.collideWithRectangle(this.player)) {
+      if (this.map.collideWithRectangle(actor)) {
         // Can we just move the player up to get over a curb?
         let step = 0
         for (; step < 3; step++) {
-          this.player.y -= 1;
+          actor.y -= 1;
           // If we are no longer colliding then stop going up
-          if (!this.map.collideWithRectangle(this.player)) {
+          if (!this.map.collideWithRectangle(actor)) {
             break;
           }
         }
         // If we never got up the curb then the curb is too steep
-        if (this.map.collideWithRectangle(this.player)) {
-          this.player.y += step;
-          this.player.x += 1;
+        if (this.map.collideWithRectangle(actor)) {
+          actor.y += step;
+          actor.x += 1;
           break;
         }
       }
@@ -192,35 +264,24 @@ class World {
     
     // Handle y direction movement
     while (movement.y < -1) {
-      this.player.y -= 1;
+      actor.y -= 1;
       movement.y += 1;
       
-      if (this.map.collideWithRectangle(this.player)) {
-        this.player.y += 1;
-        this.player.vel.y = 0;
+      if (this.map.collideWithRectangle(actor)) {
+        actor.y += 1;
+        actor.vel.y = 0;
         break;
       }
     }
     while (movement.y > 1) {
-      this.player.y += 1;
+      actor.y += 1;
       movement.y -= 1;
       
-      if (this.map.collideWithRectangle(this.player)) {
-        this.player.y -= 1;
-        this.player.vel.y = 0;
+      if (this.map.collideWithRectangle(actor)) {
+        actor.y -= 1;
+        actor.vel.y = 0;
         break;
       }
     }
-  }
-
-  update(deltaT) {
-    
-    this.updatePlayer(deltaT);
-    
-    // Set the cameras target to be the players position
-    this.camera.target.x = this.player.center.x;
-    this.camera.target.y = this.player.center.y;
-
-    this.camera.glideToTarget(8);
   }
 }
