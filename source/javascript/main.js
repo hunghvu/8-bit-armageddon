@@ -9,7 +9,7 @@ window.onload = function () {
 class Game {
   constructor() {
     let newMapImg = new Image();
-    newMapImg.src = 'map.png';
+    newMapImg.src = 'assets/map.png';
     newMapImg.onload = (function () {
       let destructionMap = new DestructableMap(newMapImg);
       this.world = new World(destructionMap);
