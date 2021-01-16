@@ -27,6 +27,11 @@ class World {
     ctx.fillRect(this.player.x, 
                  this.player.y, 
                  this.player.w, this.player.h);
+    
+    // Display current position on screen.
+    ctx.font = "20px Arial";
+    ctx.fillText("Mouse position: X-" + this.controls.moveX + ", Y-" + this.controls.moveY, 
+                  this.player.x, this.player.y - 100);           
 
     // Untransform ctx
     ctx.restore();

@@ -23,6 +23,7 @@ class Controls {
       this.clickY = event.clientY;
     })
 
+    // Mouse position
     window.addEventListener('mousemove', event => {
       this.moveX = event.clientX;
       this.moveY = event.clientY;
