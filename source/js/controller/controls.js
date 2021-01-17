@@ -9,6 +9,9 @@ class Controls {
     // How much the scroll wheel has been scrolled since last checked
     this.scrollDelta = 0;
 
+    // Click flag
+    this.hasClicked = false;
+
     // Handle the scroll wheel
     window.addEventListener('wheel', event => {
       this.scrollDelta += event.deltaY ;
@@ -26,6 +29,9 @@ class Controls {
       let canvasRect = canvas.getBoundingClientRect();
       this.clickX = event.clientX - canvasRect.left;
       this.clickY = event.clientY - canvasRect.top;
+      console.log("Before: hasClicked = " + this.hasClicked);
+      this.hasClicked = true;
+      console.log("After: hasClicked = " + this.hasClicked);
     })
 
     // Mouse position
@@ -40,6 +46,7 @@ class Controls {
   // Call this function after every update.
   reset() {
     this.scrollDelta = 0;
+    this.hasClicked = false;
   }
 
   registerKey(name, code) {
