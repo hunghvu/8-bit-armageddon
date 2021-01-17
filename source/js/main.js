@@ -17,6 +17,9 @@ class Game {
       this.ctx = this.canvas.getContext('2d');
       //console.log(ctx);
       //world.draw(ctx, canvas.width, canvas.height);
+
+      // Add mouse listener
+      this.world.controls.addMouseListener(this.canvas);
       requestAnimationFrame(this.draw.bind(this));
     }).bind(this);
   }
