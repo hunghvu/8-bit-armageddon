@@ -13,20 +13,26 @@ class Controls {
     window.addEventListener('wheel', event => {
       this.scrollDelta += event.deltaY ;
     });
+  }
 
+  addMouseListener(canvas){
     this.clickX = 0;
     this.clickY = 0;
     this.moveX = 0;
     this.moveY = 0;
-    window.addEventListener('click', event => {
-      this.clickX = event.clientX;
-      this.clickY = event.clientY;
+
+    // Source: https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
+    canvas.addEventListener('click', event => {
+      let canvasRect = canvas.getBoundingClientRect();
+      this.clickX = event.clientX - canvasRect.left;
+      this.clickY = event.clientY - canvasRect.top;
     })
 
     // Mouse position
-    window.addEventListener('mousemove', event => {
-      this.moveX = event.clientX;
-      this.moveY = event.clientY;
+    canvas.addEventListener('mousemove', event => {
+      let canvasRect = canvas.getBoundingClientRect();
+      this.moveX = event.clientX - canvasRect.left;
+      this.moveY = event.clientY - canvasRect.top;
       // console.log (this.moveX + ' ' + this.moveY);
     })
   }
