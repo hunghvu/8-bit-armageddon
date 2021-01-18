@@ -2,11 +2,11 @@ class World {
   constructor(map) {
     this.controls = new Controls();
     this.map = map;
-    
+
     this.player = new Entity(null, 344, 650);
     // Give the player gravity
     this.player.acc.y = .4;
-    
+
     this.camera = new Camera(500, 500, 1);
   }
 
@@ -21,17 +21,18 @@ class World {
 
     // Draw the map foreground
     ctx.drawImage(this.map.mapCanvas, 0, 0);
-    
+
     // Draw the rectangle player
-    ctx.fillStyle = "white";
-    ctx.fillRect(this.player.x, 
-                 this.player.y, 
-                 this.player.w, this.player.h);
-    
+    // ctx.fillStyle = "white";
+    // ctx.fillRect(this.player.x,
+    //              this.player.y,
+    //              this.player.w, this.player.h);
+    this.player.drawEntity(ctx);
+
     // Display current position on screen.
     ctx.font = "20px Arial";
-    ctx.fillText("Mouse position: X=" + this.controls.moveX + ", Y=" + this.controls.moveY, 
-                  this.player.x, this.player.y - 100);           
+    ctx.fillText("Mouse position: X=" + this.controls.moveX + ", Y=" + this.controls.moveY,
+                  this.player.x, this.player.y - 100);
 
     // Untransform ctx
     ctx.restore();
@@ -40,7 +41,7 @@ class World {
   update(deltaT) {
     this.updateInputs(this.player);
     this.updateActor(deltaT, this.player);
-    
+
     // Set the cameras target to be the players position
     this.camera.target.x = this.player.center.x;
     this.camera.target.y = this.player.center.y;
@@ -57,7 +58,7 @@ class World {
     } else if (!this.controls.left && this.controls.right) {
       currentPlayer.vel.x = 2;
     } else {
-      // Stop the player and any acceleration in the x direction 
+      // Stop the player and any acceleration in the x direction
       // if they don't want to move.
       currentPlayer.vel.x = 0;
       currentPlayer.acc.x = 0;
@@ -72,7 +73,7 @@ class World {
   }
 
   updateActor(deltaT, entity) {
-    // If the player is moved down 1px and it collides with something 
+    // If the player is moved down 1px and it collides with something
     // that means the player is on the ground.
     entity.y += 1;
     if (this.map.collideWithRectangle(entity)) {
@@ -87,7 +88,7 @@ class World {
     }
 
     let movement = entity.desiredMovement();
-    
+
     // Handle x direction movement
     while (movement.x > 1) {
       entity.x += 1;
@@ -114,7 +115,7 @@ class World {
     while (movement.x < -1) {
       entity.x -= 1;
       movement.x += 1;
-      
+
       if (this.map.collideWithRectangle(entity)) {
         // Can we just move the player up to get over a curb?
         let step = 0
@@ -133,12 +134,12 @@ class World {
         }
       }
     }
-    
+
     // Handle y direction movement
     while (movement.y < -1) {
       entity.y -= 1;
       movement.y += 1;
-      
+
       if (this.map.collideWithRectangle(entity)) {
         entity.y += 1;
         entity.vel.y = 0;
@@ -148,7 +149,7 @@ class World {
     while (movement.y > 1) {
       entity.y += 1;
       movement.y -= 1;
-      
+
       if (this.map.collideWithRectangle(entity)) {
         entity.y -= 1;
         entity.vel.y = 0;
