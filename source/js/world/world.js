@@ -8,15 +8,25 @@ class World {
     this.player.acc.y = .4;
 
     this.camera = new Camera(500, 500, 1);
+    // Add parallax background.
+    this.img = new Image();
+    this.img.src = "./assets/background.jpg";
+    // Draw less of the background so it "moves" in the opposite direction compared to the player, to mimic parallax effect
+    this.speed = 1
   }
 
   draw(ctx, w, h) {
     // Clear the screen without worrying about transforms
     ctx.clearRect(0, 0, w, h);
 
-    // Add parallax background.
-    let img = new Image();
-    img.src = "./assets/background-1920.jpg";
+    ctx.save();
+    ctx.scale(this.camera.zoom, this.camera.zoom);
+    ctx.translate(-this.camera.x, -this.camera.y);
+    ctx.drawImage(this.img, this.speed, 0);
+    if(this.controls["left"]) this.speed++;
+    if(this.controls["right"]) this.speed--;
+    ctx.restore();
+
     // Transform the renderer based on the camera object
     ctx.save();
     ctx.scale(this.camera.zoom, this.camera.zoom);
@@ -25,7 +35,7 @@ class World {
     ctx.translate((-this.camera.x + w / (2 * this.camera.zoom)), (-this.camera.y + h / (2 * this.camera.zoom)));
 
     // Draw the map foreground
-    ctx.drawImage(img, 0, 0)
+    // ctx.drawImage(img, 0, 0)
     ctx.drawImage(this.map.mapCanvas, 0, 0);
     // Draw the rectangle player
     // ctx.fillStyle = "white";
