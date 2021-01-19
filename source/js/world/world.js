@@ -14,14 +14,19 @@ class World {
     // Clear the screen without worrying about transforms
     ctx.clearRect(0, 0, w, h);
 
+    // Add parallax background.
+    let img = new Image();
+    img.src = "./assets/background-1920.jpg";
     // Transform the renderer based on the camera object
     ctx.save();
     ctx.scale(this.camera.zoom, this.camera.zoom);
+
+    // Calculate the relative original origin(?) - Hung Vu
     ctx.translate((-this.camera.x + w / (2 * this.camera.zoom)), (-this.camera.y + h / (2 * this.camera.zoom)));
 
     // Draw the map foreground
+    ctx.drawImage(img, 0, 0)
     ctx.drawImage(this.map.mapCanvas, 0, 0);
-
     // Draw the rectangle player
     // ctx.fillStyle = "white";
     // ctx.fillRect(this.player.x,
