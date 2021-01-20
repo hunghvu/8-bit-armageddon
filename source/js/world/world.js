@@ -14,25 +14,18 @@ class World {
     this.imgNear = new Image();
     this.imgNear.src = "./assets/background-cloud.jpg";
     // The sX in drawImage will be updated as the player moves in a way it create an opposite movement effect.
-    // This results in a parallax background - Hung Vu.
-    this.xFar = 0;
-    this.xNear = 0;
-    // Speed of background movement (not velocity) - Hung Vu.
-    this.xFarSpeed = 1;
-    this.xNearSpeed = 2;
   }
 
   draw(ctx, w, h) {
     // Clear the screen without worrying about transforms
     ctx.clearRect(0, 0, w, h);
 
-    this.drawBackground(ctx);
+    this.drawBackground(ctx, w, h);
 
     // Transform the renderer based on the camera object
     ctx.save();
     ctx.scale(this.camera.zoom, this.camera.zoom);
 
-    // Calculate the relative original origin(?) - Hung Vu
     ctx.translate((-this.camera.x + w / (2 * this.camera.zoom)), (-this.camera.y + h / (2 * this.camera.zoom)));
 
     // Draw the map foreground
@@ -55,17 +48,23 @@ class World {
   }
 
   /*
-    This function will draw parralax background. For now, I use updateActor
-    to also adjust background speed, but later on, should we move that to
-    this function instead (centralizing)?- Hung Vu.
+    This function will draw a parralax background. 
   */
-  drawBackground(ctx){
+  drawBackground(ctx, w, h){
     ctx.save();
     ctx.scale(this.camera.zoom, this.camera.zoom);
-    ctx.translate(-this.camera.x, -this.camera.y);
-    ctx.drawImage(this.imgFar, this.xFar, 0);
+    // By dividing the camera.x by 3, for every 1 pixels the camera travels the background will move 0.333 pixels
+    // console.log(this.camera.x, this.camera.y, w, h, this.camera.zoom)
+    ctx.translate(((-this.camera.x / 3 - this.imgFar.width / 2) + w / (2 * this.camera.zoom)), (-this.camera.y + h / (2 * this.camera.zoom)));
+    ctx.drawImage(this.imgFar, 0, 0);
+    ctx.restore();
+    
+    ctx.save();
+    ctx.scale(this.camera.zoom, this.camera.zoom);
+    // By dividing the camera.x by 2, for every 1 pixels the camera travels the background will move 0.5 pixels
+    ctx.translate(((-this.camera.x / 2 - this.imgNear.width / 2) + w / (2 * this.camera.zoom)), (-this.camera.y + h / (2 * this.camera.zoom)));
     ctx.globalAlpha = 0.7;
-    ctx.drawImage(this.imgNear, this.xNear, 0);
+    ctx.drawImage(this.imgNear, 0, 0);
     ctx.restore();
   }
 
@@ -142,9 +141,6 @@ class World {
           break;
         }
       }
-      // Update background location - Hung Vu.
-      this.xFar -= this.xFarSpeed;
-      this.xNear -= this.xNearSpeed;
     }
     while (movement.x < -1) {
       entity.x -= 1;
@@ -167,9 +163,6 @@ class World {
           break;
         }
       }
-      // Update background location - Hung Vu.
-      this.xFar += this.xFarSpeed;
-      this.xNear += this.xNearSpeed;
     }
 
     // Handle y direction movement
