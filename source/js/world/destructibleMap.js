@@ -1,4 +1,4 @@
-class DestructableMap {
+class DestructibleMap {
   /* Takes an image as the input map */
   constructor(img) {
     // Create a canvas that will hold the new map with all the destruction.

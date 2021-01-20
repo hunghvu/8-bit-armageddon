@@ -11,7 +11,7 @@ class Game {
     let newMapImg = new Image();
     newMapImg.src = 'assets/map.png';
     newMapImg.onload = (function () {
-      let destructionMap = new DestructableMap(newMapImg);
+      let destructionMap = new DestructibleMap(newMapImg);
       this.world = new World(destructionMap);
       this.canvas = document.getElementById('display');
       this.ctx = this.canvas.getContext('2d');

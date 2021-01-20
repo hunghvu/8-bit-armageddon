@@ -8,20 +8,29 @@ class World {
     this.player.acc.y = .4;
 
     this.camera = new Camera(500, 500, 1);
+    // Background images.
+    this.imgFar = new Image();
+    this.imgFar.src = "./assets/background.jpg";
+    this.imgNear = new Image();
+    this.imgNear.src = "./assets/background-cloud.jpg";
+    // The sX in drawImage will be updated as the player moves in a way it create an opposite movement effect.
   }
 
   draw(ctx, w, h) {
     // Clear the screen without worrying about transforms
     ctx.clearRect(0, 0, w, h);
 
+    this.drawBackground(ctx, w, h);
+
     // Transform the renderer based on the camera object
     ctx.save();
     ctx.scale(this.camera.zoom, this.camera.zoom);
+
     ctx.translate((-this.camera.x + w / (2 * this.camera.zoom)), (-this.camera.y + h / (2 * this.camera.zoom)));
 
     // Draw the map foreground
+    // ctx.drawImage(img, 0, 0)
     ctx.drawImage(this.map.mapCanvas, 0, 0);
-
     // Draw the rectangle player
     // ctx.fillStyle = "white";
     // ctx.fillRect(this.player.x,
@@ -35,6 +44,27 @@ class World {
                   this.player.x, this.player.y - 100);
 
     // Untransform ctx
+    ctx.restore();
+  }
+
+  /*
+    This function will draw a parralax background. 
+  */
+  drawBackground(ctx, w, h){
+    ctx.save();
+    ctx.scale(this.camera.zoom, this.camera.zoom);
+    // By dividing the camera.x by 3, for every 1 pixels the camera travels the background will move 0.333 pixels
+    // console.log(this.camera.x, this.camera.y, w, h, this.camera.zoom)
+    ctx.translate(((-this.camera.x / 3 - this.imgFar.width / 2) + w / (2 * this.camera.zoom)), (-this.camera.y + h / (2 * this.camera.zoom)));
+    ctx.drawImage(this.imgFar, 0, 0);
+    ctx.restore();
+    
+    ctx.save();
+    ctx.scale(this.camera.zoom, this.camera.zoom);
+    // By dividing the camera.x by 2, for every 1 pixels the camera travels the background will move 0.5 pixels
+    ctx.translate(((-this.camera.x / 2 - this.imgNear.width / 2) + w / (2 * this.camera.zoom)), (-this.camera.y + h / (2 * this.camera.zoom)));
+    ctx.globalAlpha = 0.7;
+    ctx.drawImage(this.imgNear, 0, 0);
     ctx.restore();
   }
 
@@ -115,7 +145,6 @@ class World {
     while (movement.x < -1) {
       entity.x -= 1;
       movement.x += 1;
-
       if (this.map.collideWithRectangle(entity)) {
         // Can we just move the player up to get over a curb?
         let step = 0
@@ -130,6 +159,7 @@ class World {
         if (this.map.collideWithRectangle(entity)) {
           entity.y += step;
           entity.x += 1;
+
           break;
         }
       }
@@ -155,6 +185,7 @@ class World {
         entity.vel.y = 0;
         break;
       }
+      
     }
   }
 }
