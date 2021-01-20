@@ -31,14 +31,9 @@ class World {
     ctx.translate((-this.camera.x + w / (2 * this.camera.zoom)), (-this.camera.y + h / (2 * this.camera.zoom)));
 
     // Draw the map foreground
-    // ctx.drawImage(img, 0, 0)
     ctx.drawImage(this.map.mapCanvas, 0, 0);
-    // Draw the rectangle player
-    // ctx.fillStyle = "white";
-    // ctx.fillRect(this.player.x,
-    //              this.player.y,
-    //              this.player.w, this.player.h);
-    //this.player.draw(ctx);
+
+    // Draw players
     this.drawPlayers(ctx);
 
 
@@ -57,7 +52,6 @@ class World {
     ctx.save();
     ctx.scale(this.camera.zoom, this.camera.zoom);
     // By dividing the camera.x by 3, for every 1 pixels the camera travels the background will move 0.333 pixels
-    // console.log(this.camera.x, this.camera.y, w, h, this.camera.zoom)
     ctx.translate(((-this.camera.x / 3 - this.imgFar.width / 2) + w / (2 * this.camera.zoom)), 
                    (-this.camera.y + h / (2 * this.camera.zoom)));
 
@@ -85,7 +79,6 @@ class World {
     this.camera.target.y = this.currentPlayer.center.y;
 
     this.camera.glideToTarget(8);
-    console.log(this.controls.scrollDelta);
     this.controls.reset();
   }
 
@@ -113,6 +106,7 @@ class World {
       this.camera.zoomOut();
     }
   }
+
   drawPlayers(ctx) {
     this.players.forEach(player => {
       player.draw(ctx)

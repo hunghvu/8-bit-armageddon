@@ -24,9 +24,9 @@ class Entity extends Rectangle {
     this.vel = newVel;
   }
 
-  update(deltaT, map, entities) {
-    // If the player is moved down 1px and it collides with something
-    // that means the player is on the ground.
+  updateOnGround(map) {
+    // If the entity is moved down 1px and it collides with something
+    // that means the entity is on the ground.
     this.y += 1;
     if (map.collideWithRectangle(this)) {
       this.onGround = true;
@@ -34,8 +34,11 @@ class Entity extends Rectangle {
       this.onGround = false;
     }
     this.y -= 1;
+  }
 
 
+  update(deltaT, map, entities) {
+    this.updateOnGround(map);
     let movement = this.desiredMovement();
 
     // Handle x direction movement
@@ -44,7 +47,7 @@ class Entity extends Rectangle {
       movement.x -= 1;
 
       if (map.collideWithRectangle(this)) {
-        // Can we just move the player up to get over a curb?
+        // Can we just move the entity up to get over a curb?
         let step = 0
         for (; step < 3; step++) {
           this.y -= 1;
@@ -60,12 +63,29 @@ class Entity extends Rectangle {
           break;
         }
       }
+
+      if (this.onGround) {
+        this.updateOnGround(map);
+        // If we have moved off the ground, check if can move the 
+        // entity down one pixel to put them back on the ground.
+        //
+        // This will smooth out walking down slopes.
+        if (!this.onGround) {
+          this.y += 2;
+          if (map.collideWithRectangle(this)) {
+            // We can move down a single pixel to get back on the ground
+          } else {
+            // We have moved of a steep cliff, let nature take its course
+            this.y -= 2;
+          }
+        }
+      }
     }
     while (movement.x < -1) {
       this.x -= 1;
       movement.x += 1;
       if (map.collideWithRectangle(this)) {
-        // Can we just move the player up to get over a curb?
+        // Can we just move the entity up to get over a curb?
         let step = 0
         for (; step < 3; step++) {
           this.y -= 1;

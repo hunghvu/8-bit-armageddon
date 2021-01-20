@@ -29,9 +29,7 @@ class Controls {
       let canvasRect = canvas.getBoundingClientRect();
       this.clickX = event.clientX - canvasRect.left;
       this.clickY = event.clientY - canvasRect.top;
-      console.log("Before: hasClicked = " + this.hasClicked);
       this.hasClicked = true;
-      console.log("After: hasClicked = " + this.hasClicked);
     })
 
     // Mouse position
@@ -39,7 +37,6 @@ class Controls {
       let canvasRect = canvas.getBoundingClientRect();
       this.moveX = event.clientX - canvasRect.left;
       this.moveY = event.clientY - canvasRect.top;
-      // console.log (this.moveX + ' ' + this.moveY);
     })
   }
 
