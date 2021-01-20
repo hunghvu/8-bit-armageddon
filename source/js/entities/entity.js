@@ -5,11 +5,13 @@ class Entity extends Rectangle {
     this.vel = new Point(0, 0);
     this.acc = new Point(0, 0);
 
+    // Default gravity acceleration
+    this.acc.y = .4;
+
     this.onGround = false;
   }
 
-  draw(ctx)
-  {
+  draw(ctx) {
     ctx.fillStyle = "white";
     ctx.fillRect(this.x, this.y, this.w, this.h);
   }

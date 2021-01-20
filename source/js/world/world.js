@@ -3,11 +3,13 @@ class World {
     this.controls = new Controls();
     this.map = map;
 
-    this.player = new Entity(null, 344, 650);
-    // Give the player gravity
-    this.player.acc.y = .4;
+    this.players = [new Entity(null, 344, 650), new Entity(null, 500, 650)];
+    this.currentPlayer = this.players[0];
+
+    this.entities = [];
 
     this.camera = new Camera(500, 500, 1);
+
     // Background images.
     this.imgFar = new Image();
     this.imgFar.src = "./assets/background.jpg";
@@ -36,7 +38,8 @@ class World {
     // ctx.fillRect(this.player.x,
     //              this.player.y,
     //              this.player.w, this.player.h);
-    this.player.draw(ctx);
+    //this.player.draw(ctx);
+    this.drawPlayers(ctx);
 
 
     // Untransform ctx
@@ -73,12 +76,13 @@ class World {
   }
 
   update(deltaT) {
-    this.updateInputs(this.player);
-    this.player.update(null, this.map, null);
+    this.updateInputs(this.currentPlayer);
+    this.updatePlayers(deltaT);
+    this.updateEntities(deltaT);
 
     // Set the cameras target to be the players position
-    this.camera.target.x = this.player.center.x;
-    this.camera.target.y = this.player.center.y;
+    this.camera.target.x = this.currentPlayer.center.x;
+    this.camera.target.y = this.currentPlayer.center.y;
 
     this.camera.glideToTarget(8);
     console.log(this.controls.scrollDelta);
@@ -109,8 +113,27 @@ class World {
       this.camera.zoomOut();
     }
   }
+  drawPlayers(ctx) {
+    this.players.forEach(player => {
+      player.draw(ctx)
+    });
+  }
 
-  updateEntities(deltaT, player) {
+  drawEntities(ctx) {
+    this.entities.forEach(entity => {
+      entity.draw(ctx)
+    });
+  }
 
+  updatePlayers(deltaT) {
+    this.players.forEach(player => {
+      player.update(deltaT, this.map, this.entities)
+    });
+  }
+
+  updateEntities(deltaT) {
+    this.entities.forEach(entity => {
+      entity.update(deltaT, this.map, this.entities)
+    });
   }
 }
