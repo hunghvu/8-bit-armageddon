@@ -102,6 +102,23 @@ class Entity extends Rectangle {
           break;
         }
       }
+
+      if (this.onGround) {
+        this.updateOnGround(map);
+        // If we have moved off the ground, check if can move the 
+        // entity down one pixel to put them back on the ground.
+        //
+        // This will smooth out walking down slopes.
+        if (!this.onGround) {
+          this.y += 2;
+          if (map.collideWithRectangle(this)) {
+            // We can move down a single pixel to get back on the ground
+          } else {
+            // We have moved of a steep cliff, let nature take its course
+            this.y -= 2;
+          }
+        }
+      }
     }
 
     // Handle y direction movement
