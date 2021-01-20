@@ -8,7 +8,7 @@ class Entity extends Rectangle {
     this.onGround = false;
   }
 
-  drawEntity(ctx)
+  draw(ctx)
   {
     ctx.fillStyle = "white";
     ctx.fillRect(this.x, this.y, this.w, this.h);
@@ -20,6 +20,89 @@ class Entity extends Rectangle {
 
   setVelocity(newVel) {
     this.vel = newVel;
+  }
+
+  update(deltaT, map, entities) {
+    // If the player is moved down 1px and it collides with something
+    // that means the player is on the ground.
+    this.y += 1;
+    if (map.collideWithRectangle(this)) {
+      this.onGround = true;
+    } else {
+      this.onGround = false;
+    }
+    this.y -= 1;
+
+
+    let movement = this.desiredMovement();
+
+    // Handle x direction movement
+    while (movement.x > 1) {
+      this.x += 1;
+      movement.x -= 1;
+
+      if (map.collideWithRectangle(this)) {
+        // Can we just move the player up to get over a curb?
+        let step = 0
+        for (; step < 3; step++) {
+          this.y -= 1;
+          // If we are no longer colliding then stop going up
+          if (!map.collideWithRectangle(this)) {
+            break;
+          }
+        }
+        // If we never got up the curb then the curb is too steep
+        if (map.collideWithRectangle(this)) {
+          this.y += step;
+          this.x -= 1;
+          break;
+        }
+      }
+    }
+    while (movement.x < -1) {
+      this.x -= 1;
+      movement.x += 1;
+      if (map.collideWithRectangle(this)) {
+        // Can we just move the player up to get over a curb?
+        let step = 0
+        for (; step < 3; step++) {
+          this.y -= 1;
+          // If we are no longer colliding then stop going up
+          if (!map.collideWithRectangle(this)) {
+            break;
+          }
+        }
+        // If we never got up the curb then the curb is too steep
+        if (map.collideWithRectangle(this)) {
+          this.y += step;
+          this.x += 1;
+
+          break;
+        }
+      }
+    }
+
+    // Handle y direction movement
+    while (movement.y < -1) {
+      this.y -= 1;
+      movement.y += 1;
+
+      if (map.collideWithRectangle(this)) {
+        this.y += 1;
+        this.vel.y = 0;
+        break;
+      }
+    }
+    while (movement.y > 1) {
+      this.y += 1;
+      movement.y -= 1;
+
+      if (map.collideWithRectangle(this)) {
+        this.y -= 1;
+        this.vel.y = 0;
+        break;
+      }
+    }
   }
 
   // return the desired displacement
