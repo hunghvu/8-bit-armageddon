@@ -30,4 +30,12 @@ class DestructibleMap {
     // If any of the pixels are non zero then return true for a collision
     return iData.data.reduce((acc, currentValue) => (acc || currentValue != 0), false)
   }
+
+  get width() {
+    return this.mapCanvas.width;
+  }
+
+  get height() {
+    return this.mapCanvas.height;
+  }
 }
