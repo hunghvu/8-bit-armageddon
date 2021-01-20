@@ -13,9 +13,13 @@ class World {
     this.imgFar.src = "./assets/background.jpg";
     this.imgNear = new Image();
     this.imgNear.src = "./assets/background-cloud.jpg";
-    // Draw less of the background so it "moves" in the opposite direction compared to the player, to mimic parallax effect
-    this.speedFar = 0;
-    this.speedNear = 0;
+    // The sX in drawImage will be updated as the player moves in a way it create an opposite movement effect.
+    // This results in a parallax background - Hung Vu.
+    this.xFar = 0;
+    this.xNear = 0;
+    // Speed of background movement (not velocity) - Hung Vu.
+    this.xFarSpeed = 1;
+    this.xNearSpeed = 2;
   }
 
   draw(ctx, w, h) {
@@ -51,24 +55,17 @@ class World {
   }
 
   /*
-    This function will draw parralax background. We can also turn the in/decrement amount
-    into a global variable so it is easier to modified - Hung Vu.
+    This function will draw parralax background. For now, I use updateActor
+    to also adjust background speed, but later on, should we move that to
+    this function instead (centralizing)?- Hung Vu.
   */
   drawBackground(ctx){
     ctx.save();
     ctx.scale(this.camera.zoom, this.camera.zoom);
     ctx.translate(-this.camera.x, -this.camera.y);
-    ctx.drawImage(this.imgFar, this.speedFar, 0);
+    ctx.drawImage(this.imgFar, this.xFar, 0);
     ctx.globalAlpha = 0.7;
-    ctx.drawImage(this.imgNear, this.speedNear, 0);
-    if(this.controls["left"]) {
-      this.speedFar++;
-      this.speedNear += 2;
-    }
-    if(this.controls["right"]){
-      this.speedFar--;
-      this.speedNear -= 2;
-    } 
+    ctx.drawImage(this.imgNear, this.xNear, 0);
     ctx.restore();
   }
 
@@ -145,11 +142,13 @@ class World {
           break;
         }
       }
+      // Update background location - Hung Vu.
+      this.xFar -= this.xFarSpeed;
+      this.xNear -= this.xNearSpeed;
     }
     while (movement.x < -1) {
       entity.x -= 1;
       movement.x += 1;
-
       if (this.map.collideWithRectangle(entity)) {
         // Can we just move the player up to get over a curb?
         let step = 0
@@ -164,9 +163,13 @@ class World {
         if (this.map.collideWithRectangle(entity)) {
           entity.y += step;
           entity.x += 1;
+
           break;
         }
       }
+      // Update background location - Hung Vu.
+      this.xFar += this.xFarSpeed;
+      this.xNear += this.xNearSpeed;
     }
 
     // Handle y direction movement
@@ -189,6 +192,7 @@ class World {
         entity.vel.y = 0;
         break;
       }
+      
     }
   }
 }
