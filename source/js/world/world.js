@@ -8,24 +8,21 @@ class World {
     this.player.acc.y = .4;
 
     this.camera = new Camera(500, 500, 1);
-    // Add parallax background.
-    this.img = new Image();
-    this.img.src = "./assets/background.jpg";
+    // Background images.
+    this.imgFar = new Image();
+    this.imgFar.src = "./assets/background.jpg";
+    this.imgNear = new Image();
+    this.imgNear.src = "./assets/background-cloud.jpg";
     // Draw less of the background so it "moves" in the opposite direction compared to the player, to mimic parallax effect
-    this.speed = 1
+    this.speedFar = 0;
+    this.speedNear = 0;
   }
 
   draw(ctx, w, h) {
     // Clear the screen without worrying about transforms
     ctx.clearRect(0, 0, w, h);
 
-    ctx.save();
-    ctx.scale(this.camera.zoom, this.camera.zoom);
-    ctx.translate(-this.camera.x, -this.camera.y);
-    ctx.drawImage(this.img, this.speed, 0);
-    if(this.controls["left"]) this.speed++;
-    if(this.controls["right"]) this.speed--;
-    ctx.restore();
+    this.drawBackground(ctx);
 
     // Transform the renderer based on the camera object
     ctx.save();
@@ -50,6 +47,28 @@ class World {
                   this.player.x, this.player.y - 100);
 
     // Untransform ctx
+    ctx.restore();
+  }
+
+  /*
+    This function will draw parralax background. We can also turn the in/decrement amount
+    into a global variable so it is easier to modified - Hung Vu.
+  */
+  drawBackground(ctx){
+    ctx.save();
+    ctx.scale(this.camera.zoom, this.camera.zoom);
+    ctx.translate(-this.camera.x, -this.camera.y);
+    ctx.drawImage(this.imgFar, this.speedFar, 0);
+    ctx.globalAlpha = 0.7;
+    ctx.drawImage(this.imgNear, this.speedNear, 0);
+    if(this.controls["left"]) {
+      this.speedFar++;
+      this.speedNear += 2;
+    }
+    if(this.controls["right"]){
+      this.speedFar--;
+      this.speedNear -= 2;
+    } 
     ctx.restore();
   }
 
