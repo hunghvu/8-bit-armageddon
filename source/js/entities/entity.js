@@ -74,6 +74,7 @@ class Entity extends Rectangle {
           this.y += 2;
           if (map.collideWithRectangle(this)) {
             // We can move down a single pixel to get back on the ground
+            this.y -= 1
           } else {
             // We have moved of a steep cliff, let nature take its course
             this.y -= 2;
@@ -113,6 +114,7 @@ class Entity extends Rectangle {
           this.y += 2;
           if (map.collideWithRectangle(this)) {
             // We can move down a single pixel to get back on the ground
+            this.y -= 1
           } else {
             // We have moved of a steep cliff, let nature take its course
             this.y -= 2;
