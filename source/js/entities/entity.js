@@ -62,9 +62,7 @@ class Entity extends Rectangle {
     let movement = this.desiredMovement();
 
     this.privateHandleHorizontalMovement(movement, deltaT, map, entities);
-    
     this.privateHandleVerticalMovement(movement, deltaT, map, entities);
-    
   }
 
   // return the desired displacement
@@ -116,6 +114,7 @@ class Entity extends Rectangle {
             this.y -= 2;
           }
         }
+        this.updateOnGround(map);
       }
     }
     while (movement.x < -1) {
@@ -140,6 +139,7 @@ class Entity extends Rectangle {
         }
       }
 
+      // If we are on the ground and we aren't going up
       if (this.onGround) {
         this.updateOnGround(map);
         // If we have moved off the ground, check if can move the 
@@ -155,6 +155,7 @@ class Entity extends Rectangle {
             // We have moved of a steep cliff, let nature take its course
             this.y -= 2;
           }
+          this.updateOnGround(map);
         }
       }
     }
