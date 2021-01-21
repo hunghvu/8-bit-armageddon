@@ -10,8 +10,8 @@ class ShootingAngle {
     // The points may or not be able to be constructed using point.js 
     //  because the transformation may not be linear. For now, we will
     //  directly assign them for developing purpose.
-    constructor (originX, originY, radius, lowerBound, uperBound, defaultAngle) {
-        Object.assign(this, {originX, originY, radius, lowerBound, uperBound, defaultAngle})
+    constructor (originX, originY, radius, lowerBound, upperBound, defaultAngle) {
+        Object.assign(this, {originX, originY, radius, lowerBound, upperBound, defaultAngle})
 
         // These are points on the circumference.
         this.endPointX = 0;
@@ -29,10 +29,12 @@ class ShootingAngle {
     }
 
     increaseAngle() {
+        if (this.defaultAngle === this.upperBound) return;
         this.defaultAngle++;
     }
 
     decreaseAngle() {
+        if (this.defaultAngle === this.lowerBound) return;
         this.defaultAngle--;
     }
 

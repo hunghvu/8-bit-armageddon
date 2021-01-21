@@ -11,7 +11,8 @@ class Entity extends Rectangle {
     this.onGround = false;
 
     // The shooting angle is always attached to a player, so this should be 
-    // a better place than 'world' - Hung vu
+    // a better place than 'world'. The entity shooting angle bounds are defined
+    // by a weapon that a player is holding, it is hard coded now only for testing - Hung Vu
     this.shootingAngle = new ShootingAngle(
       this.x + this.w,
       this.y + this.h,
