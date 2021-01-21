@@ -10,6 +10,8 @@ class Entity extends Rectangle {
 
     this.onGround = false;
 
+    // The shooting angle is always attached to a player, so this should be 
+    // a better place than 'world' - Hung vu
     this.shootingAngle = new ShootingAngle(
       this.x + this.w,
       this.y + this.h,
@@ -21,10 +23,12 @@ class Entity extends Rectangle {
     ctx.fillRect(this.x, this.y, this.w, this.h);
 
     // Draw shooting angle indicator
+    // Technically, the origin can be derived from a player position as shown below
+    //  but by having a separate query like this, it will increase readability - Hung Vu
+    this.shootingAngle.updateOrigin(this.x, this.y);
     ctx.beginPath();
     ctx.moveTo(this.shootingAngle.originX, this.shootingAngle.originY);
-
-    // The coord system of 2D plane in canvas is reversed compared to in reality, so we need a negative angle here.
+    // The coord system of 2D plane in canvas is reversed compared to in reality, so we need a negative angle here
     let radian = -this.shootingAngle.defaultAngle * Math.PI / 180;
     ctx.lineTo(
       this.shootingAngle.originX + this.shootingAngle.radius * Math.cos(radian),

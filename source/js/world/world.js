@@ -92,7 +92,19 @@ class World {
       currentPlayer.vel.x = -2;
     } else if (!this.controls.left && this.controls.right) {
       currentPlayer.vel.x = 2;
-    } else {
+    } 
+
+    /**
+     * Adjust shooting angle
+     * @todo Have a better handler when pressing multiple button at once
+     */
+    else if (this.controls.up) {
+      currentPlayer.shootingAngle.increaseAngle();
+    } else if (this.controls.down) {
+      currentPlayer.shootingAngle.decreaseAngle();
+    }
+    
+    else {
       // Stop the player and any acceleration in the x direction
       // if they don't want to move.
       currentPlayer.vel.x = 0;

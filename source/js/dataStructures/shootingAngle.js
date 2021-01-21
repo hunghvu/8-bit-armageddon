@@ -29,11 +29,11 @@ class ShootingAngle {
     }
 
     increaseAngle() {
-        defaultAngle++;
+        this.defaultAngle++;
     }
 
     decreaseAngle() {
-        defaultAngle--;
+        this.defaultAngle--;
     }
 
 }
