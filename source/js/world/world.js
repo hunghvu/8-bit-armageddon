@@ -90,25 +90,26 @@ class World {
     // If the player move in either direction
     if (this.controls.left && !this.controls.right) {
       currentPlayer.vel.x = -2;
+      currentPlayer.shootingAngle.updateQuadrant(0);
     } else if (!this.controls.left && this.controls.right) {
       currentPlayer.vel.x = 2;
-    } 
-
-    /**
-     * Adjust shooting angle
-     * @todo Have a better handler when pressing multiple button at once
-     */
-    else if (this.controls.up) {
-      currentPlayer.shootingAngle.increaseAngle();
-    } else if (this.controls.down) {
-      currentPlayer.shootingAngle.decreaseAngle();
-    }
-    
+      currentPlayer.shootingAngle.updateQuadrant(1);
+    }    
     else {
       // Stop the player and any acceleration in the x direction
       // if they don't want to move.
       currentPlayer.vel.x = 0;
       currentPlayer.acc.x = 0;
+    }
+
+    /**
+     * Adjust shooting angle
+     * @todo Have a better handler when pressing multiple button at once
+     */
+    if (this.controls.up) {
+      currentPlayer.shootingAngle.right ? currentPlayer.shootingAngle.increaseAngle() : currentPlayer.shootingAngle.decreaseAngle();
+    } else if (this.controls.down) {
+      currentPlayer.shootingAngle.left ? currentPlayer.shootingAngle.increaseAngle() : currentPlayer.shootingAngle.decreaseAngle();
     }
 
     // If the user scrolls then zoom in or out

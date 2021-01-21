@@ -16,6 +16,8 @@ class ShootingAngle {
         // These are points on the circumference.
         this.endPointX = 0;
         this.endPointY = 0;
+        this.right = true;
+        this.left = false;
     }
 
     updateOrigin(newX, newY) {
@@ -36,6 +38,31 @@ class ShootingAngle {
     decreaseAngle() {
         if (this.defaultAngle === this.lowerBound) return;
         this.defaultAngle--;
+    }
+
+    /**
+     * Update shooting direction when changing facing direction
+     * @param {int} signal 1 for right, 0 for left
+     */
+    updateQuadrant(signal) {
+        if(signal === 1 && this.right === true) {
+            return;
+        } else if (signal === 0 && this.left === true) { 
+            return
+        } else {
+            if (signal === 1) {
+                this.right = true;
+                this.left = false;
+            } else {
+                this.left = true;
+                this.right = false;
+            }
+            this.defaultAngle = 180 - this.defaultAngle;
+            let tmpUpperBound = this.upperBound;
+            let tmpLowerBound = this.lowerBound;
+            this.upperBound = 180 - tmpLowerBound;
+            this.lowerBound = 180 - tmpUpperBound;
+        }
     }
 
 }
