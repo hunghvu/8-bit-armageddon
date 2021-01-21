@@ -9,11 +9,32 @@ class Entity extends Rectangle {
     this.acc.y = .4;
 
     this.onGround = false;
+
+    // The shooting angle is always attached to a player, so this should be 
+    // a better place than 'world'. The entity shooting angle bounds are defined
+    // by a weapon that a player is holding, it is hard coded now only for testing - Hung Vu
+    this.shootingAngle = new ShootingAngle(
+      this.x + this.w,
+      this.y + this.h,
+      100, 0, 90, 45);
   }
 
   draw(ctx) {
     ctx.fillStyle = "white";
     ctx.fillRect(this.x, this.y, this.w, this.h);
+
+    // Draw shooting angle indicator
+    // Technically, the origin can be derived from a player position as shown below
+    //  but by having a separate query like this, it will increase readability - Hung Vu
+    this.shootingAngle.updateOrigin(this.x, this.y);
+    ctx.beginPath();
+    ctx.moveTo(this.shootingAngle.originX, this.shootingAngle.originY);
+    // The coord system of 2D plane in canvas is reversed compared to in reality, so we need a negative angle here
+    let radian = -this.shootingAngle.defaultAngle * Math.PI / 180;
+    ctx.lineTo(
+      this.shootingAngle.originX + this.shootingAngle.radius * Math.cos(radian),
+      this.shootingAngle.originY + this.shootingAngle.radius * Math.sin(radian));
+    ctx.stroke();
   }
 
   setAcceleration(newAcc) {
@@ -36,12 +57,27 @@ class Entity extends Rectangle {
     this.y -= 1;
   }
 
-
   update(deltaT, map, entities) {
     this.updateOnGround(map);
     let movement = this.desiredMovement();
 
-    // Handle x direction movement
+    this.privateHandleHorizontalMovement(movement, deltaT, map, entities);
+    
+    this.privateHandleVerticalMovement(movement, deltaT, map, entities);
+    
+  }
+
+  // return the desired displacement
+  desiredMovement(deltaT) {
+    // Update the acceleration
+    this.vel.x += this.acc.x;
+    this.vel.y += this.acc.y;
+
+    return new Point(this.vel.x, this.vel.y);
+  }
+
+  // A helper function to handle x direction movement
+  privateHandleHorizontalMovement(movement, deltaT, map, entities) {
     while (movement.x > 1) {
       this.x += 1;
       movement.x -= 1;
@@ -122,8 +158,10 @@ class Entity extends Rectangle {
         }
       }
     }
+  }
 
-    // Handle y direction movement
+  // A helper function to handle y direction movement
+  privateHandleVerticalMovement(movement, detalT, map, entities) {
     while (movement.y < -1) {
       this.y -= 1;
       movement.y += 1;
@@ -144,14 +182,5 @@ class Entity extends Rectangle {
         break;
       }
     }
-  }
-
-  // return the desired displacement
-  desiredMovement(deltaT) {
-    // Update the acceleration
-    this.vel.x += this.acc.x;
-    this.vel.y += this.acc.y;
-
-    return new Point(this.vel.x, this.vel.y);
   }
 }
