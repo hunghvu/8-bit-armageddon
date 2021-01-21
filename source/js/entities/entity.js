@@ -36,12 +36,27 @@ class Entity extends Rectangle {
     this.y -= 1;
   }
 
-
   update(deltaT, map, entities) {
     this.updateOnGround(map);
     let movement = this.desiredMovement();
 
-    // Handle x direction movement
+    this.privateHandleHorizontalMovement(movement, deltaT, map, entities);
+    
+    this.privateHandleVerticalMovement(movement, deltaT, map, entities);
+    
+  }
+
+  // return the desired displacement
+  desiredMovement(deltaT) {
+    // Update the acceleration
+    this.vel.x += this.acc.x;
+    this.vel.y += this.acc.y;
+
+    return new Point(this.vel.x, this.vel.y);
+  }
+
+  // A helper function to handle x direction movement
+  privateHandleHorizontalMovement(movement, deltaT, map, entities) {
     while (movement.x > 1) {
       this.x += 1;
       movement.x -= 1;
@@ -122,8 +137,10 @@ class Entity extends Rectangle {
         }
       }
     }
+  }
 
-    // Handle y direction movement
+  // A helper function to handle y direction movement
+  privateHandleVerticalMovement(movement, detalT, map, entities) {
     while (movement.y < -1) {
       this.y -= 1;
       movement.y += 1;
@@ -144,14 +161,5 @@ class Entity extends Rectangle {
         break;
       }
     }
-  }
-
-  // return the desired displacement
-  desiredMovement(deltaT) {
-    // Update the acceleration
-    this.vel.x += this.acc.x;
-    this.vel.y += this.acc.y;
-
-    return new Point(this.vel.x, this.vel.y);
   }
 }
