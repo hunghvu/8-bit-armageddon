@@ -9,11 +9,27 @@ class Entity extends Rectangle {
     this.acc.y = .4;
 
     this.onGround = false;
+
+    this.shootingAngle = new ShootingAngle(
+      this.x + this.w,
+      this.y + this.h,
+      100, 0, 90, 45);
   }
 
   draw(ctx) {
     ctx.fillStyle = "white";
     ctx.fillRect(this.x, this.y, this.w, this.h);
+
+    // Draw shooting angle indicator
+    ctx.beginPath();
+    ctx.moveTo(this.shootingAngle.originX, this.shootingAngle.originY);
+
+    // The coord system of 2D plane in canvas is reversed compared to in reality, so we need a negative angle here.
+    let radian = -this.shootingAngle.defaultAngle * Math.PI / 180;
+    ctx.lineTo(
+      this.shootingAngle.originX + this.shootingAngle.radius * Math.cos(radian),
+      this.shootingAngle.originY + this.shootingAngle.radius * Math.sin(radian));
+    ctx.stroke();
   }
 
   setAcceleration(newAcc) {

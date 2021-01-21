@@ -6,7 +6,7 @@
         The bounds indicates range of usable angles, relative to
             player facing angle - Hung Vu.
 */
-class shootingAngle {
+class ShootingAngle {
     // The points may or not be able to be constructed using point.js 
     //  because the transformation may not be linear. For now, we will
     //  directly assign them for developing purpose.
