@@ -61,8 +61,8 @@ class Entity extends Rectangle {
     this.updateOnGround(map);
     let movement = this.desiredMovement();
 
-    this.privateHandleHorizontalMovement(movement, deltaT, map, entities);
-    this.privateHandleVerticalMovement(movement, deltaT, map, entities);
+    this.privateHandleHorizontalMovement(movement.x, deltaT, map, entities);
+    this.privateHandleVerticalMovement(movement.y, deltaT, map, entities);
   }
 
   // return the desired displacement
@@ -75,10 +75,22 @@ class Entity extends Rectangle {
   }
 
   // A helper function to handle x direction movement
-  privateHandleHorizontalMovement(movement, deltaT, map, entities) {
-    while (movement.x > 1) {
-      this.x += 1;
-      movement.x -= 1;
+  privateHandleHorizontalMovement(movementX, deltaT, map, entities) {
+    // If we need to move more than a pixel in either direction
+    // then do it pixel by pixel
+    while (movementX > 1 || movementX < -1) {
+      // The current shift is either a negative or a positive value
+      // depending on whether we are going left (-) or right (+)
+      let currentShift = 0;
+
+      if (movementX > 1) {
+        currentShift = 1;
+      } else {
+        currentShift = -1;
+      }
+
+      movementX -= currentShift;
+      this.x += currentShift;
 
       if (map.collideWithRectangle(this)) {
         // Can we just move the entity up to get over a curb?
@@ -93,7 +105,7 @@ class Entity extends Rectangle {
         // If we never got up the curb then the curb is too steep
         if (map.collideWithRectangle(this)) {
           this.y += step;
-          this.x -= 1;
+          this.x -= currentShift;
           break;
         }
       }
@@ -115,70 +127,28 @@ class Entity extends Rectangle {
           }
         }
         this.updateOnGround(map);
-      }
-    }
-    while (movement.x < -1) {
-      this.x -= 1;
-      movement.x += 1;
-      if (map.collideWithRectangle(this)) {
-        // Can we just move the entity up to get over a curb?
-        let step = 0
-        for (; step < 3; step++) {
-          this.y -= 1;
-          // If we are no longer colliding then stop going up
-          if (!map.collideWithRectangle(this)) {
-            break;
-          }
-        }
-        // If we never got up the curb then the curb is too steep
-        if (map.collideWithRectangle(this)) {
-          this.y += step;
-          this.x += 1;
-
-          break;
-        }
-      }
-
-      // If we are on the ground and we aren't going up
-      if (this.onGround) {
-        this.updateOnGround(map);
-        // If we have moved off the ground, check if can move the 
-        // entity down one pixel to put them back on the ground.
-        //
-        // This will smooth out walking down slopes.
-        if (!this.onGround) {
-          this.y += 2;
-          if (map.collideWithRectangle(this)) {
-            // We can move down a single pixel to get back on the ground
-            this.y -= 1
-          } else {
-            // We have moved of a steep cliff, let nature take its course
-            this.y -= 2;
-          }
-          this.updateOnGround(map);
-        }
       }
     }
   }
 
   // A helper function to handle y direction movement
-  privateHandleVerticalMovement(movement, detalT, map, entities) {
-    while (movement.y < -1) {
-      this.y -= 1;
-      movement.y += 1;
+  privateHandleVerticalMovement(movementY, detalT, map, entities) {
+    while (movementY > 1 || movementY < -1) {
+      // The current shift is either a negative or a positive value
+      // depending on whether we are going down (+) or up (-)
+      let currentShift = 0;
 
-      if (map.collideWithRectangle(this)) {
-        this.y += 1;
-        this.vel.y = 0;
-        break;
+      if (movementY > 1) {
+        currentShift = 1;
+      } else {
+        currentShift = -1;
       }
-    }
-    while (movement.y > 1) {
-      this.y += 1;
-      movement.y -= 1;
+
+      this.y += currentShift;
+      movementY -= currentShift;
 
       if (map.collideWithRectangle(this)) {
-        this.y -= 1;
+        this.y -= currentShift;
         this.vel.y = 0;
         break;
       }
