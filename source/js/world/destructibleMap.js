@@ -27,8 +27,14 @@ class DestructibleMap {
   collideWithRectangle(rect) {
     // Get an array of all the pixels in the map
     let iData = this.ctx.getImageData(rect.x, rect.y, rect.w, rect.h);
-    // If any of the pixels are non zero then return true for a collision
-    return iData.data.reduce((acc, currentValue) => (acc || currentValue != 0), false)
+    // Run through all the transparency values
+    for (let i = 3; i < iData.data.length; i += 4) {
+      if (iData.data[i] != 0) {
+        // If any of the pixels in the rect aren't transparent then it's a collision
+        return true;
+      }
+    }
+    return false;
   }
 
   get width() {
