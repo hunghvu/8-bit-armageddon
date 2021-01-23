@@ -14,6 +14,18 @@ class Game {
       let destructionMap = new DestructibleMap(newMapImg);
       this.world = new World(destructionMap);
       this.canvas = document.getElementById('display');
+
+      // Set responsive size
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
+      this.canvas.style.left = "0px";
+      this.canvas.style.top = "0px";
+      this.canvas.style.position = "absolute";
+      window.addEventListener('resize', event => {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      })
+
       this.ctx = this.canvas.getContext('2d');
       //console.log(ctx);
       //world.draw(ctx, canvas.width, canvas.height);
