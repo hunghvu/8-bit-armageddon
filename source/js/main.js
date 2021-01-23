@@ -1,9 +1,18 @@
+var MANAGER = new AssetManager();
+
 window.onload = function () {
   // Load a map image
+  // asset_manager here
 
-  //destructionMap = new DestructableMap('map/map.png');
-  gg = new Game();
-  
+  MANAGER.queueDownload('./assets/character.png');
+
+  MANAGER.downloadAll(function () {
+
+    //destructionMap = new DestructableMap('map/map.png');
+    gg = new Game();
+
+  });
+
 }
 
 class Game {
@@ -23,9 +32,9 @@ class Game {
       requestAnimationFrame(this.draw.bind(this));
     }).bind(this);
   }
-  
+
   draw() {
-    
+
     this.world.update(this.ctx);
     this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
     requestAnimationFrame(this.draw.bind(this));

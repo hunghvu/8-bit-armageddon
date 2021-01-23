@@ -3,7 +3,11 @@ class World {
     this.controls = new Controls();
     this.map = map;
 
-    this.player = new Entity(null, 344, 650);
+    this.spritesheet = MANAGER.getAsset('./assets/character.png');
+
+    // this.player = new Entity(NULL, 344, 650);
+    this.player = new Entity(this.spritesheet, 59, 65);
+
     // Give the player gravity
     this.player.acc.y = .4;
 
