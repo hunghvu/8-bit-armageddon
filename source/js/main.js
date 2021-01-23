@@ -9,7 +9,7 @@ window.onload = function () {
 class Game {
   constructor() {
     let newMapImg = new Image();
-    newMapImg.src = 'assets/map.png';
+    newMapImg.src = 'assets/emptyMap.png'; // An image with all transparent pixels.
     newMapImg.onload = (function () {
       let destructionMap = new DestructibleMap(newMapImg);
       this.world = new World(destructionMap);
