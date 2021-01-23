@@ -14,20 +14,8 @@ class DestructibleMap {
 
     // Generate and draw a random map.
     let mapGenerator = new MapGenerator(img.width, img.height);
-    mapGenerator.generateMap();
-    const pixelArray = mapGenerator.pixelArray;
-
-    this.ctx.beginPath();
-    for (var  i = 0; i < pixelArray.length; i++){
-      this.ctx.moveTo(i, pixelArray[i]);
-      this.ctx.lineTo(i, this.height);
-      this.ctx.moveTo(i, pixelArray[i]);
-      this.ctx.lineTo(i + 1, pixelArray[i + 1]);
-      this.ctx.stroke();
-    }
-
-
-    console.log(pixelArray);
+    mapGenerator.privateGenerateGroundCoord();
+    mapGenerator.drawMap(this.ctx);
   }
 
   // Destory a single pixel of the map by replacing it with a pixel of transparency.
