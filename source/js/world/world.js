@@ -108,7 +108,8 @@ class World {
      */
     if (this.controls.up) {
       currentPlayer.shootingAngle.right ? currentPlayer.shootingAngle.increaseAngle() : currentPlayer.shootingAngle.decreaseAngle();
-    } else if (this.controls.down) {
+    } 
+    if (this.controls.down) {
       currentPlayer.shootingAngle.left ? currentPlayer.shootingAngle.increaseAngle() : currentPlayer.shootingAngle.decreaseAngle();
     }
 

@@ -11,6 +11,11 @@ class DestructibleMap {
     
     // Draw the image onto the map for further use
     this.ctx.drawImage(img, 0, 0);
+
+    // Generate and draw a random map.
+    let mapGenerator = new MapGenerator(img.width, img.height);
+    mapGenerator.privateGenerateGroundCoord();
+    mapGenerator.drawMap(this.ctx);
   }
 
   // Destory a single pixel of the map by replacing it with a pixel of transparency.
