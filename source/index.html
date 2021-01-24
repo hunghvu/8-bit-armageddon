@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Game Page</title>
     <link rel="stylesheet" href="css/stylesheet.css" type="text/css">
+    <script src="js/world/mapGenerator.js"></script>
     <script src="js/dataStructures/rectangle.js"></script>
     <script src="js/dataStructures/point.js"></script>
+    <script src="js/dataStructures/shootingAngle.js"></script>
     <script src="js/controller/controls.js"></script>
     <script src="js/entities/entity.js"></script>
     <script src="js/entities/characters/Animator.js"></script>
-    <script src="js/world/destructableMap.js"></script>
+    <script src="js/world/destructibleMap.js"></script>
     <script src="js/world/camera.js"></script>
     <script src="js/world/world.js"></script>
     <script src="js/AssetManager.js"></script>
@@ -18,7 +20,7 @@
   </head>
   <body>
     <div class="container">
-      <canvas width="640" height="480" id="display"></canvas>
+      <canvas id="display"></canvas>
     </div>
   </body>
 </html>

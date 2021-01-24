@@ -1,9 +1,16 @@
 class Controls {
   constructor() {
+    // WASD
     this.registerKey('up', 'KeyW');
     this.registerKey('down', 'KeyS');
     this.registerKey('left', 'KeyA');
     this.registerKey('right', 'KeyD');
+    // Arrow keys
+    this.registerKey('up', 'ArrowUp');
+    this.registerKey('down', 'ArrowDown');
+    this.registerKey('left', 'ArrowLeft');
+    this.registerKey('right', 'ArrowRight');
+
     this.registerKey('enter', 'Enter');
     this.registerKey('jump', 'Space');
     // How much the scroll wheel has been scrolled since last checked
@@ -29,9 +36,7 @@ class Controls {
       let canvasRect = canvas.getBoundingClientRect();
       this.clickX = event.clientX - canvasRect.left;
       this.clickY = event.clientY - canvasRect.top;
-      console.log("Before: hasClicked = " + this.hasClicked);
       this.hasClicked = true;
-      console.log("After: hasClicked = " + this.hasClicked);
     })
 
     // Mouse position
@@ -39,7 +44,6 @@ class Controls {
       let canvasRect = canvas.getBoundingClientRect();
       this.moveX = event.clientX - canvasRect.left;
       this.moveY = event.clientY - canvasRect.top;
-      // console.log (this.moveX + ' ' + this.moveY);
     })
   }
 
