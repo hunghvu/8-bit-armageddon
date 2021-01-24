@@ -35,6 +35,7 @@ class World {
 
     // Draw players
     this.drawPlayers(ctx);
+    this.drawEntities(ctx);
 
 
     // Untransform ctx
@@ -106,6 +107,7 @@ class World {
      * Adjust shooting angle
      * @todo Have a better handler when pressing multiple button at once
      */
+
     if (this.controls.up) {
       currentPlayer.shootingAngle.right ? currentPlayer.shootingAngle.increaseAngle() : currentPlayer.shootingAngle.decreaseAngle();
     } 
@@ -113,6 +115,12 @@ class World {
       currentPlayer.shootingAngle.left ? currentPlayer.shootingAngle.increaseAngle() : currentPlayer.shootingAngle.decreaseAngle();
     }
 
+    if(this.controls.shootingDownThisLoop){
+      this.entities.push(new Bullet(currentPlayer.x,currentPlayer.y, Math.cos(currentPlayer.shootingAngle.defaultAngle*(Math.PI/180)) * 20, -Math.sin(currentPlayer.shootingAngle.defaultAngle*(Math.PI/180))*20));
+      console.log("shoot");
+      console.log(currentPlayer.y);
+
+    }
     // If the user scrolls then zoom in or out
     if (this.controls.scrollDelta > 0) {
       this.camera.zoomIn();

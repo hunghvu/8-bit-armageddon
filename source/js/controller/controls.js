@@ -13,6 +13,10 @@ class Controls {
 
     this.registerKey('enter', 'Enter');
     this.registerKey('jump', 'Space');
+
+    // Z for shooting
+    this.registerKey('shooting','KeyX');
+
     // How much the scroll wheel has been scrolled since last checked
     this.scrollDelta = 0;
 
@@ -51,12 +55,17 @@ class Controls {
   reset() {
     this.scrollDelta = 0;
     this.hasClicked = false;
+    Object.keys(this).forEach((element) => {if (element.endsWith("DownThisLoop")){
+      this[element] = false;
+    }
+    });
   }
 
   registerKey(name, code) {
     window.addEventListener('keydown', event => {
       if (event.code == code) {
         this[name] = true;
+        this[name+'DownThisLoop'] = true;
         event.preventDefault();
       }
     });
@@ -64,6 +73,7 @@ class Controls {
     window.addEventListener('keyup', event => {
       if (event.code == code) {
         this[name] = false;
+        this[name+'DownThisLoop'] = false;
         event.preventDefault();
       }
     });
