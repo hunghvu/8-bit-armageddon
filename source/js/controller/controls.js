@@ -15,7 +15,7 @@ class Controls {
     this.registerKey('jump', 'Space');
 
     // Z for shooting
-    this.registerKey('shooting','KeyX');
+    this.registerKey('shooting','KeyJ');
 
     // How much the scroll wheel has been scrolled since last checked
     this.scrollDelta = 0;
