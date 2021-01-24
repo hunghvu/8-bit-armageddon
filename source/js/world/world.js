@@ -5,7 +5,7 @@ class World {
 
     this.spritesheet = MANAGER.getAsset('./assets/character.png');
 
-    this.players = [new Entity(this.spritesheet, 344, 650), new Entity(this.spritesheet, 500, 650);];
+    this.players = [new Entity(this.spritesheet, 344, 650), new Entity(this.spritesheet, 500, 650)];
     this.currentPlayer = this.players[0];
 
     this.entities = [];
