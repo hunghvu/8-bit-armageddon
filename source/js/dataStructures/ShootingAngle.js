@@ -20,6 +20,10 @@ class ShootingAngle {
         this.left = false;
     }
 
+    get radians() {
+        return this.defaultAngle * (Math.PI / 180);
+    }
+
     updateOrigin(newX, newY) {
         this.originX = newX;
         this.originY = newY;

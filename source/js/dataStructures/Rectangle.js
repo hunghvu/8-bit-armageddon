@@ -1,12 +1,20 @@
-/* A Rectangle class contains a x and y coordinates as well as width and height */ 
-class Rectangle {
+/**
+ * A Rectangle class contains a x and y coordinates 
+ * as well as width and height 
+ */ 
+class Rectangle extends Point {
   constructor(x, y, w, h) {
-    this.x = x;
-    this.y = y;
+    super(x, y);
     this.w = w;
     this.h = h;
   }
 
+  /**
+   * Determines if this rectangle collides with another
+   * @param {Rectangle} otherRect - The other rectangle to check
+   * @returns {boolean} - True if they are colliding, false 
+   *                      otherwise
+   */
   doesCollide(otherRect) {
     if (this.x < otherRect.x && this.x + this.w > otherRect.x) {
       // The left side of the rect is inside this rect horizontally
@@ -37,6 +45,11 @@ class Rectangle {
     return false;
   }
 
+  /**
+   * Returns a point that is in the center of this rectangle
+   * @returns {Point} - An x, y coordinate for the center of 
+   *                    this rectangle
+   */
   get center() {
     return new Point(this.x + this.w / 2, this.y + this.h / 2)
   }
