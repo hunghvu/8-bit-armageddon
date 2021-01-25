@@ -66,4 +66,17 @@ class Camera extends Point {
     this.y = this.target.y;
   }
 
+  transformContext(ctx, distance) {
+    let drawingWidth = ctx.canvas.width;
+    let drawingHeight = ctx.canvas.height;
+
+    ctx.save();
+    ctx.scale(this.zoom, this.zoom);
+    ctx.translate((-this.x / distance) + drawingWidth / (2 * this.zoom), 
+                  (-this.y / distance) + drawingHeight / (2 * this.zoom));
+  }
+
+  restoreContext(ctx) {
+    ctx.restore();
+  }
 }

@@ -26,11 +26,7 @@ class World {
     this.drawBackground(ctx, w, h);
 
     // Transform the renderer based on the camera object
-    ctx.save();
-    ctx.scale(this.camera.zoom, this.camera.zoom);
-
-    ctx.translate((-this.camera.x + w / (2 * this.camera.zoom)), 
-                  (-this.camera.y + h / (2 * this.camera.zoom)));
+    this.camera.transformContext(ctx, 1);
 
     // Draw the map foreground
     ctx.drawImage(this.map.mapCanvas, 0, 0);
@@ -40,31 +36,21 @@ class World {
     this.drawEntities(ctx);
 
     // Untransform ctx
-    ctx.restore();
+    this.camera.restoreContext(ctx);
   }
 
   /*
     This function will draw a parralax background. 
   */
   drawBackground(ctx, w, h){
-    ctx.save();
-    ctx.scale(this.camera.zoom, this.camera.zoom);
-    // By dividing the camera.x by 3, for every 1 pixels the camera travels the background will move 0.333 pixels
-    ctx.translate(((-this.camera.x / 3 - this.imgFar.width / 2) + w / (2 * this.camera.zoom)), 
-                   (-this.camera.y + h / (2 * this.camera.zoom)));
-
-    ctx.drawImage(this.imgFar, 0, 0);
-    ctx.restore();
+    this.camera.transformContext(ctx, 3);
+    ctx.drawImage(this.imgFar, -this.imgNear.width / 2, -this.imgFar.height / 2);
+    this.camera.restoreContext(ctx);
     
-    ctx.save();
-    ctx.scale(this.camera.zoom, this.camera.zoom);
-    // By dividing the camera.x by 2, for every 1 pixels the camera travels the background will move 0.5 pixels
-    ctx.translate(((-this.camera.x / 2 - this.imgNear.width / 2) + w / (2 * this.camera.zoom)), 
-                   (-this.camera.y + h / (2 * this.camera.zoom)));
-
+    this.camera.transformContext(ctx, 2);
     ctx.globalAlpha = 0.7;
-    ctx.drawImage(this.imgNear, 0, 0);
-    ctx.restore();
+    ctx.drawImage(this.imgNear, -this.imgNear.width / 2, -this.imgNear.height / 2);
+    this.camera.restoreContext(ctx);
   }
 
   update(deltaT, controls) {
