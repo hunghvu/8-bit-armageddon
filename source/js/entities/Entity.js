@@ -1,4 +1,15 @@
+/** 
+ * The base entity that other entities like bullets and players extend from
+ */
 class Entity extends Rectangle {
+  /**
+   * Constructs the entity based on the hit box.
+   *
+   * @param {number} x - The x position
+   * @param {number} y - The y position
+   * @param {number} w - The width of the hitbox
+   * @param {number} h - the height of the hitbox
+   */
   constructor(x, y, w, h) {
     //Used as hitbox
     //can change x and y but not w and d
@@ -19,37 +30,47 @@ class Entity extends Rectangle {
     this.onGround = false;
   }
 
+
+  /**
+   * Draws the hitbox, meant to be overridden but good for debugging
+   *
+   * @param {CanvasRenderingContext2D} ctx - The context to draw to
+   */
   draw(ctx) {
     // Used as hitbox
     ctx.linewidth = "1";
     ctx.strokeStyle = "white";
-    ctx.strokeRect(this.x, this.y, this.w + 15, this.h + 15);
+    ctx.strokeRect(this.x, this.y, this.w, this.h);
   }
 
-  setAcceleration(newAcc) {
+  /**
+   * Set the acceleration to a specific set of values.
+   * @param {Point} newAcc - The new acceleration
+   */
+  set acceleration(newAcc) {
     this.acc = newAcc;
   }
 
-  setVelocity(newVel) {
+  /**
+   * Set the velocity to a specific set of values.
+   * @param {Point} newVel - The new velocity
+   */
+  set velocity(newVel) {
     this.vel = newVel;
   }
 
-  updateOnGround(map) {
-    // If the entity is moved down 1px and it collides with something
-    // that means the entity is on the ground.
-    this.y += 1;
-    if (map.collideWithRectangle(this)) {
-      this.onGround = true;
-    } else {
-      this.onGround = false;
-    }
-    this.y -= 1;
-  }
 
+  /** 
+   * Boiler plate nothing
+   */
   update(world, deltaT) {
   }
 
-  // return the desired displacement
+  /**
+   * Returns a point that represents the new offset that the entity should have.
+   *
+   * @params {deltaT} - The number of ms since the last update
+   */
   desiredMovement(deltaT) {
     // Update the acceleration
     this.vel.x += this.acc.x * deltaT;

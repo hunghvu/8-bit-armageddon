@@ -23,7 +23,7 @@ class World {
     // Clear the screen without worrying about transforms
     ctx.clearRect(0, 0, w, h);
 
-    this.drawBackground(ctx, w, h);
+    this.drawBackground(ctx);
 
     // Transform the renderer based on the camera object
     this.camera.transformContext(ctx, 1);
@@ -42,7 +42,7 @@ class World {
   /*
     This function will draw a parralax background. 
   */
-  drawBackground(ctx, w, h){
+  drawBackground(ctx){
     this.camera.transformContext(ctx, 3);
     ctx.drawImage(this.imgFar, -this.imgNear.width / 2, -this.imgFar.height / 2);
     this.camera.restoreContext(ctx);

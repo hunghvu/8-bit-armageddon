@@ -1,11 +1,19 @@
+/**
+ * The class for player characters
+ */
 class Player extends Entity {
+  /**
+   * The constructor for the player
+   * @param {Image} spriteSheet - The players spritesheet
+   * @param {number} x - The x position where the player is spawned
+   * @param {number} y - The y position where the player is spawned
+   */
   constructor(spriteSheet, x, y) {
     //Used as hitbox
     //can change x and y but not w and d
     super(x - 3, y, 6, 48);
     this.WALK_SPEED = 100;
     this.JUMP_POWER = 300;
-    // super(x + 200, y, 82 - x, 126 - y);
 
     this.spritesheet = spriteSheet;
 
@@ -27,11 +35,15 @@ class Player extends Entity {
     this.loadAnimations();
   }
 
+  /**
+   * Draws the player and any parts of the player to the context.
+   * @param {CanvasRenderingContext2D} ctx - The context to draw to.
+   */
   draw(ctx) {
     // Used as hitbox
     ctx.linewidth = "1";
     ctx.strokeStyle = "white";
-    ctx.strokeRect(this.x,this.y,this.w+15,this.h+15);
+    ctx.strokeRect(this.x, this.y, this.w, this.h);
 
     this.animations[this.state][this.facing].drawFrame(.17, ctx, this.x, this.y, 0.8);
 
@@ -49,14 +61,28 @@ class Player extends Entity {
     ctx.stroke();
   }
 
+  /**
+   * Set the acceleration to a specific set of values.
+   * @param {Point} newAcc - The new acceleration
+   */
   set acceleration(newAcc) {
     this.acc = newAcc;
   }
 
+  /**
+   * Set the velocity to a specific set of values.
+   * @param {Point} newVel - The new velocity
+   */
   set velocity(newVel) {
     this.vel = newVel;
   }
 
+  /**
+   * Updates the onGround status of the player.
+   * Set to true if the player is one pixel from 
+   * colliding with the ground downward.
+   * @param {DestructibleMap} - The map to collide with
+   */
   updateOnGround(map) {
     // If the entity is moved down 1px and it collides with something
     // that means the entity is on the ground.
@@ -69,28 +95,49 @@ class Player extends Entity {
     this.y -= 1;
   }
 
+  /**
+   * If this is the active player then call this function to update 
+   * based on the user's inputs.
+   *
+   * @params {World} - The world object that should be referenced
+   * @params {Controls} - The controls to get the user input from
+   * @params {deltaT} - The number of ms since the last update
+   */
   updateActive(world, controls, deltaT) {
     this.updateInputs(world, controls, deltaT);
   }
 
+  /**
+   * Updates the player's position based onthe velocity and such.
+   *
+   * @params {World} - The world object that should be referenced
+   * @params {Controls} - The controls to get the user input from
+   * @params {deltaT} - The number of ms since the last update
+   */
   update(world, controls, deltaT) {
     this.updateOnGround(world.map);
     let movement = this.desiredMovement(deltaT);
 
     const MIN_WALK = 1.0;
 
-    //update direction/facing
+    // update direction/facing
     if (this.vel.x < 0) this.facing = 1;
     if (this.vel.x > 0) this.facing = 0;
 
-    //update state
+    // update state
     if (Math.abs(this.vel.x) >= MIN_WALK) this.state = 1;
     else this.state = 0;
 
-    this.privateHandleHorizontalMovement(movement.x, deltaT, world.map, world.entities);
-    this.privateHandleVerticalMovement(movement.y, deltaT, world.map, world.entities);
+    this.privateHandleHorizontalMovement(movement.x, world.map);
+    this.privateHandleVerticalMovement(movement.y, world.map);
   }
 
+  /**
+   * Updates the player's status based on user input
+   *
+   * @params {World} - The world object that should be referenced
+   * @params {Controls} - The controls to get the user input from
+   */
   updateInputs(world, controls) {
     if (controls.jump && this.onGround) {
       this.vel.y = -this.JUMP_POWER;
@@ -163,12 +210,18 @@ class Player extends Entity {
 
 
     //Shooting = 2
-    //should have an angle check so function know what angle frame it should be on (should this be another for above?)
+    // should have an angle check so function know what angle 
+    // frame it should be on (should this be another for above?)
 
   };
 
-  // A helper function to handle x direction movement
-  privateHandleHorizontalMovement(movementX, deltaT, map, entities) {
+  /**
+   * Handles the x axis movement in a way that is feels natural.
+   *
+   * @param {number} movementX - The number of pixels to move in 
+   *                             the x direction
+   */
+  privateHandleHorizontalMovement(movementX, map) {
     // If we need to move more than a pixel in either direction
     // then do it pixel by pixel
     while (movementX >= 1 || movementX <= -1) {
@@ -182,6 +235,8 @@ class Player extends Entity {
         currentShift = -1;
       }
 
+      // Move the player a single pixel and then 
+      // start performing checks
       movementX -= currentShift;
       this.x += currentShift;
 
@@ -224,8 +279,13 @@ class Player extends Entity {
     }
   }
 
-  // A helper function to handle y direction movement
-  privateHandleVerticalMovement(movementY, detalT, map, entities) {
+  /**
+   * Handles the y axis movement.
+   *
+   * @param {number} movementY - The number of pixels to move in 
+   *                             the y direction
+   */
+  privateHandleVerticalMovement(movementY, map) {
     while (movementY >= 1 || movementY <= -1) {
       // The current shift is either a negative or a positive value
       // depending on whether we are going down (+) or up (-)
@@ -237,6 +297,8 @@ class Player extends Entity {
         currentShift = -1;
       }
 
+      // Move the player a single pixel and then 
+      // start performing checks
       this.y += currentShift;
       movementY -= currentShift;
 

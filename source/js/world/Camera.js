@@ -1,4 +1,14 @@
+/**
+ * The camera that is used to determine where to draw the map on the screen.
+ */
 class Camera extends Point {
+  /**
+   * Initializes a camera with certain position and zoom level.
+   *
+   * @params {number} x - The x position of the camera
+   * @params {number} y - The x position of the camera
+   * @params {number} zoom - How close the camera is zoomed in
+   */
   constructor(x, y, zoom) {
     super(x, y);
     // the target is the point that the camera is to be moved to
@@ -12,18 +22,29 @@ class Camera extends Point {
     this.MIN_ZOOM = 0.25; // Four times zoom out
   }
 
+  /**
+   * Zooms the camera out to double the size of the drawn map
+   */
   zoomOut() {
     this.targetZoom *= 2;
     this.targetZoom = Math.min(this.targetZoom, this.MAX_ZOOM);
   }
 
+  /**
+   * Zooms the camera in to halve the size of the drawn map
+   */
   zoomIn() {
     this.targetZoom /= 2;
     this.targetZoom = Math.max(this.targetZoom, this.MIN_ZOOM);
   }
 
-  // The larger the speed the slower the camera movement
-  // Speed must be greater than 1
+  /**
+   * Glides the camera towards the target point
+   *
+   * @param {number} speed - The larger the speed the slower 
+   *                         the camera movement.
+   *                         Speed must be greater than 1
+   */  
   glideToTarget(speed) {
     // Slowly glide the camera to the position that the target is
     // This fuction needs to be called multiple times between frames.
@@ -60,12 +81,21 @@ class Camera extends Point {
     }
   }
 
+  /**
+   * Snaps the camera on the target point of the camera.
+   */  
   snapToTarget() {
     // Snap the camera directly to the current position of the target
     this.x = this.target.x;
     this.y = this.target.y;
   }
 
+  /** 
+   * Sets up the ctx that was passed in so that further 
+   * drawing to canvas will be in relation to the map.
+   *
+   * @param {CanvasRenderingContext2D} ctx - The context to transform
+   */
   transformContext(ctx, distance) {
     let drawingWidth = ctx.canvas.width;
     let drawingHeight = ctx.canvas.height;
@@ -76,6 +106,11 @@ class Camera extends Point {
                   (-this.y / distance) + drawingHeight / (2 * this.zoom));
   }
 
+  /** 
+   * Resets the contexts drawing transformation
+   *
+   * @param {CanvasRenderingContext2D} ctx - The context to restore
+   */
   restoreContext(ctx) {
     ctx.restore();
   }
