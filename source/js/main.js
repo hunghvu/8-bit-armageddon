@@ -24,6 +24,7 @@ class Game {
       this.world = new World(destructionMap);
       this.canvas = document.getElementById('display');
 
+
       // Set responsive size
       this.canvas.width = window.innerWidth;
       this.canvas.height = window.innerHeight;
@@ -39,6 +40,9 @@ class Game {
       //console.log(ctx);
       //world.draw(ctx, canvas.width, canvas.height);
 
+      //Add timer
+      this.timer = new Timer();
+
       // Add mouse listener
       this.world.controls.addMouseListener(this.canvas);
       requestAnimationFrame(this.draw.bind(this));
@@ -49,6 +53,12 @@ class Game {
 
     this.world.update(this.ctx);
     this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
+
     requestAnimationFrame(this.draw.bind(this));
   }
+
+  loop(){
+    this.clockTick = this.timer.tick();
+    this.draw();
+  };
 }

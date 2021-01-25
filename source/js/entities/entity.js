@@ -1,11 +1,11 @@
 class Entity extends Rectangle {
   constructor(spriteSheet, x, y) {
     //Used as hitbox
-    // super(x - 3, y, 6, 48);
-    super(x + 200, y, 82 - x, 126 - y);
+    //can change x and y but not w and d
+    super(x - 3, y, 6, 48);
+    // super(x + 200, y, 82 - x, 126 - y);
 
     this.spritesheet = spriteSheet;
-
 
     this.facing = 0; // 0 = right, 1 = left
     this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling? 3 = shooting
@@ -18,29 +18,28 @@ class Entity extends Rectangle {
     this.acc.y = .4;
 
     this.onGround = false;
-    
-    // The shooting angle is always attached to a player, so this should be 
+
+    // The shooting angle is always attached to a player, so this should be
     // a better place than 'world'. The entity shooting angle bounds are defined
     // by a weapon that a player is holding, it is hard coded now only for testing - Hung Vu
     this.shootingAngle = new ShootingAngle(
       this.x + this.w,
       this.y + this.h,
       100, 0, 90, 45);
-    //
-    // this.animations = [];
-    // this.loadAnimations();
+
+    this.animations = [];
+    this.loadAnimations();
 
   }
 
   draw(ctx) {
-    ctx.drawImage(this.spritesheet, 59, 65, 23, 61, this.x, this.y, this.w, this.h);
-    // ctx.drawImage(this.spritesheet, this.x, this.y, this.w, this.h); //draws everything
     // Used as hitbox
     ctx.linewidth = "1";
     ctx.strokeStyle = "white";
-    ctx.strokeRect(this.x,this.y,this.w,this.h);
-    
-    
+    ctx.strokeRect(this.x,this.y,this.w+15,this.h+15);
+
+    this.animations[this.state][this.facing].drawFrame(null, ctx, this.x, this.y, 0.8);
+
     // Draw shooting angle indicator
     // Technically, the origin can be derived from a player position as shown below
     //  but by having a separate query like this, it will increase readability - Hung Vu
@@ -79,6 +78,16 @@ class Entity extends Rectangle {
     this.updateOnGround(map);
     let movement = this.desiredMovement();
 
+    const MIN_WALK = 1.0;
+
+    //update direction/facing
+    if (this.vel.x < 0) this.facing = 1;
+    if (this.vel.x > 0) this.facing = 0;
+
+    //update state
+    if (Math.abs(this.vel.x) >= MIN_WALK) this.state = 1;
+    else this.state = 0;
+
     this.privateHandleHorizontalMovement(movement.x, deltaT, map, entities);
     this.privateHandleVerticalMovement(movement.y, deltaT, map, entities);
   }
@@ -93,31 +102,39 @@ class Entity extends Rectangle {
   }
 
 
-  // loadAnimations() {
-  //   for (var i = 0; i < 3; i++) { //states
-  //     this.animations.push([]);
-  //     for (var j = 0; j < 2; j++) { //facing
-  //       this.animations[i].push([]);
-  //     }
-  //   }
-  //   //idle = 0
-  //   //facing right, double check NULL
-  //   this.animations[0][0] = new Animator(this.spritesheet, 59, 65, 23, 61, 1, 0.5, NULL, false, true);
-  //
-  //   //Buffer space current build: 23
-  //   //Note: seperate spritesheet into respected motions (eg one line walking right, another walking left, etc)
-  //   //walk = 1
-  //   //facing right
-  //   this.animation[1][0] = new Animatior(this.spritesheet, 59, 65, 23, 61, 4, 0.5, 23, false, true);
-  //
-  //   //Jumping/Falling = 1?
-  //
-  //
-  //   //Shooting = 2
-  //   //should have an angle check so function know what angle frame it should be on (should this be another for above?)
-  //
-  // }
-  
+  loadAnimations() {
+    for (var i = 0; i < 3; i++) { //states
+      this.animations.push([]);
+      for (var j = 0; j < 2; j++) { //facing
+        this.animations[i].push([]);
+      }
+    }
+    //idle = 0
+    //facing right = 0,
+    this.animations[0][0] = new Animator(this.spritesheet, 11, 128, 23, 61, 1, 0.5, null, false, true);
+
+    //facing left = 1,
+    this.animations[0][1] = new Animator(this.spritesheet, 11, 193, 23, 61, 1, 0.5, null, false, true);
+
+    //NOTES:
+    //Buffer space 1.0 build: 23
+    //Buffer space current build: 22
+
+    //walk = 1
+    //facing right = 0
+    this.animations[1][0] = new Animator(this.spritesheet, 11, 128, 23, 61, 7, 0.5, 22, false, true);
+
+    //facing left = 1
+    this.animations[1][1] = new Animator(this.spritesheet, 11, 193, 23, 61, 7, 0.5, 22, false, true);
+
+    //Jumping/Falling = 1?
+
+
+    //Shooting = 2
+    //should have an angle check so function know what angle frame it should be on (should this be another for above?)
+
+  };
+
   // A helper function to handle x direction movement
   privateHandleHorizontalMovement(movementX, deltaT, map, entities) {
     // If we need to move more than a pixel in either direction
@@ -156,7 +173,7 @@ class Entity extends Rectangle {
 
       if (this.onGround) {
         this.updateOnGround(map);
-        // If we have moved off the ground, check if can move the 
+        // If we have moved off the ground, check if can move the
         // entity down one pixel to put them back on the ground.
         //
         // This will smooth out walking down slopes.
