@@ -1,6 +1,5 @@
 class World {
   constructor(map) {
-    this.controls = new Controls();
     this.map = map;
 
     this.spritesheet = MANAGER.getAsset('./assets/character.png');
@@ -30,7 +29,8 @@ class World {
     ctx.save();
     ctx.scale(this.camera.zoom, this.camera.zoom);
 
-    ctx.translate((-this.camera.x + w / (2 * this.camera.zoom)), (-this.camera.y + h / (2 * this.camera.zoom)));
+    ctx.translate((-this.camera.x + w / (2 * this.camera.zoom)), 
+                  (-this.camera.y + h / (2 * this.camera.zoom)));
 
     // Draw the map foreground
     ctx.drawImage(this.map.mapCanvas, 0, 0);
@@ -39,13 +39,8 @@ class World {
     this.drawPlayers(ctx);
     this.drawEntities(ctx);
 
-
     // Untransform ctx
     ctx.restore();
-
-    // Display current position on screen.
-    ctx.font = "20px Arial";
-    ctx.fillText("Mouse position: X=" + this.controls.moveX + ", Y=" + this.controls.moveY, 20, 20);
   }
 
   /*
@@ -72,9 +67,9 @@ class World {
     ctx.restore();
   }
 
-  update(deltaT) {
-    this.updatePlayers(deltaT, this.controls);
-    this.currentPlayer.updateActive(this, this.controls, this.deltaT);
+  update(deltaT, controls) {
+    this.updatePlayers(deltaT, controls);
+    this.currentPlayer.updateActive(this, controls, deltaT);
     this.updateEntities(deltaT);
 
     // Set the cameras target to be the players position
@@ -82,7 +77,6 @@ class World {
     this.camera.target.y = this.currentPlayer.center.y;
 
     this.camera.glideToTarget(8);
-    this.controls.reset();
   }
 
 
@@ -100,7 +94,7 @@ class World {
 
   updatePlayers(deltaT, controls) {
     this.players.forEach(player => {
-      player.update(this, this.controls, deltaT);
+      player.update(this, controls, deltaT);
     });
   }
 

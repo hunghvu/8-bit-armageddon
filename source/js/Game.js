@@ -25,18 +25,20 @@ class Game {
 
       //Add timer
       this.timer = new Timer();
+      // Add a controls handler
+      this.controls = new Controls();
 
       // Add mouse listener
-      this.world.controls.addMouseListener(this.canvas);
+      this.controls.addMouseListener(this.canvas);
       requestAnimationFrame(this.draw.bind(this));
     }).bind(this);
   }
 
   draw() {
 
-    this.world.update(this.timer.tick());
+    this.world.update(this.timer.tick(), this.controls);
     this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
-
+    this.controls.reset();
     requestAnimationFrame(this.draw.bind(this));
   }
 

@@ -70,7 +70,7 @@ class Player extends Entity {
   }
 
   updateActive(world, controls, deltaT) {
-    this.updateInputs(world, controls);
+    this.updateInputs(world, controls, deltaT);
   }
 
   update(world, controls, deltaT) {
@@ -92,7 +92,7 @@ class Player extends Entity {
   }
 
   updateInputs(world, controls) {
-    if (world.controls.jump && this.onGround) {
+    if (controls.jump && this.onGround) {
       this.vel.y = -this.JUMP_POWER;
     }
 
