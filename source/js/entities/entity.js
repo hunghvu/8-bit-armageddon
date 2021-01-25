@@ -38,7 +38,7 @@ class Entity extends Rectangle {
     ctx.strokeStyle = "white";
     ctx.strokeRect(this.x,this.y,this.w+15,this.h+15);
 
-    this.animations[this.state][this.facing].drawFrame(null, ctx, this.x, this.y, 0.8);
+    this.animations[this.state][this.facing].drawFrame(.17, ctx, this.x, this.y, 0.8);
 
     // Draw shooting angle indicator
     // Technically, the origin can be derived from a player position as shown below
@@ -122,10 +122,10 @@ class Entity extends Rectangle {
 
     //walk = 1
     //facing right = 0
-    this.animations[1][0] = new Animator(this.spritesheet, 11, 128, 23, 61, 7, 0.5, 22, false, true);
+    this.animations[1][0] = new Animator(this.spritesheet, 11, 128, 23, 61, 7, 0.5, 25, false, true);
 
     //facing left = 1
-    this.animations[1][1] = new Animator(this.spritesheet, 11, 193, 23, 61, 7, 0.5, 22, false, true);
+    this.animations[1][1] = new Animator(this.spritesheet, 11, 193, 23, 61, 7, 0.5, 25, true, true);
 
     //Jumping/Falling = 1?
 
