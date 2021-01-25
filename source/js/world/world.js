@@ -3,7 +3,9 @@ class World {
     this.controls = new Controls();
     this.map = map;
 
-    this.players = [new Entity(null, 344, 650), new Entity(null, 500, 650)];
+    this.spritesheet = MANAGER.getAsset('./assets/character.png');
+
+    this.players = [new Entity(this.spritesheet, 344, 650), new Entity(this.spritesheet, 500, 650)];
     this.currentPlayer = this.players[0];
 
     this.entities = [];

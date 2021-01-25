@@ -1,9 +1,18 @@
+var MANAGER = new AssetManager();
+
 window.onload = function () {
   // Load a map image
+  // asset_manager here
 
-  //destructionMap = new DestructableMap('map/map.png');
-  gg = new Game();
-  
+  MANAGER.queueDownload('./assets/character.png');
+
+  MANAGER.downloadAll(function () {
+
+    //destructionMap = new DestructableMap('map/map.png');
+    gg = new Game();
+
+  });
+
 }
 
 class Game {
@@ -14,6 +23,7 @@ class Game {
       let destructionMap = new DestructibleMap(newMapImg);
       this.world = new World(destructionMap);
       this.canvas = document.getElementById('display');
+
 
       // Set responsive size
       this.canvas.width = window.innerWidth;
@@ -30,16 +40,25 @@ class Game {
       //console.log(ctx);
       //world.draw(ctx, canvas.width, canvas.height);
 
+      //Add timer
+      this.timer = new Timer();
+
       // Add mouse listener
       this.world.controls.addMouseListener(this.canvas);
       requestAnimationFrame(this.draw.bind(this));
     }).bind(this);
   }
-  
+
   draw() {
-    
+
     this.world.update(this.ctx);
     this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
+
     requestAnimationFrame(this.draw.bind(this));
   }
+
+  loop(){
+    this.clockTick = this.timer.tick();
+    this.draw();
+  };
 }
