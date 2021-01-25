@@ -1,19 +1,14 @@
 class Bullet extends Entity{
-    constructor(x, y, vx, vy) {
+    constructor(x, y, angle, power) {
         super();
         this.x = x;
         this.y = y;
-        this.vel.x = vx;
-        this.vel.y = vy;
-
+        this.vel.x = Math.cos(angle) * power;
+        this.vel.y = -Math.sin(angle) * power;
     }
 
-    update(){
-        this.vel.x += this.acc.x;
-        this.vel.y += this.acc.y;
-        this.x += this.vel.x;
-        this.y += this.vel.y;
-
+    update(world, deltaT){
+        this.add(this.desiredMovement(deltaT))
     }
 
     draw(ctx){

@@ -1,8 +1,7 @@
 /* A Rectangle class contains a x and y coordinates as well as width and height */ 
-class Rectangle {
+class Rectangle extends Point {
   constructor(x, y, w, h) {
-    this.x = x;
-    this.y = y;
+    super(x, y);
     this.w = w;
     this.h = h;
   }

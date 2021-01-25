@@ -34,7 +34,7 @@ class Game {
 
   draw() {
 
-    this.world.update(this.ctx);
+    this.world.update(this.timer.tick());
     this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
 
     requestAnimationFrame(this.draw.bind(this));

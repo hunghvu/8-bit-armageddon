@@ -5,7 +5,7 @@ class World {
 
     this.spritesheet = MANAGER.getAsset('./assets/character.png');
 
-    this.players = [new Entity(this.spritesheet, 344, 650), new Entity(this.spritesheet, 500, 650)];
+    this.players = [new Player(this.spritesheet, 344, 650), new Player(this.spritesheet, 500, 650)];
     this.currentPlayer = this.players[0];
 
     this.entities = [];
@@ -73,8 +73,8 @@ class World {
   }
 
   update(deltaT) {
-    this.updateInputs(this.currentPlayer);
-    this.updatePlayers(deltaT);
+    this.updatePlayers(deltaT, this.controls);
+    this.currentPlayer.updateActive(this, this.controls, this.deltaT);
     this.updateEntities(deltaT);
 
     // Set the cameras target to be the players position
@@ -85,73 +85,31 @@ class World {
     this.controls.reset();
   }
 
-  updateInputs(currentPlayer) {
-    if (this.controls.jump && currentPlayer.onGround) {
-      currentPlayer.vel.y = -10;
-    }
-
-    // If the player move in either direction
-    if (this.controls.left && !this.controls.right) {
-      currentPlayer.vel.x = -2;
-      currentPlayer.shootingAngle.updateQuadrant(0);
-    } else if (!this.controls.left && this.controls.right) {
-      currentPlayer.vel.x = 2;
-      currentPlayer.shootingAngle.updateQuadrant(1);
-    }    
-    else {
-      // Stop the player and any acceleration in the x direction
-      // if they don't want to move.
-      currentPlayer.vel.x = 0;
-      currentPlayer.acc.x = 0;
-    }
-
-    /**
-     * Adjust shooting angle
-     * @todo Have a better handler when pressing multiple button at once
-     */
-
-    if (this.controls.up) {
-      currentPlayer.shootingAngle.right ? currentPlayer.shootingAngle.increaseAngle() : currentPlayer.shootingAngle.decreaseAngle();
-    } 
-    if (this.controls.down) {
-      currentPlayer.shootingAngle.left ? currentPlayer.shootingAngle.increaseAngle() : currentPlayer.shootingAngle.decreaseAngle();
-    }
-
-    if(this.controls.shootingDownThisLoop){
-      this.entities.push(new Bullet(currentPlayer.x,currentPlayer.y, Math.cos(currentPlayer.shootingAngle.defaultAngle*(Math.PI/180)) * 20, -Math.sin(currentPlayer.shootingAngle.defaultAngle*(Math.PI/180))*20));
-      console.log("shoot");
-      console.log(currentPlayer.y);
-
-    }
-    // If the user scrolls then zoom in or out
-    if (this.controls.scrollDelta > 0) {
-      this.camera.zoomIn();
-    } else if (this.controls.scrollDelta < 0) {
-      this.camera.zoomOut();
-    }
-  }
 
   drawPlayers(ctx) {
     this.players.forEach(player => {
-      player.draw(ctx)
+      player.draw(ctx);
     });
   }
 
   drawEntities(ctx) {
     this.entities.forEach(entity => {
-      entity.draw(ctx)
+      entity.draw(ctx);
     });
   }
 
-  updatePlayers(deltaT) {
+  updatePlayers(deltaT, controls) {
     this.players.forEach(player => {
-      player.update(deltaT, this.map, this.entities)
+      player.update(this, this.controls, deltaT);
     });
   }
 
   updateEntities(deltaT) {
     this.entities.forEach(entity => {
-      entity.update(deltaT, this.map, this.entities)
+      entity.update(this, deltaT);
     });
+  }
+  spawn(entity) {
+    this.entities.push(entity);
   }
 }
