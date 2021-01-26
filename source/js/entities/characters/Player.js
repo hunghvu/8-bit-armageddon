@@ -33,7 +33,7 @@ class Player extends Entity {
 
     this.animations = [];
 
-    // Determine if it's this player's turn.
+    // Determine if it's this player's turn. This flag is currently not in used.
     this.isInTurn = false;
     this.loadAnimations();
   }
@@ -120,23 +120,23 @@ class Player extends Entity {
    * @params {deltaT} - The number of ms since the last update
    */
   update(world, controls, deltaT) {
-    if(this.isInTurn) {
-      this.updateOnGround(world.map);
-      let movement = this.desiredMovement(deltaT);
 
-      const MIN_WALK = 1.0;
+    this.updateOnGround(world.map);
+    let movement = this.desiredMovement(deltaT);
 
-      // update direction/facing
-      if (this.vel.x < 0) this.facing = 1;
-      if (this.vel.x > 0) this.facing = 0;
+    const MIN_WALK = 1.0;
 
-      // update state
-      if (Math.abs(this.vel.x) >= MIN_WALK) this.state = 1;
-      else this.state = 0;
+    // update direction/facing
+    if (this.vel.x < 0) this.facing = 1;
+    if (this.vel.x > 0) this.facing = 0;
 
-      this.privateHandleHorizontalMovement(movement.x, world.map);
-      this.privateHandleVerticalMovement(movement.y, world.map);
-    }
+    // update state
+    if (Math.abs(this.vel.x) >= MIN_WALK) this.state = 1;
+    else this.state = 0;
+
+    this.privateHandleHorizontalMovement(movement.x, world.map);
+    this.privateHandleVerticalMovement(movement.y, world.map);
+
   }
 
   /**
