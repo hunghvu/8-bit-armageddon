@@ -32,6 +32,9 @@ class Player extends Entity {
       100, 0, 90, 45);
 
     this.animations = [];
+
+    // Determine if it's this player's turn.
+    this.isInTurn = false;
     this.loadAnimations();
   }
 
@@ -104,7 +107,9 @@ class Player extends Entity {
    * @params {deltaT} - The number of ms since the last update
    */
   updateActive(world, controls, deltaT) {
-    this.updateInputs(world, controls, deltaT);
+    // if(this.isInTurn) {
+      this.updateInputs(world, controls, deltaT);
+    // }
   }
 
   /**
@@ -115,21 +120,23 @@ class Player extends Entity {
    * @params {deltaT} - The number of ms since the last update
    */
   update(world, controls, deltaT) {
-    this.updateOnGround(world.map);
-    let movement = this.desiredMovement(deltaT);
+    if(this.isInTurn) {
+      this.updateOnGround(world.map);
+      let movement = this.desiredMovement(deltaT);
 
-    const MIN_WALK = 1.0;
+      const MIN_WALK = 1.0;
 
-    // update direction/facing
-    if (this.vel.x < 0) this.facing = 1;
-    if (this.vel.x > 0) this.facing = 0;
+      // update direction/facing
+      if (this.vel.x < 0) this.facing = 1;
+      if (this.vel.x > 0) this.facing = 0;
 
-    // update state
-    if (Math.abs(this.vel.x) >= MIN_WALK) this.state = 1;
-    else this.state = 0;
+      // update state
+      if (Math.abs(this.vel.x) >= MIN_WALK) this.state = 1;
+      else this.state = 0;
 
-    this.privateHandleHorizontalMovement(movement.x, world.map);
-    this.privateHandleVerticalMovement(movement.y, world.map);
+      this.privateHandleHorizontalMovement(movement.x, world.map);
+      this.privateHandleVerticalMovement(movement.y, world.map);
+    }
   }
 
   /**

@@ -30,6 +30,9 @@ class Game {
 
       // Add mouse listener
       this.controls.addMouseListener(this.canvas);
+
+      // Turn mechanism
+      this.turn = new Turn(5000, this, this.world).countdownTurn();
       requestAnimationFrame(this.draw.bind(this));
     }).bind(this);
   }

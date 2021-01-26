@@ -5,7 +5,9 @@ class World {
     this.spritesheet = MANAGER.getAsset('./assets/character.png');
 
     this.players = [new Player(this.spritesheet, 344, 650), new Player(this.spritesheet, 500, 650)];
-    this.currentPlayer = this.players[0];
+
+    this.currentPlayer = this.players[this.players.length - 1];
+    this.currentPlayer.isInTurn = true;
 
     this.entities = [];
 
@@ -17,6 +19,9 @@ class World {
     this.imgNear = new Image();
     this.imgNear.src = "./assets/background-cloud.jpg";
     // The sX in drawImage will be updated as the player moves in a way it create an opposite movement effect.
+
+
+    
   }
 
   draw(ctx, w, h) {
