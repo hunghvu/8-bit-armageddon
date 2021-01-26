@@ -46,11 +46,21 @@ class Rectangle extends Point {
   }
 
   /**
-   * Returns a point that is in the center of this rectangle
+   * Returns a point that is in the center of this rectangle.
    * @returns {Point} - An x, y coordinate for the center of 
    *                    this rectangle
    */
   get center() {
     return new Point(this.x + this.w / 2, this.y + this.h / 2)
+  }
+
+  /**
+   * Centers this rectangle on the point passed to it.
+   * @param {Point} point - An x, y coordinate for the center of 
+   *                        this rectangle
+   */
+  set center(point) {
+    this.x = point.x - this.w / 2;
+    this.y = point.y - this.h / 2;
   }
 }

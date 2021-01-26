@@ -86,6 +86,9 @@ class World {
   }
 
   updateEntities(deltaT) {
+    // Filter out entities that have died
+    this.entities = this.entities.filter((entity) => entity.active);
+    // Update what is left
     this.entities.forEach(entity => {
       entity.update(this, deltaT);
     });
