@@ -20,16 +20,6 @@ class World {
     this.imgNear.src = "./assets/background-cloud.jpg";
     // The sX in drawImage will be updated as the player moves in a way it create an opposite movement effect.
 
-    // For testing only.
-    this.countDown = 5;
-    setTimeout (() => {
-      setInterval(() => {
-        this.countDown --;
-        if (this.countDown === 0) {
-          this.countDown = 5;
-        }
-      }, 1000);
-    }, 3000);
   }
 
   draw(ctx, w, h) {
@@ -47,10 +37,6 @@ class World {
     // Draw players
     this.drawPlayers(ctx);
     this.drawEntities(ctx);
-
-    // For testing only.
-    ctx.font = "30px Arial";
-    ctx.fillText(this.countDown, this.currentPlayer.x, this.currentPlayer.y);
 
     // Untransform ctx
     this.camera.restoreContext(ctx);

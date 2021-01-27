@@ -43,6 +43,10 @@ class Game {
     this.turn.countdownTurn();
     this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
 
+    // For testing only.
+    this.ctx.font = "30px Arial";
+    this.ctx.fillText(5 - Math.round(this.timer.turnTime % 5), 200, 200);
+
     this.controls.reset();
     requestAnimationFrame(this.draw.bind(this));
   }
