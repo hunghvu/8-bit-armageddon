@@ -38,7 +38,6 @@ class Game {
   }
 
   draw() {
-
     this.world.update(this.timer.tick(), this.controls);
     this.turn.countdownTurn();
     this.world.draw(this.ctx, this.canvas.width, this.canvas.height);

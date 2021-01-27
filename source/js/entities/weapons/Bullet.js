@@ -11,11 +11,16 @@ class Bullet extends Entity{
      *                         projectile. higher is further
      */
     constructor(x, y, angle, power) {
-        super();
-        this.x = x;
-        this.y = y;
+        super(x, y, 8, 8);
         this.vel.x = Math.cos(angle) * power;
         this.vel.y = -Math.sin(angle) * power;
+
+        //this.type = 0; Type of weapon gun = 0, grenade = 1, teleport gun = 2, portal gun = 3
+
+        this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
+
+        this.animations = [];
+        this.loadAnimations();
     }
 
     /**
@@ -26,6 +31,34 @@ class Bullet extends Entity{
      */
     update(world, deltaT){
         this.add(this.desiredMovement(deltaT))
+
+        // update direction/facing
+        if (this.vel.x < 0) this.facing = 1;
+        if (this.vel.x > 0) this.facing = 0;
+
+        if (world.map.collideWithRectangle(this)) {
+            // Destroy this bullet if we hit something
+            this.active = false;
+            //let destructionRect = new Rectangle(this.x, this.y, 20, 20);
+            //destructionRect.center = this.center;
+            //world.map.destroyRectangle(destructionRect);
+            world.map.destroyCircle(this.center.x, this.center.y, 10);
+        }
+    }
+
+    moveUntilCollision(world, movement) {
+        while (movement.x >= 1 || movement.x <= 1 
+               && world.map.collideWithRectangle(this)) {
+            let direction = movement.x >= 1 ? 1 : -1;
+            this.x += direction;
+            movement.x -= direction;
+        }
+        while (movement.y >= 1 || movement.y <= 1
+               && world.map.collideWithRectangle(this)) {
+            let direction = movement.y >= 1 ? 1 : -1;
+            this.y += direction;
+            movement.y -= direction;
+        }
     }
 
     /**
@@ -34,7 +67,24 @@ class Bullet extends Entity{
      * @param {CanvasRenderingContext2D} ctx - The context to draw to
      */
     draw(ctx){
-        ctx.fillStyle = "red";
-        ctx.fillRect(this.x, this.y, 16, 16);
+        // ctx.drawImage(this.spritesheet, 9, 7, 12, 14, this.x, this.y, 12, 14);
+        this.animations[this.facing].drawFrame(.17, ctx, this.x, this.y, 0.8);
+
+        ctx.fillStyle = "white";
+        ctx.strokeRect(this.x, this.y, 16, 16);
+
+        //fix and add load animation
+    }
+    loadAnimations() {
+      for (var j = 0; j < 2; j++) { //facing
+        this.animations.push([]);
+      }
+      //buffer padding current build =
+      //facing right = 0,
+      this.animations[0] = new Animator(this.spritesheet, 9, 7, 12, 14, 4, 0.5, 17, false, true);
+
+      //facing left = 1,
+      this.animations[1] = new Animator(this.spritesheet, 137, 7, 12, 14, 1, 0.5, 17, true, true);
+
     }
 }

@@ -8,15 +8,15 @@ class Player extends Entity {
    * @param {number} x - The x position where the player is spawned
    * @param {number} y - The y position where the player is spawned
    */
-  constructor(spriteSheet, x, y) {
+  constructor(spriteSheet, x, y, design) {
     //Used as hitbox
-    //can change x and y but not w and d
     super(x - 3, y, 6, 48);
     this.WALK_SPEED = 100;
     this.JUMP_POWER = 300;
 
     this.spritesheet = spriteSheet;
 
+    this.design = design; //0 = human, 1 = food
     this.facing = 0; // 0 = right, 1 = left
     this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling? 3 = shooting
     // this.dead = false; ??
@@ -49,7 +49,7 @@ class Player extends Entity {
     ctx.strokeStyle = "white";
     ctx.strokeRect(this.x, this.y, this.w, this.h);
 
-    this.animations[this.state][this.facing].drawFrame(.17, ctx, this.x, this.y, 0.8);
+    this.animations[this.design][this.state][this.facing].drawFrame(.17, ctx, this.x, this.y, 0.8);
 
     // Draw shooting angle indicator
     // Technically, the origin can be derived from a player position as shown below
@@ -83,7 +83,7 @@ class Player extends Entity {
 
   /**
    * Updates the onGround status of the player.
-   * Set to true if the player is one pixel from 
+   * Set to true if the player is one pixel from
    * colliding with the ground downward.
    * @param {DestructibleMap} - The map to collide with
    */
@@ -100,7 +100,7 @@ class Player extends Entity {
   }
 
   /**
-   * If this is the active player then call this function to update 
+   * If this is the active player then call this function to update
    * based on the user's inputs.
    *
    * @params {World} - The world object that should be referenced
@@ -158,7 +158,7 @@ class Player extends Entity {
     } else if (!controls.left && controls.right) {
       this.vel.x = this.WALK_SPEED;
       this.shootingAngle.updateQuadrant(1);
-    }    
+    }
     else {
       // Stop the player and any acceleration in the x direction
       // if they don't want to move.
@@ -173,7 +173,7 @@ class Player extends Entity {
 
     if (controls.up) {
       this.shootingAngle.right ? this.shootingAngle.increaseAngle() : this.shootingAngle.decreaseAngle();
-    } 
+    }
     if (controls.down) {
       this.shootingAngle.left ? this.shootingAngle.increaseAngle() : this.shootingAngle.decreaseAngle();
     }
@@ -196,12 +196,14 @@ class Player extends Entity {
         this.animations[i].push([]);
       }
     }
+    //Human = 0;
+
     //idle = 0
     //facing right = 0,
-    this.animations[0][0] = new Animator(this.spritesheet, 11, 128, 23, 61, 1, 0.5, null, false, true);
+    this.animations[0][0][0] = new Animator(this.spritesheet, 11, 128, 23, 61, 1, 0.5, null, false, true);
 
     //facing left = 1,
-    this.animations[0][1] = new Animator(this.spritesheet, 11, 193, 23, 61, 1, 0.5, null, false, true);
+    this.animations[0][0][1] = new Animator(this.spritesheet, 11, 193, 23, 61, 1, 0.5, null, false, true);
 
     //NOTES:
     //Buffer space 1.0 build: 23
@@ -209,24 +211,40 @@ class Player extends Entity {
 
     //walk = 1
     //facing right = 0
-    this.animations[1][0] = new Animator(this.spritesheet, 11, 128, 23, 61, 7, 0.5, 25, false, true);
+    this.animations[0][1][0] = new Animator(this.spritesheet, 11, 128, 23, 61, 7, 0.5, 25, false, true);
 
     //facing left = 1
-    this.animations[1][1] = new Animator(this.spritesheet, 11, 193, 23, 61, 7, 0.5, 25, true, true);
+    this.animations[0][1][1] = new Animator(this.spritesheet, 11, 193, 23, 61, 7, 0.5, 25, true, true);
 
-    //Jumping/Falling = 1?
+    //Jumping/Falling = 2
+    //facing right = 0
+    //this.animations[0][2][0]
 
 
-    //Shooting = 2
-    // should have an angle check so function know what angle 
+    //Shooting = 3
+    // should have an angle check so function know what angle
     // frame it should be on (should this be another for above?)
+
+    //Food = 1;
+
+    //Idle = 0;
+    //facing right
+    this.animations[1][0][0] = new Animator(this.spritesheet, 102, 320, 36, 59, 1, 0.5, null, false, true);
+    //facing left = 1;
+    this.animations[1][0][1] = new Animator(this.spritesheet, 54, 320, 36, 59, 1, 0.5, null, false, true);
+
+
+    //walk = 1;
+    this.animations[1][1][0] = new Animator(this.spritesheet, 102, 320, 36, 59, 1, 0.5, null, false, true);
+    this.animations[1][1][1] = new Animator(this.spritesheet, 54, 320, 36, 59, 1, 0.5, null, false, true);
+
 
   };
 
   /**
    * Handles the x axis movement in a way that is feels natural.
    *
-   * @param {number} movementX - The number of pixels to move in 
+   * @param {number} movementX - The number of pixels to move in
    *                             the x direction
    */
   privateHandleHorizontalMovement(movementX, map) {
@@ -243,7 +261,7 @@ class Player extends Entity {
         currentShift = -1;
       }
 
-      // Move the player a single pixel and then 
+      // Move the player a single pixel and then
       // start performing checks
       movementX -= currentShift;
       this.x += currentShift;
@@ -290,7 +308,7 @@ class Player extends Entity {
   /**
    * Handles the y axis movement.
    *
-   * @param {number} movementY - The number of pixels to move in 
+   * @param {number} movementY - The number of pixels to move in
    *                             the y direction
    */
   privateHandleVerticalMovement(movementY, map) {
@@ -305,7 +323,7 @@ class Player extends Entity {
         currentShift = -1;
       }
 
-      // Move the player a single pixel and then 
+      // Move the player a single pixel and then
       // start performing checks
       this.y += currentShift;
       movementY -= currentShift;

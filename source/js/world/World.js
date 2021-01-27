@@ -4,10 +4,11 @@ class World {
 
     this.spritesheet = MANAGER.getAsset('./assets/character.png');
 
-    this.players = [new Player(this.spritesheet, 344, 650), new Player(this.spritesheet, 500, 650)];
-
+    // parameter sets the players design
+    this.players = [new Player(this.spritesheet, 344, 650, 0), new Player(this.spritesheet, 500, 650, 1)];
     this.currentPlayer = this.players[this.players.length - 1];
     this.currentPlayer.isInTurn = true;
+
 
     this.entities = [];
 
@@ -43,13 +44,13 @@ class World {
   }
 
   /*
-    This function will draw a parralax background. 
+    This function will draw a parralax background.
   */
   drawBackground(ctx){
     this.camera.transformContext(ctx, 3);
     ctx.drawImage(this.imgFar, -this.imgNear.width / 2, -this.imgFar.height / 2);
     this.camera.restoreContext(ctx);
-    
+
     this.camera.transformContext(ctx, 2);
     ctx.globalAlpha = 0.7;
     ctx.drawImage(this.imgNear, -this.imgNear.width / 2, -this.imgNear.height / 2);
@@ -88,6 +89,9 @@ class World {
   }
 
   updateEntities(deltaT) {
+    // Filter out entities that have died
+    this.entities = this.entities.filter((entity) => entity.active);
+    // Update what is left
     this.entities.forEach(entity => {
       entity.update(this, deltaT);
     });

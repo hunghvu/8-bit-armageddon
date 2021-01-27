@@ -20,12 +20,23 @@ class DestructibleMap {
 
   // Destory a single pixel of the map by replacing it with a pixel of transparency.
   destroyPixel(x, y) {
-    this.ctx.clearRectangle(x, y, 1, 1);
+    this.ctx.clearRect(x, y, 1, 1);
   }
 
-  // Destory a rect of the map by replacing it with a pixel of transparency.
-  destroyRectangle(x, y, w, h) {
-      this.ctx.clearRectangle(x, y, w, h);
+  // Destory a rect of the map by replacing it with pixels of transparency.
+  destroyRectangle(rectangle) {
+    this.ctx.clearRect(rectangle.x, rectangle.y, 
+                       rectangle.w, rectangle.h);
+  }
+
+  // Destory a circle of the map by replacing it with pixels of transparency.
+  destroyCircle(x, y, r) {
+    for (let i = -r; i <= r; i++) {
+      let thisWidth = Math.sqrt(1 - Math.pow(i / r, 2)) * r;
+      this.ctx.clearRect(x - thisWidth, i + y, 
+                         thisWidth * 2, 1);
+
+    }
   }
   
   // Check if the rectangle collides with any non transparent pixels

@@ -5,6 +5,7 @@ window.onload = function () {
   // asset_manager here
 
   MANAGER.queueDownload('./assets/character.png');
+  MANAGER.queueDownload('./assets/weapons.png');
 
   MANAGER.downloadAll(function () {
 
@@ -14,4 +15,3 @@ window.onload = function () {
   });
 
 }
-
