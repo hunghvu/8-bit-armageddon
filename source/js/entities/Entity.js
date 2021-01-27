@@ -15,6 +15,10 @@ class Entity extends Rectangle {
     //can change x and y but not w and d
     super(x, y, w, h);
 
+    // This variable keeps track of whether an entity is to be 
+    // removed or not
+    this.active = true;
+
     // The players are locked to a single pixel with no decimal part
     // so when the player moves 1.3pixels the sub pixel position is 
     // incremented by 0.3 pixel and the player is moved a single pixel.

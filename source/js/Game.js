@@ -35,7 +35,6 @@ class Game {
   }
 
   draw() {
-
     this.world.update(this.timer.tick(), this.controls);
     this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
     this.controls.reset();

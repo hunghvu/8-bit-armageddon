@@ -11,9 +11,7 @@ class Bullet extends Entity{
      *                         projectile. higher is further
      */
     constructor(x, y, angle, power) {
-        super();
-        this.x = x;
-        this.y = y;
+        super(x, y, 8, 8);
         this.vel.x = Math.cos(angle) * power;
         this.vel.y = -Math.sin(angle) * power;
 
@@ -37,6 +35,30 @@ class Bullet extends Entity{
         // update direction/facing
         if (this.vel.x < 0) this.facing = 1;
         if (this.vel.x > 0) this.facing = 0;
+
+        if (world.map.collideWithRectangle(this)) {
+            // Destroy this bullet if we hit something
+            this.active = false;
+            //let destructionRect = new Rectangle(this.x, this.y, 20, 20);
+            //destructionRect.center = this.center;
+            //world.map.destroyRectangle(destructionRect);
+            world.map.destroyCircle(this.center.x, this.center.y, 10);
+        }
+    }
+
+    moveUntilCollision(world, movement) {
+        while (movement.x >= 1 || movement.x <= 1 
+               && world.map.collideWithRectangle(this)) {
+            let direction = movement.x >= 1 ? 1 : -1;
+            this.x += direction;
+            movement.x -= direction;
+        }
+        while (movement.y >= 1 || movement.y <= 1
+               && world.map.collideWithRectangle(this)) {
+            let direction = movement.y >= 1 ? 1 : -1;
+            this.y += direction;
+            movement.y -= direction;
+        }
     }
 
     /**
