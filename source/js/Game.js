@@ -32,7 +32,7 @@ class Game {
       this.controls.addMouseListener(this.canvas);
 
       // Turn mechanism
-      this.turn = new Turn(5000, this, this.world).countdownTurn();
+      this.turn = new Turn(this.timer, this.world, 5);
       requestAnimationFrame(this.draw.bind(this));
     }).bind(this);
   }
@@ -40,7 +40,9 @@ class Game {
   draw() {
 
     this.world.update(this.timer.tick(), this.controls);
+    this.turn.countdownTurn();
     this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
+
     this.controls.reset();
     requestAnimationFrame(this.draw.bind(this));
   }

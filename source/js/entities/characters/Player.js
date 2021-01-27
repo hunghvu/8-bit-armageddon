@@ -33,7 +33,8 @@ class Player extends Entity {
 
     this.animations = [];
 
-    // Determine if it's this player's turn. This flag is currently not in used.
+    // Determine if it's this player's turn 
+    // Lock user's input if false (when the turns end)
     this.isInTurn = false;
     this.loadAnimations();
   }
@@ -107,9 +108,9 @@ class Player extends Entity {
    * @params {deltaT} - The number of ms since the last update
    */
   updateActive(world, controls, deltaT) {
-    // if(this.isInTurn) {
+    if(this.isInTurn) {
       this.updateInputs(world, controls, deltaT);
-    // }
+    }
   }
 
   /**
