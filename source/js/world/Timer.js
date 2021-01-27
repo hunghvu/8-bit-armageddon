@@ -7,6 +7,9 @@ class Timer
 {
   constructor() {
     this.gameTime = 0;
+    // Create a second "gameTime" so it can be modified as the turns go on.
+    //  this.gameTime should not be changed as it may affects frames order - Hung Vu.
+    this.turnTime = 0;
     this.maxStep = 0.05;
     this.lastTimestamp = 0;
   }
@@ -18,6 +21,8 @@ class Timer
 
     var gameDelta = Math.min(delta,this.maxStep);
     this.gameTime += gameDelta;
+
+    this.turnTime += gameDelta;
     return gameDelta;
   }
 }

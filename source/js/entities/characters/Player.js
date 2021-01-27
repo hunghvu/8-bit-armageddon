@@ -32,6 +32,10 @@ class Player extends Entity {
       100, 0, 90, 45);
 
     this.animations = [];
+
+    // Determine if it's this player's turn 
+    // Lock user's input if false (when the turns end)
+    this.isInTurn = false;
     this.loadAnimations();
   }
 
@@ -104,7 +108,9 @@ class Player extends Entity {
    * @params {deltaT} - The number of ms since the last update
    */
   updateActive(world, controls, deltaT) {
-    this.updateInputs(world, controls, deltaT);
+    if(this.isInTurn) {
+      this.updateInputs(world, controls, deltaT);
+    }
   }
 
   /**
@@ -115,6 +121,7 @@ class Player extends Entity {
    * @params {deltaT} - The number of ms since the last update
    */
   update(world, controls, deltaT) {
+
     this.updateOnGround(world.map);
     let movement = this.desiredMovement(deltaT);
 
@@ -130,6 +137,7 @@ class Player extends Entity {
 
     this.privateHandleHorizontalMovement(movement.x, world.map);
     this.privateHandleVerticalMovement(movement.y, world.map);
+
   }
 
   /**
