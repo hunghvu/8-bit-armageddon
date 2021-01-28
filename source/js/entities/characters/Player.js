@@ -33,6 +33,7 @@ class Player extends Entity {
 
     this.animations = [];
     this.loadAnimations();
+    this.currentWeapon = new CurrentWeapon(this.x, this.y, this.shootingAngle.radians, 600);
   }
 
   /**
@@ -171,8 +172,20 @@ class Player extends Entity {
     }
 
     if(controls.shootingDownThisLoop){
-      world.spawn(new Bullet(this.x, this.y, this.shootingAngle.radians, 600));
+      world.spawn(this.currentWeapon.spawnCurrentWeapon(this.x, this.y, this.shootingAngle));
     }
+
+
+    if(controls.nextWeaponDownThisLoop) {
+      this.currentWeapon.nextWeapon();
+      console.log(this.currentWeapon);
+    }
+
+    if(controls.previousWeaponDownThisLoop) {
+      this.currentWeapon.previousWeapon();
+    }
+
+
     // If the user scrolls then zoom in or out
     if (controls.scrollDelta > 0) {
       world.camera.zoomIn();
