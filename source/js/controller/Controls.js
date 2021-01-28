@@ -21,6 +21,11 @@ class Controls {
 
     // J for shooting
     this.registerKey('shooting','KeyJ');
+    this.registerKey('shootRocket', 'KeyK');
+
+    // Q and E for changing weapon
+    this.registerKey('nextWeapon', 'KeyE');
+    this.registerKey('previousWeapon', 'KeyQ');
 
     // How much the scroll wheel has been scrolled since last checked
     this.scrollDelta = 0;
@@ -78,7 +83,7 @@ class Controls {
   }
 
   /** 
-   * Call this function to registrer a certain keycode to a certain purpose
+   * Call this function to register a certain keycode to a certain purpose
    * For example ("shoot", "KeyZ") to tie the object variable shoot with the 
    * z key.
    * @param {string} name - The name of the action
