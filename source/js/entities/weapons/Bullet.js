@@ -47,7 +47,7 @@ class Bullet extends Entity{
     }
 
     moveUntilCollision(world, movement) {
-        while (movement.x >= 1 || movement.x <= 1 
+        while (movement.x >= 1 || movement.x <= 1
                && world.map.collideWithRectangle(this)) {
             let direction = movement.x >= 1 ? 1 : -1;
             this.x += direction;
@@ -84,7 +84,7 @@ class Bullet extends Entity{
       this.animations[0] = new Animator(this.spritesheet, 9, 7, 12, 14, 4, 0.5, 17, false, true);
 
       //facing left = 1,
-      this.animations[1] = new Animator(this.spritesheet, 137, 7, 12, 14, 1, 0.5, 17, true, true);
+      this.animations[1] = new Animator(this.spritesheet, 137, 7, 12, 14, 4, 0.5, 17, true, true);
 
     }
 }
