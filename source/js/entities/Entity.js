@@ -29,7 +29,7 @@ class Entity extends Rectangle {
     this.acc = new Point(0, 0);
 
     // Default gravity acceleration
-    this.acc.y = 500;
+    this.acc.y = 300;
 
     this.onGround = false;
   }

@@ -67,7 +67,7 @@ class World {
     this.camera.target.x = this.currentPlayer.center.x;
     this.camera.target.y = this.currentPlayer.center.y;
 
-    this.camera.glideToTarget(8);
+    this.camera.glideToTarget(8, deltaT);
   }
 
 
