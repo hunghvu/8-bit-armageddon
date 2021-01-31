@@ -63,7 +63,6 @@ class Entity extends Rectangle {
     this.vel = newVel;
   }
 
-
   /** 
    * Boiler plate nothing
    */
@@ -91,4 +90,5 @@ class Entity extends Rectangle {
 
     return new Point(xWholePixels, yWholePixels);
   }
+
 }

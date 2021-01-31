@@ -12,10 +12,51 @@ class DestructibleMap {
     // Draw the image onto the map for further use
     this.ctx.drawImage(img, 0, 0);
 
+    this.platform = new MovingPlatform(400, this.height * (5/7), 48, 8);
+
     // Generate and draw a random map.
     let mapGenerator = new MapGenerator(img.width, img.height);
     mapGenerator.privateGenerateGroundCoord();
     mapGenerator.drawMap(this.ctx);
+  }
+
+  update(game, deltaT) {
+    this.platform.update(game, deltaT);
+    /*
+    // Move the platform up to find all the entities that are on it.
+    this.platform.y -= 1;
+    for (let i = 0; i < game.players.length; i++) {
+      if (this.platform.doesCollide(game.players[i])) {
+        // If the player is right above the platform then take the player for a ride
+        game.players[i].x += this.platformDirection;
+      }
+    }
+    this.platform.y += 1;
+
+    // Move the platform
+    this.platform.x += this.platformDirection;
+    for (let i = 0; i < game.players.length; i++) {
+      if (this.platform.doesCollide(game.players[i])) {
+        // If the player would be pushed by the platform then just don't move
+        // TODO decide what to do when the platform moves into a player
+        this.platform.x -= this.platformDirection;
+        // Unmove the player
+        game.players[i].x -= this.platformDirection;
+
+        return;
+      }
+    }
+    if (this.platform.x < (1/5) * this.width) {
+      this.platformDirection = 1;
+    } else if (this.platform.x > (4/5) * this.width) {
+      this.platformDirection = -1;
+    }
+    */
+  }
+
+  draw(ctx) {
+    ctx.drawImage(this.mapCanvas, 0, 0);
+    this.platform.draw(ctx);
   }
 
   // Destory a single pixel of the map by replacing it with a pixel of transparency.
@@ -49,6 +90,10 @@ class DestructibleMap {
         // If any of the pixels in the rect aren't transparent then it's a collision
         return true;
       }
+    }
+
+    if (this.platform.doesCollide(rect)) {
+      return true;
     }
     return false;
   }
