@@ -16,32 +16,39 @@ class Rectangle extends Point {
    *                      otherwise
    */
   doesCollide(otherRect) {
-    if (this.x < otherRect.x && this.x + this.w > otherRect.x) {
-      // The left side of the rect is inside this rect horizontally
-      if (this.y < otherRect.y && this.y + this.h > otherRect.y) {
-        // and the top side vertically
-        return true;
-      } else if (this.y < otherRect.y + otherRect.h && 
-                 this.y + this.h > otherRect.y + otherRect.h) {
+    if (this.x < otherRect.x && this.x + this.w > otherRect.x ||
+        this.x < otherRect.x + otherRect.w && this.x + this.w > otherRect.x + otherRect.w) {
+      // The other Rectangle's left or right side is inside this one
+      if (this.y > otherRect.y && // We start above the top edge
+          this.y < otherRect.y + otherRect.h) { // We end below it
 
-        // and the bottom side vertically
+        // This rectangle passes through the top edge
+        return true;
+
+      } else if (this.y + this.h > otherRect.y && // We start above the bottom edge
+                 this.y + this.h < otherRect.y + otherRect.h) { // We end below it
+
+        // This rectangle passes through the bottom edge
+        return true;
+      }
+    } else if (this.y < otherRect.y && this.y + this.h > otherRect.y ||
+               this.y < otherRect.y + otherRect.h && this.y + this.h > otherRect.y + otherRect.h) {
+      // The other Rectangle's top or bottom side is inside this one
+      if (this.x > otherRect.x && // We start left of the left edge
+          this.x < otherRect.x + otherRect.w) { // We end to the right of it
+
+        // This rectangle passes through the left edge
+        return true;
+
+      } else if (this.x + this.w > otherRect.x && // We start left of the right edge
+                 this.x + this.w < otherRect.x + otherRect.w) { // We end to the right of it
+
+        // This rectangle passes through the right edge
         return true;
       }
 
-    } else if (this.x < otherRect.x + otherRect.w && 
-               this.x + this.w > otherRect.x + otherRect.w) {
-
-      // The right side of the rect is inside this rect horizontally
-      if (this.y < otherRect.y && this.y + this.h > otherRect.y) {
-        // and the top side vertically
-        return true;
-      } else if (this.y < otherRect.y + otherRect.h && 
-                 this.y + this.h > otherRect.y + otherRect.h) {
-
-        // and the bottom side vertically
-        return true;
-      }
     }
+
     return false;
   }
 
