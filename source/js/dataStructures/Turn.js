@@ -8,6 +8,8 @@ class Turn {
         this.world = world;
         this.playerNumber = this.world.players.length - 2;
         this.timer = timer;
+        this.readyTime = 3; // preparation period after ending each turn.
+        this.inReadyPeriod = false;
         // this.timer = null;
         console.log(new Date())
     }
@@ -26,10 +28,23 @@ class Turn {
                 this.world.currentPlayer.vel.x = 0;
                 this.world.currentPlayer.acc.x = 0;
                 this.world.currentPlayer.isInTurn = false;
-                this.world.currentPlayer = this.world.players[this.playerNumber]; 
-                this.world.currentPlayer.isInTurn = true;
+                this.world.currentPlayer = this.world.players[this.playerNumber];  
 
-                this.playerNumber--;
+                // Explanation.
+                //  countdownTurn() is origninally run once per approximately 5 secs.
+                //  with the introduction of inReadyPeriod flag, it will be set to true when a player is in ready period, false otherwise.
+                //  the camera will always change player per X secs due to line 31, however, it will only give that user control permission
+                //   if after a ready period.
+                //  Now the timer will run in this interleaving order: 5 secs action => 3 secs waiting => 5 secs action => ...
+                if (this.inReadyPeriod) {  
+                    this.world.currentPlayer.isInTurn = true;
+                    this.inReadyPeriod = false;                  
+                    this.playerNumber--;
+                } else {
+                    this.timer.turnTime -= this.readyTime; // Minus the ready time.
+                    this.inReadyPeriod = true;
+                }
+
             } else { // Extend timer.
                 this.world.currentPlayer.isInTurn = false;
                 this.timer.turnTime -= this.timer.maxStep;
