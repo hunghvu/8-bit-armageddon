@@ -12,6 +12,7 @@ class Timer
     this.turnTime = 0;
     this.maxStep = 0.05;
     this.lastTimestamp = 0;
+    this.lastTurnStamp = 0;
   }
 
   tick() {
@@ -22,7 +23,17 @@ class Timer
     var gameDelta = Math.min(delta,this.maxStep);
     this.gameTime += gameDelta;
 
-    this.turnTime += gameDelta;
+    // this.turnTime += gameDelta;
     return gameDelta;
+  }
+
+  turnTick() {
+    var current = Date.now();
+    var delta = (current - this.lastTurnStamp) / 1000;
+    this.lastTurnStamp = current;
+
+    var gameDelta = Math.min(delta,this.maxStep);
+    this.turnTime += gameDelta;
+    // return gameDelta;
   }
 }

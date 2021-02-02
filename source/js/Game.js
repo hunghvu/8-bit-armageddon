@@ -32,7 +32,7 @@ class Game {
       this.controls.addMouseListener(this.canvas);
 
       // Turn mechanism
-      this.turn = new Turn(this.timer, this.world, 5);
+      this.turn = new Turn(this.timer, this.world, 5, this.controls);
       requestAnimationFrame(this.draw.bind(this));
     }).bind(this);
   }
