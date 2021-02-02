@@ -58,14 +58,36 @@ class Game {
     for (var i = 0; i <= this.world.currentPlayer.currentWeapon.myWeaponBag.length; i++)
     {
       this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
-      if (this.world.currentPlayer.currentWeapon.currentIndex == 0) //Bullet
+      if (this.world.currentPlayer.currentWeapon.currentIndex == 0) //normal Bullet
       {
-        this.ctx.drawImage(this.spritesheet, 9, 7, 12, 14, 200, 35, 48, 56);
+        // if (this.world.currentPlayer.currentWeapon.myWeaponBag.upgraded == 0)
+        // {
+        this.ctx.drawImage(this.spritesheet, 6, 70, 23, 16, 200, 35, 92, 64);
+        // }
+        // else {} //sniper Bullet
       }
-      else { //GrenadeLauncher
-        this.ctx.drawImage(this.spritesheet, 38, 38, 23, 16, 200, 35, 92, 64);
+      else if (this.world.currentPlayer.currentWeapon.currentIndex == 1)
+      { //GrenadeLauncher
+        // if (this.world.currentPlayer.currentWeapon.myWeaponBag.upgraded == 0)
+        // {
+        this.ctx.drawImage(this.spritesheet, 10, 7, 11, 14, 200, 35, 44, 56);
+        //}
+        // else {} //dynomite
+      }
+      else {
+        this.ctx.fillText('Portal IMG', 200, 70);
       }
     }
+
+    this.spritesheet = MANAGER.getAsset('./assets/HealthBar.png');
+
+    this.ctx.fillText('Health: ', 343, 31);
+    this.ctx.drawImage(this.spritesheet, 83, 1, 29, 26, 343, 32, 92, 64);
+
+    // if (this.world.currentPlayer.design == 1 && this.world.currentPlayer.team ==)
+    // {
+    //
+    // }
 
     this.controls.reset();
     requestAnimationFrame(this.draw.bind(this));

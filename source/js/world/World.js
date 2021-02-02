@@ -4,11 +4,12 @@ class World {
 
     this.spritesheet = MANAGER.getAsset('./assets/character.png');
 
-    // parameter sets the players design
-    this.players = [new Player(this.spritesheet, 344, 650, 0), new Player(this.spritesheet, 500, 650, 1)];
+    // 3rd parameter sets the player or food
+    this.players = [new Player(this.spritesheet, 344, 650, 0, 0), new Player(this.spritesheet, 500, 650, 1, 1), new Player(this.spritesheet,400,650,2, 1)];
+    // TEST PURPOSES, implement a way to seperate food and human as well as seperate by design
+    // this.players = [new Player(this.spritesheet, 344, 650, 0, 0)];
     this.currentPlayer = this.players[this.players.length - 1];
     this.currentPlayer.isInTurn = true;
-
 
     this.entities = [];
 

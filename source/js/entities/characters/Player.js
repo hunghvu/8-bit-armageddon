@@ -1,14 +1,14 @@
 /**
  * The class for player characters
  */
-class Player extends Entity {
+class Player extends Entity { //Add button to enter portal
   /**
    * The constructor for the player
    * @param {Image} spriteSheet - The players spritesheet
    * @param {number} x - The x position where the player is spawned
    * @param {number} y - The y position where the player is spawned
    */
-  constructor(spriteSheet, x, y, design) {
+  constructor(spriteSheet, x, y, design, team) {
     //Used as hitbox
     super(x - 3, y, 6, 48);
     this.WALK_SPEED = 100;
@@ -16,7 +16,8 @@ class Player extends Entity {
 
     this.spritesheet = spriteSheet;
 
-    this.design = design; //0 = human, 1 = food
+    this.team = team;
+    this.design = design; //different designs of characters
     this.facing = 0; // 0 = right, 1 = left
     this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling? 3 = shooting
     // this.dead = false; ??
@@ -33,7 +34,7 @@ class Player extends Entity {
 
     this.animations = [];
 
-    // Determine if it's this player's turn 
+    // Determine if it's this player's turn
     // Lock user's input if false (when the turns end)
     this.isInTurn = false;
     this.loadAnimations();
@@ -167,6 +168,15 @@ class Player extends Entity {
       this.acc.x = 0;
     }
 
+    // @todo Add portal variables once portal gun is made.
+    // initial thought on condition option: (controls.enterPortalDownThisLoop && this.onGround)
+    //Don't know how big the portal will be so 5 and 3 are inserted as testers
+    // if (controls.enterPortalDownThisLoop && (this.x < portal1.x + 5 && this.x > portal1.x-5) && (this.y < portal1.y + 3 && this.y > portal1.y-3));
+    // {
+    //   this.x = portal2.x;
+    //   this.y = portal2.y;
+    // }
+
     /**
      * Adjust shooting angle
      * @todo Have a better handler when pressing multiple button at once
@@ -193,7 +203,6 @@ class Player extends Entity {
       this.currentWeapon.previousWeapon();
     }
 
-
     // If the user scrolls then zoom in or out
     if (controls.scrollDelta > 0) {
       world.camera.zoomIn();
@@ -215,7 +224,7 @@ class Player extends Entity {
     //facing right = 0,
     this.animations[0][0][0] = new Animator(this.spritesheet, 11, 128, 23, 61, 1, 0.5, null, false, true);
 
-    //facing left = 1,
+    // facing left = 1,
     this.animations[0][0][1] = new Animator(this.spritesheet, 11, 193, 23, 61, 1, 0.5, null, false, true);
 
     //NOTES:
@@ -231,25 +240,38 @@ class Player extends Entity {
 
     //Jumping/Falling = 2
     //facing right = 0
-    //this.animations[0][2][0]
+    // this.animations[0][2][0] = new Animator(this.spritesheet, 11, 193, 23, 61, 7, 0.5, 25, true, true);
 
 
     //Shooting = 3
     // should have an angle check so function know what angle
     // frame it should be on (should this be another for above?)
 
-    //Food = 1;
+    //Boba = 1;
 
     //Idle = 0;
     //facing right
-    this.animations[1][0][0] = new Animator(this.spritesheet, 102, 320, 36, 59, 1, 0.5, null, false, true);
+    this.animations[1][0][0] = new Animator(this.spritesheet, 102, 384, 36, 59, 1, 0.5, null, false, true);
     //facing left = 1;
-    this.animations[1][0][1] = new Animator(this.spritesheet, 54, 320, 36, 59, 1, 0.5, null, false, true);
+    this.animations[1][0][1] = new Animator(this.spritesheet, 54, 384, 36, 59, 1, 0.5, null, false, true);
 
 
     //walk = 1;
-    this.animations[1][1][0] = new Animator(this.spritesheet, 102, 320, 36, 59, 1, 0.5, null, false, true);
-    this.animations[1][1][1] = new Animator(this.spritesheet, 54, 320, 36, 59, 1, 0.5, null, false, true);
+    this.animations[1][1][0] = new Animator(this.spritesheet, 102, 384, 36, 59, 1, 0.5, null, false, true);
+    this.animations[1][1][1] = new Animator(this.spritesheet, 54, 384, 36, 59, 1, 0.5, null, false, true);
+
+    // Cup of Noodle = 2
+
+    //Idle = 0;
+    //facing right
+    this.animations[2][0][0] = new Animator(this.spritesheet, 240, 384, 41, 54, 1, 0.5, null, false, true);
+    //facing left = 1;
+    this.animations[2][0][1] = new Animator(this.spritesheet, 197, 386, 41, 54, 1, 0.5, null, false, true);
+
+
+    //walk = 1;
+    this.animations[2][1][0] = new Animator(this.spritesheet, 240, 384, 41, 54, 1, 0.5, null, false, true);
+    this.animations[2][1][1] = new Animator(this.spritesheet, 197, 386, 41, 54, 1, 0.5, null, false, true);
 
 
   };
