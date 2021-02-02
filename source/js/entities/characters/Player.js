@@ -155,12 +155,12 @@ class Player extends Entity {
    * @params {World} - The world object that should be referenced
    * @params {Controls} - The controls to get the user input from
    */
-  updateInputs(world, controls) {
+  updateInputs(world, controls, deltaT) {
 
     if (this.onGround) {
       this.airTimer = 0;
     } else {
-      this.airTimer += 5;
+      this.airTimer += deltaT * 100;
     }
 
     if (controls.jump && this.airTimer < this.jumpTolerance) {
