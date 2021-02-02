@@ -38,6 +38,14 @@ class Player extends Entity {
     this.isInTurn = false;
     this.loadAnimations();
     this.currentWeapon = new CurrentWeapon(this.x, this.y, this.shootingAngle.radians, 600);
+
+    var d = new Date();
+    d.setMilliseconds(200);
+    this.jumpTolerance = d.getMilliseconds();
+
+    var a = new Date();
+    a.setMilliseconds(500);
+    this.airTimer = a.getMilliseconds();
   }
 
   /**
@@ -148,9 +156,18 @@ class Player extends Entity {
    * @params {Controls} - The controls to get the user input from
    */
   updateInputs(world, controls) {
-    if (controls.jump && this.onGround) {
-      this.vel.y = -this.JUMP_POWER;
+
+    if (this.onGround) {
+      this.airTimer = 0;
+    } else {
+      this.airTimer += 5;
     }
+
+    if (controls.jump && this.airTimer < this.jumpTolerance) {
+      this.vel.y = -this.JUMP_POWER;
+      this.airTimer = this.jumpTolerance;
+    }
+
 
     // If the player move in either direction
     if (controls.left && !controls.right) {
@@ -201,6 +218,7 @@ class Player extends Entity {
       world.camera.zoomOut();
     }
   }
+
 
   loadAnimations() {
     for (var i = 0; i < 3; i++) { //states
