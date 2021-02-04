@@ -2,15 +2,13 @@ class World {
   constructor(map) {
     this.map = map;
 
-    this.spritesheet = MANAGER.getAsset('./assets/character.png');
-
+    this.entityOnMap = new EntityOnMap();
     // parameter sets the players design
-    this.players = [new Player(this.spritesheet, 344, 650, 0), new Player(this.spritesheet, 500, 650, 1)];
+    this.players = this.entityOnMap.playerOnMapList;
     this.currentPlayer = this.players[this.players.length - 1];
     this.currentPlayer.isInTurn = true;
 
-
-    this.entities = [];
+    this.entities = this.entityOnMap.bulletOnMapList;
 
     this.camera = new Camera(500, 500, 1);
 

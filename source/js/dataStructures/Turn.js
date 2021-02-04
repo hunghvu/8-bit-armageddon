@@ -18,10 +18,11 @@ class Turn {
         console.log(new Date())
     }
     countdownTurn(){
-        if (this.controls.shooting) {
-            this.isShot = true;
-            this.world.currentPlayer.isInTurn = false;
-        }
+        // console.log(this.world.entities)
+        // if (this.controls.shooting) {
+        //     this.isShot = true;
+        //     this.world.currentPlayer.isInTurn = false;
+        // }
 
         if (!this.isShot) {
             // Turn.js will control its own tick
