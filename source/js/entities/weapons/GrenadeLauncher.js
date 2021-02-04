@@ -59,7 +59,7 @@ class GrenadeLauncher extends Entity{
       // this.animations[1] = new Animator(this.spritesheet, 137, 7, 12, 14, 4, 0.5, 17, true, true);
 
       // Dynomite (upgrade lvl 2) = no set number
-      //buffer padding current build = 17
+      //buffer padding current build = 
       //facing right = 0,
       this.animations[0] = new Animator(this.spritesheet, 2, 35, 28, 28, 4, 0.5, 14, false, true);
 

@@ -81,13 +81,9 @@ class Game {
 
     this.spritesheet = MANAGER.getAsset('./assets/HealthBar.png');
 
+    //No test yet since player health not implemented
     this.ctx.fillText('Health: ', 343, 31);
     this.ctx.drawImage(this.spritesheet, 83, 1, 29, 26, 343, 32, 92, 64);
-
-    // if (this.world.currentPlayer.design == 1 && this.world.currentPlayer.team ==)
-    // {
-    //
-    // }
 
     this.controls.reset();
     requestAnimationFrame(this.draw.bind(this));

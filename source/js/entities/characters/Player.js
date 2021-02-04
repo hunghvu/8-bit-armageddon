@@ -170,12 +170,13 @@ class Player extends Entity { //Add button to enter portal
 
     // @todo Add portal variables once portal gun is made.
     // initial thought on condition option: (controls.enterPortalDownThisLoop && this.onGround)
-    //Don't know how big the portal will be so 5 and 3 are inserted as testers
-    // if (controls.enterPortalDownThisLoop && (this.x < portal1.x + 5 && this.x > portal1.x-5) && (this.y < portal1.y + 3 && this.y > portal1.y-3));
-    // {
-    //   this.x = portal2.x;
-    //   this.y = portal2.y;
-    // }
+    // Don't know how big the portal will be so 5 and 3 are inserted as testers
+    // Problem: Entering loop without M key pressed
+    if (controls.enterPortalDownThisLoop && (this.x < world.entities[1] + 13 && this.x > world.entities[1]-13) && (this.y < world.entities[1] + 16 && this.y > world.entities[1]-16));
+    {
+      // this.x = world.entities[2];
+      // this.y = world.entities[1];
+    }
 
     /**
      * Adjust shooting angle

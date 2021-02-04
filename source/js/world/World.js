@@ -40,6 +40,12 @@ class World {
     this.drawPlayers(ctx);
     this.drawEntities(ctx);
 
+    console.log(this.currentPlayer.currentWeapon.myCurrentWeapon.portalActivate);
+    if (this.currentPlayer.currentWeapon.currentIndex == 2 && this.currentPlayer.currentWeapon.myCurrentWeapon.portalActivate == true)
+    {
+      console.log("inside");
+    }
+
     // Untransform ctx
     this.camera.restoreContext(ctx);
   }
