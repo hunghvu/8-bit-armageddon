@@ -39,6 +39,7 @@ class Turn {
             this.world.currentPlayer.acc.x = 0;
             this.world.currentPlayer.isInTurn = false;
         }
+        // console.log(this.world.entityOnMap.isAllEntityStop());
         if (this.world.entityOnMap.isAllEntityStop() && this.isShot === true) {
             this.isShot = false;
             // There is another turnTick() inside private updateTurn, so minus maxStep*2
