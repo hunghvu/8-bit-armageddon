@@ -33,7 +33,7 @@ class Turn {
      */
     privateExtendTurn() {
         if (this.controls.shooting && !this.inReadyPeriod) {
-            console.log(this.inReadyPeriod);
+            // console.log(this.inReadyPeriod);
             this.isShot = true;
             this.world.currentPlayer.vel.x = 0;
             this.world.currentPlayer.acc.x = 0;

@@ -8,7 +8,7 @@ class World {
     this.currentPlayer = this.players[this.players.length - 1];
     this.currentPlayer.isInTurn = true;
 
-    this.entities = this.entityOnMap.bulletOnMapList;
+    this.entities = this.entityOnMap.entityOnMapList;
 
     this.camera = new Camera(500, 500, 1);
 
@@ -95,12 +95,12 @@ class World {
     });
 
     // Replicate. Only need to filter out, the info of each referenced bullet is updated above.
-    this.entityOnMap.bulletOnMapList = this.entityOnMap.bulletOnMapList.filter((entity) => entity.active);
+    this.entityOnMap.entityOnMapList = this.entityOnMap.entityOnMapList.filter((entity) => entity.active);
 
   }
   spawn(entity) {
     this.entities.push(entity);
     // Replicate for bulletOnMap
-    this.entityOnMap.bulletOnMapList.push(entity)
+    this.entityOnMap.entityOnMapList.push(entity)
   }
 }
