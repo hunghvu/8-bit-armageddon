@@ -93,8 +93,14 @@ class World {
     this.entities.forEach(entity => {
       entity.update(this, deltaT);
     });
+
+    // Replicate. Only need to filter out, the info of each referenced bullet is updated above.
+    this.entityOnMap.bulletOnMapList = this.entityOnMap.bulletOnMapList.filter((entity) => entity.active);
+
   }
   spawn(entity) {
     this.entities.push(entity);
+    // Replicate for bulletOnMap
+    this.entityOnMap.bulletOnMapList.push(entity)
   }
 }

@@ -18,7 +18,9 @@ class Turn {
         console.log(new Date())
     }
     countdownTurn(){
-        // console.log(this.world.entities)
+        // console.log(this.world.entities);
+        // console.log(this.world.entityOnMap.bulletOnMapList);
+        // console.log(this.world.entityOnMap.isAllEntityStop());
         // if (this.controls.shooting) {
         //     this.isShot = true;
         //     this.world.currentPlayer.isInTurn = false;
