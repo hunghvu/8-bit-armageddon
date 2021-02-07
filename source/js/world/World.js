@@ -33,7 +33,7 @@ class World {
     this.camera.transformContext(ctx, 1);
 
     // Draw the map foreground
-    ctx.drawImage(this.map.mapCanvas, 0, 0);
+    this.map.draw(ctx);
 
     // Draw players
     this.drawPlayers(ctx);
@@ -58,6 +58,7 @@ class World {
   }
 
   update(deltaT, controls) {
+    this.map.update(this, deltaT);
     this.updatePlayers(deltaT, controls);
     this.currentPlayer.updateActive(this, controls, deltaT);
     this.updateEntities(deltaT);
@@ -66,7 +67,7 @@ class World {
     this.camera.target.x = this.currentPlayer.center.x;
     this.camera.target.y = this.currentPlayer.center.y;
 
-    this.camera.glideToTarget(8);
+    this.camera.glideToTarget(8, deltaT);
   }
 
 

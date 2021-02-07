@@ -29,7 +29,7 @@ class Entity extends Rectangle {
     this.acc = new Point(0, 0);
 
     // Default gravity acceleration
-    this.acc.y = 500;
+    this.acc.y = 300;
 
     this.onGround = false;
   }
@@ -63,7 +63,6 @@ class Entity extends Rectangle {
     this.vel = newVel;
   }
 
-
   /** 
    * Boiler plate nothing
    */
@@ -91,4 +90,5 @@ class Entity extends Rectangle {
 
     return new Point(xWholePixels, yWholePixels);
   }
+
 }

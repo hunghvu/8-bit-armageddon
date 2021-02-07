@@ -8,6 +8,14 @@ class Point {
   }
 
   /**
+   * Uses euclidion distance to determine the magnitude
+   * @param {Point} - the point to add to this point
+   */
+  get magnitude(){
+    return Math.sqrt(this.x * this.x + this.y * this.y);
+  }
+
+  /**
    * Add another point to this point
    * @param {Point} - the point to add to this point
    */
@@ -25,3 +33,4 @@ class Point {
     this.y -= otherPoint.y;
   }
 }
+
