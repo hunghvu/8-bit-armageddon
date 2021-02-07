@@ -147,6 +147,17 @@ class Player extends Entity {
   }
 
   /**
+   * Determine whether a player is stand still.
+   * When the player is on ground, if there is no movement to left and right
+   *  then the user is not moving.
+   */
+  isStandStill() {
+    let flag = true;
+    this.onGround && this.vel.x === 0 ? flag = true : flag = false;
+    return flag;
+  }
+
+  /**
    * If this is the active player then call this function to update
    * based on the user's inputs.
    *

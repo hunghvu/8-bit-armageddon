@@ -2,15 +2,13 @@ class World {
   constructor(map) {
     this.map = map;
 
-    this.spritesheet = MANAGER.getAsset('./assets/character.png');
-
+    this.entityOnMap = new EntityOnMap();
     // parameter sets the players design
-    this.players = [new Player(this.spritesheet, 344, 650, 0), new Player(this.spritesheet, 500, 650, 1)];
+    this.players = this.entityOnMap.playerOnMapList;
     this.currentPlayer = this.players[this.players.length - 1];
     this.currentPlayer.isInTurn = true;
 
-
-    this.entities = [];
+    this.entities = this.entityOnMap.entityOnMapList;
 
     this.camera = new Camera(500, 500, 1);
 
@@ -96,8 +94,14 @@ class World {
     this.entities.forEach(entity => {
       entity.update(this, deltaT);
     });
+
+    // Replicate. Only need to filter out, the info of each referenced bullet is updated above.
+    this.entityOnMap.entityOnMapList = this.entityOnMap.entityOnMapList.filter((entity) => entity.active);
+
   }
   spawn(entity) {
     this.entities.push(entity);
+    // Replicate for bulletOnMap
+    this.entityOnMap.entityOnMapList.push(entity)
   }
 }
