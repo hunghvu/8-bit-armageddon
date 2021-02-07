@@ -27,7 +27,7 @@ class Player extends Entity {
     this.onGround = false;
 
     // The health of this player
-    this.health = 0;
+    this.damageTaken = 0;
 
     // The shooting angle is always attached to a player, so this should be
     // a better place than 'world'. The entity shooting angle bounds are defined
@@ -75,7 +75,7 @@ class Player extends Entity {
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
     ctx.fillStyle = "white";
-    ctx.fillText(Math.round(this.health * 100, 2) + "%", this.x + this.w / 2, this.y + this.h);
+    ctx.fillText(Math.round((1 - this.damageTaken) * 100, 2) + "%", this.x + this.w / 2, this.y + this.h);
     ctx.restore();
   }
 
@@ -97,7 +97,11 @@ class Player extends Entity {
       this.vel.y = 1000;
     }
 
-    this.health += power / 100;
+    this.damageTaken += power / 100;
+    if (this.damageTaken > 1) {
+      // If the total damage dealt is greater than 1 then the player is dead.
+      // TODO
+    }
   }
 
   /**

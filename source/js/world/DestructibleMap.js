@@ -12,7 +12,7 @@ class DestructibleMap {
     // Draw the image onto the map for further use
     this.ctx.drawImage(img, 0, 0);
 
-    this.platform = new MovingPlatform(400, this.height * (5/7), 48, 8);
+    this.platform = new MovingPlatform(400, this.height * (4/7), (this.width * 1/8), (this.width * 7/8));
 
     // Generate and draw a random map.
     let mapGenerator = new MapGenerator(img.width, img.height);
@@ -22,36 +22,6 @@ class DestructibleMap {
 
   update(game, deltaT) {
     this.platform.update(game, deltaT);
-    /*
-    // Move the platform up to find all the entities that are on it.
-    this.platform.y -= 1;
-    for (let i = 0; i < game.players.length; i++) {
-      if (this.platform.doesCollide(game.players[i])) {
-        // If the player is right above the platform then take the player for a ride
-        game.players[i].x += this.platformDirection;
-      }
-    }
-    this.platform.y += 1;
-
-    // Move the platform
-    this.platform.x += this.platformDirection;
-    for (let i = 0; i < game.players.length; i++) {
-      if (this.platform.doesCollide(game.players[i])) {
-        // If the player would be pushed by the platform then just don't move
-        // TODO decide what to do when the platform moves into a player
-        this.platform.x -= this.platformDirection;
-        // Unmove the player
-        game.players[i].x -= this.platformDirection;
-
-        return;
-      }
-    }
-    if (this.platform.x < (1/5) * this.width) {
-      this.platformDirection = 1;
-    } else if (this.platform.x > (4/5) * this.width) {
-      this.platformDirection = -1;
-    }
-    */
   }
 
   draw(ctx) {
@@ -73,10 +43,16 @@ class DestructibleMap {
   // Destory a circle of the map by replacing it with pixels of transparency.
   destroyCircle(x, y, r) {
     for (let i = -r; i <= r; i++) {
+      // Use the equation of a circle to determine the area to destroy
       let thisWidth = Math.sqrt(1 - Math.pow(i / r, 2)) * r;
       this.ctx.clearRect(x - thisWidth, i + y, 
                          thisWidth * 2, 1);
+    }
 
+    let EXPLOSION_DISTANCE = 10;
+    // The platform has taken damage if it is close enough to the explosion
+    if (this.platform.doesCollide(new Rectangle(x - EXPLOSION_DISTANCE / 2, y - EXPLOSION_DISTANCE / 2, EXPLOSION_DISTANCE, EXPLOSION_DISTANCE))) {
+        this.platform.damageTaken = 1;
     }
   }
   

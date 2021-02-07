@@ -1,17 +1,23 @@
 class MovingPlatform extends Entity {
-  constructor(x, y, w, h) {
-    super(x, y, w, h);
+  constructor(x, y, startX, endX) {
+    super(x, y, 80, 10);
     this.vel.x = -20;
     this.acc.y = 0;
 
     // The position that the platform starts at
-    this.startX = 100;
+    this.startX = startX;
+
+    this.damageTaken = 0;
 
     // The position that the platform ends at
-    this.endX = 400;
+    this.endX = endX;
   }
 
   update(game, deltaT) {
+    if (this.damageTaken != 0) {
+      // If we have taken any damage then stop all updates
+      return
+    }
     let movement = this.desiredMovement(deltaT);
     // Move the platform up to find all the entities that are on it.
     this.y -= 1;
