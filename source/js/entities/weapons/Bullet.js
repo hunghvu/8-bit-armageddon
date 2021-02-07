@@ -20,6 +20,7 @@ class Bullet extends Entity{
         this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
 
         this.animations = [];
+        this.projectileCanEndTurn = false;
         this.loadAnimations();
     }
 
@@ -39,6 +40,7 @@ class Bullet extends Entity{
         if (world.map.collideWithRectangle(this)) {
             // Destroy this bullet if we hit something
             this.active = false;
+            this.projectileCanEndTurn = true;
             //let destructionRect = new Rectangle(this.x, this.y, 20, 20);
             //destructionRect.center = this.center;
             //world.map.destroyRectangle(destructionRect);

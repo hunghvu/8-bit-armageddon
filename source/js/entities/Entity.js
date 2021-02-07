@@ -32,6 +32,9 @@ class Entity extends Rectangle {
     this.acc.y = 500;
 
     this.onGround = false;
+
+    this.projectileCanEndTurn = null; // Declare whether a projectile allows a turn to be ended.
+                                      // null for non-projectile, true means yes, and false is otherwise.
   }
 
 

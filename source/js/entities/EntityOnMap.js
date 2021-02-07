@@ -17,14 +17,10 @@ class EntityOnMap {
      */
     isAllEntityStop(){
         // console.log(this.entityOnMapList)
-        // As of now, all entities are bullet, the thing is, a "dead" bullet
-        //   is removed from the list before this isAllEntityStop is called.
-        //   That means who lose a reference to that bullet, so can't put isStandStill() inside bullet.
-        //   However, the flying bullet is mark .active===true, while the collided is "false" so I assume
-        //   that is also the case with portals (portals appear after the colllision, so false). Thus, this loop
-        //   is to check the activity of bullets. 
+        // As of now, all entities are bullet. The projectile entities
+        //  have a flag to indicate whether they allow the turn to be ended.
         for(var i = 0; i < this.entityOnMapList.length; i ++) {
-            if(this.entityOnMapList[i].active === true) {
+            if(!this.entityOnMapList[i].projectileCanEndTurn) {
                 return false;
             }
         }

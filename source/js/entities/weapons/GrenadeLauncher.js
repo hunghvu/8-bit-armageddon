@@ -11,6 +11,7 @@ class GrenadeLauncher extends Entity{
         this.y = y;
         this.vel.x = Math.cos(angle) * power;
         this.vel.y = -Math.sin(angle) * power;
+        this.projectileCanEndTurn = false; // It is not used as of now.
     }
 
     /**
