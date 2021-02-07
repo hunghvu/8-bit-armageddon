@@ -19,8 +19,7 @@ class Turn {
 
         // console.log(new Date())
 
-        this.wind = new Wind();
-        this.wind.change(); // Wind is changed per turn.
+        Wind.change(); // Wind is changed per turn.
     }
 
     /**
@@ -87,14 +86,14 @@ class Turn {
                     } else {
                         this.timer.turnTime -= this.readyTime; // Minus the ready time.
                         this.inReadyPeriod = true;
-                        this.wind.change(); // Change the wind when a turn starts (begins at ready period).
+                        Wind.change(); // Change the wind when a turn starts (begins at ready period).
                     }
 
                 } else { // Extend timer.
                     this.world.currentPlayer.isInTurn = false;
                     this.timer.turnTime -= this.timer.maxStep;
                 }
-                // console.log(this.wind);
+                // console.log(Wind.x, Wind.y);
             }
 
         }

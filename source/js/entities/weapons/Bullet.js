@@ -31,7 +31,7 @@ class Bullet extends Entity{
      * @params {deltaT} - The number of ms since the last update
      */
     update(world, deltaT){
-        this.add(this.desiredMovement(deltaT))
+        this.add(this.desiredMovement(deltaT, Wind.x, Wind.y))
 
         // update direction/facing
         if (this.vel.x < 0) this.facing = 1;

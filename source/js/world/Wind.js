@@ -1,13 +1,23 @@
+/**
+ * This class will provide random wind for each turn.
+ * The wind itself will affect trajectory of a projectile.
+ */
 class Wind {
+
     constructor () {
-        this.x = 0;
-        this.y = 0;
-        this.max = 10; // The max and min winds are just arbitrary number now. 
-        this.min = 0   //  They should be fixed values determined by game creators.
+        // Should be empty. Only used this class for static var.
     }
     
-    change() {
-        this.x = Math.random() * (this.max - this.min) + this.min;
-        this.y = Math.random() * (this.max - this.min) + this.min;
+    static max = 100; // The max and min winds are just arbitrary number now. 
+    static min = -100; //  They should be fixed values determined by game creators.
+    static x = 0; // Negative is to the left, and vice versa.
+    static y = 0;
+
+    /**
+     * Give wind in X and Y direction new variables randomly.
+     */
+    static change() {
+        this.x = Math.round(Math.random() * (this.max - this.min) + this.min);
+        this.y = Math.round(Math.random() * (this.max - this.min) + this.min);
     }
 }

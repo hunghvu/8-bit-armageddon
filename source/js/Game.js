@@ -67,6 +67,8 @@ class Game {
       }
     }
 
+    this.ctx.fillText("Wind(X): " + Wind.x + ", Wind(Y): " + Wind.y, 343, 31);
+
     this.controls.reset();
     requestAnimationFrame(this.draw.bind(this));
   }
