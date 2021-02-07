@@ -28,6 +28,8 @@ class Game {
       // Add a controls handler
       this.controls = new Controls();
 
+      this.status = "PLAYING";
+
       // Add mouse listener
       this.controls.addMouseListener(this.canvas);
 
@@ -38,16 +40,38 @@ class Game {
   }
 
   draw() {
-    this.world.update(this.timer.tick(), this.controls);
-    this.turn.countdownTurn();
-    this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
+    if (this.status == "PLAYING") {
+      this.world.update(this.timer.tick(), this.controls);
+      this.turn.countdownTurn();
+      this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
 
-    // For testing only.
-    this.ctx.font = "30px Arial";
-    this.ctx.fillText(5 - Math.round(this.timer.turnTime % 5), 200, 200);
-
+      // For testing only.
+      this.ctx.font = "30px Arial";
+      this.ctx.fillText(5 - Math.round(this.timer.turnTime % 5), 200, 200);
+      if (this.controls.enterDownThisLoop) {
+        // Allow the player to move from the playing state to the paused state
+        this.status = "PAUSED";
+      }
+    } else {
+      this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
+      this.drawPauseMenu(this.ctx);
+      if (this.controls.enterDownThisLoop) {
+        // Allow the player to move from the paused state to the playing state
+        this.status = "PLAYING";
+      }
+    }
     this.controls.reset();
     requestAnimationFrame(this.draw.bind(this));
+  }
+
+
+  drawPauseMenu(ctx) {
+    ctx.save();
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillStyle = "white";
+    ctx.fillText("PAUSED", ctx.canvas.width / 2, ctx.canvas.height / 2);
+    ctx.restore();
   }
 
   loop(){
