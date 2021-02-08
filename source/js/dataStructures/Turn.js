@@ -17,7 +17,9 @@ class Turn {
         this.inReadyPeriod = false; // Indicate if the match is in preparation period.
         this.isShot = false; // Indicate if a player has shot.
 
-        console.log(new Date())
+        // console.log(new Date())
+
+        Wind.change(); // Wind is changed per turn.
     }
 
     /**
@@ -84,12 +86,14 @@ class Turn {
                     } else {
                         this.timer.turnTime -= this.readyTime; // Minus the ready time.
                         this.inReadyPeriod = true;
+                        Wind.change(); // Change the wind when a turn starts (begins at ready period).
                     }
 
                 } else { // Extend timer.
                     this.world.currentPlayer.isInTurn = false;
                     this.timer.turnTime -= this.timer.maxStep;
                 }
+                // console.log(Wind.x, Wind.y);
             }
 
         }

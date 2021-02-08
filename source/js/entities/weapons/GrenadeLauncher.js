@@ -21,7 +21,7 @@ class GrenadeLauncher extends Entity{
      * @params {deltaT} - The number of ms since the last update
      */
     update(world, deltaT){
-        this.add(this.desiredMovement(deltaT))
+        this.add(this.desiredMovement(deltaT, Wind.x, Wind.y))
     }
 
     /**

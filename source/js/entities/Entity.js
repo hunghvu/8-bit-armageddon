@@ -76,11 +76,13 @@ class Entity extends Rectangle {
    * Returns a point that represents the new offset that the entity should have.
    *
    * @params {deltaT} - The number of ms since the last update
+   * @params {windX} - The X accleration from wind
+   * @params {windY} - The Y acceleration from wind
    */
-  desiredMovement(deltaT) {
+  desiredMovement(deltaT, windX = 0, windY = 0) {
     // Update the acceleration
-    this.vel.x += this.acc.x * deltaT;
-    this.vel.y += this.acc.y * deltaT;
+    this.vel.x += (windX + this.acc.x) * deltaT;
+    this.vel.y += (windY + this.acc.y) * deltaT;
 
     let xWholePixels = Math.round(this.vel.x * deltaT + this.subPixelPosition.x);
     let yWholePixels = Math.round(this.vel.y * deltaT + this.subPixelPosition.y);
