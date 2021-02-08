@@ -20,6 +20,7 @@ class Bullet extends Entity{
         this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
 
         this.animations = [];
+        this.projectileCanEndTurn = false;
         this.loadAnimations();
     }
 
@@ -30,7 +31,7 @@ class Bullet extends Entity{
      * @params {deltaT} - The number of ms since the last update
      */
     update(world, deltaT){
-        this.add(this.desiredMovement(deltaT))
+        this.add(this.desiredMovement(deltaT, Wind.x, Wind.y))
 
         // update direction/facing
         if (this.vel.x < 0) this.facing = 1;
@@ -39,6 +40,7 @@ class Bullet extends Entity{
         if (world.map.collideWithRectangle(this)) {
             // Destroy this bullet if we hit something
             this.active = false;
+            this.projectileCanEndTurn = true;
             //let destructionRect = new Rectangle(this.x, this.y, 20, 20);
             //destructionRect.center = this.center;
             //world.map.destroyRectangle(destructionRect);
@@ -58,7 +60,7 @@ class Bullet extends Entity{
     }
 
     moveUntilCollision(world, movement) {
-        while (movement.x >= 1 || movement.x <= 1 
+        while (movement.x >= 1 || movement.x <= 1
                && world.map.collideWithRectangle(this)) {
             let direction = movement.x >= 1 ? 1 : -1;
             this.x += direction;
@@ -95,7 +97,7 @@ class Bullet extends Entity{
       this.animations[0] = new Animator(this.spritesheet, 9, 7, 12, 14, 4, 0.5, 17, false, true);
 
       //facing left = 1,
-      this.animations[1] = new Animator(this.spritesheet, 137, 7, 12, 14, 1, 0.5, 17, true, true);
+      this.animations[1] = new Animator(this.spritesheet, 137, 7, 12, 14, 4, 0.5, 17, true, true);
 
     }
 }
