@@ -19,6 +19,8 @@ class PortalGun extends Entity{
     // this.animationsOrangePortal = new Animator(this.spritesheet, 0, 96, 32, 32, 4, 0.5, 0, false, false);
     // this.animationsBluePortal = new Animator(this.spritesheet, 0, 96, 32, 32, 4, 0.5, 0, false, false)
 
+    this.team;
+
     this.vel.x = Math.cos(angle) * power;
     this.vel.y = -Math.sin(angle) * power;
   }
@@ -32,29 +34,73 @@ class PortalGun extends Entity{
   update(world, deltaT){
     this.add(this.desiredMovement(deltaT))
 
+    //sets this.team, needed for drawing
+    this.team = world.currentPlayer.team;
+
     // update direction/facing
     if (this.vel.x < 0) this.facing = 1;
     if (this.vel.x > 0) this.facing = 0;
 
     if (world.map.collideWithRectangle(this)) {
+      //get rid of bullet
       this.active = false;
-      // this.animationsOrangePortal.drawFrame(.17,ctx, this.x, this.y, 1.5);
-      // this.portalActivate = true;
-      world.entities[1] = new Portal(this.x, this.y, 0, 0);
-      world.entities[2] = new Portal(world.currentPlayer.x, world.currentPlayer.y, 1, 0);
-      // world.spawn(new Portal(this.x, this.y, 0, 0));
-      // world.spawn(new Portal(world.currentPlayer.x, world.currentPlayer.y, 1, 0));
+      //Keeps track if a portal was found inside world.entities[]
+      var isPortalCreate = 0;
+      for(var i = 0; i < world.entities.length; i++)
+      {
+        if (world.entities[i] instanceof Portal &&
+          this.team == 0 &&
+          world.entities[i].design == 0) {
+            // replace team 0 old portal with new portal
+            world.entities[i] = new Portal(this.x, this.y, 0, 0);
+            world.entities[i+1] = new Portal(world.currentPlayer.x, world.currentPlayer.y, 1, 0);
+            isPortalCreate = 1;
+            break;
+        }
+        else if (world.entities[i] instanceof Portal &&
+          this.team == 1 &&
+          world.entities[i].design == 1) {
+            world.entities[i] = new Portal(this.x, this.y, 0, 1);
+            world.entities[i+1] = new Portal(world.currentPlayer.x, world.currentPlayer.y, 1, 1);
+            isPortalCreate = 1;
+            break;
+        }
+      }
+      //If no portal is on the ctx/playfield
+      if (isPortalCreate == 0)
+      {
+        //if human team
+        if(this.team == 0)
+        {
+          //create a set of human portals
+          world.spawn(new Portal(this.x, this.y, 0, 0));
+          world.spawn(new Portal(world.currentPlayer.x, world.currentPlayer.y, 1, 0));
+        }
+        //else food team
+        else {
+          //create a set of food portals
+          world.spawn(new Portal(this.x, this.y, 0, 1));
+          world.spawn(new Portal(world.currentPlayer.x, world.currentPlayer.y, 1, 1));
+        }
+      }
     }
   }
 
   /**
-   * Draw the bullet of portal2
+   * Draw the bullet of portal
    *
    * @param {CanvasRenderingContext2D} ctx - The context to draw to
    */
   draw(ctx){
-    ctx.fillStyle = "orange";
-    ctx.beginPath();
-    ctx.fillRect(this.x, this.y, 10, 10);
+    if (this.team) {
+      ctx.fillStyle = "yellow";
+      ctx.beginPath();
+      ctx.fillRect(this.x, this.y, 10, 10);
+    }
+    else {
+      ctx.fillStyle = "orange";
+      ctx.beginPath();
+      ctx.fillRect(this.x, this.y, 10, 10);
+    }
   }
 }

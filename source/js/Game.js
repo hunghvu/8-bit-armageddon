@@ -58,24 +58,35 @@ class Game {
     for (var i = 0; i <= this.world.currentPlayer.currentWeapon.myWeaponBag.length; i++)
     {
       this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
-      if (this.world.currentPlayer.currentWeapon.currentIndex == 0) //normal Bullet
+      //Bullet
+      if (this.world.currentPlayer.currentWeapon.currentIndex == 0)
       {
+        //Normal Bullet/Gun
         // if (this.world.currentPlayer.currentWeapon.myWeaponBag.upgraded == 0)
         // {
         this.ctx.drawImage(this.spritesheet, 6, 70, 23, 16, 200, 35, 92, 64);
         // }
-        // else {} //sniper Bullet
+        //Sniper Bullet/Gun
+        // else {}
       }
+      //GrenadeLauncher
       else if (this.world.currentPlayer.currentWeapon.currentIndex == 1)
-      { //GrenadeLauncher
+      {
+        //Grenade
         // if (this.world.currentPlayer.currentWeapon.myWeaponBag.upgraded == 0)
         // {
         this.ctx.drawImage(this.spritesheet, 10, 7, 11, 14, 200, 35, 44, 56);
         //}
-        // else {} //dynomite
+        //dynomite
+        // else {}
       }
-      else {
+      //PortalGun
+      else if (this.world.currentPlayer.currentWeapon.currentIndex == 2){
         this.ctx.fillText('Portal IMG', 200, 70);
+      }
+      //TeleportGun
+      else {
+        this.ctx.fillText('Teleport IMG', 200, 70);
       }
     }
 
