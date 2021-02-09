@@ -11,8 +11,11 @@ class Player extends Entity { //Add button to enter portal
   constructor(spriteSheet, x, y, design, team) {
     //Used as hitbox
     super(x - 3, y, 6, 48);
-    this.WALK_SPEED = 100;
-    this.JUMP_POWER = 300;
+    this.WALK_SPEED = 64;
+    this.JUMP_POWER = 128;
+
+    // The speed at which wind resistance should take effect for the player
+    this.LUDICROUS_SPEED = 500;
 
     this.spritesheet = spriteSheet;
 
@@ -23,6 +26,9 @@ class Player extends Entity { //Add button to enter portal
     // this.dead = false; ??
 
     this.onGround = false;
+
+    // The health of this player
+    this.damageTaken = 0;
 
     // The shooting angle is always attached to a player, so this should be
     // a better place than 'world'. The entity shooting angle bounds are defined
@@ -39,6 +45,14 @@ class Player extends Entity { //Add button to enter portal
     this.isInTurn = false;
     this.loadAnimations();
     this.currentWeapon = new CurrentWeapon(this.x, this.y, this.shootingAngle.radians, 600);
+
+    var d = new Date();
+    d.setMilliseconds(200);
+    this.jumpTolerance = d.getMilliseconds();
+
+    var a = new Date();
+    a.setMilliseconds(500);
+    this.airTimer = a.getMilliseconds();
   }
 
   /**
@@ -51,7 +65,7 @@ class Player extends Entity { //Add button to enter portal
     ctx.strokeStyle = "white";
     ctx.strokeRect(this.x, this.y, this.w, this.h);
 
-    this.animations[this.design][this.state][this.facing].drawFrame(.17, ctx, this.x, this.y, 0.8);
+    this.animations[this.design][this.state][this.facing].drawFrame(.17, ctx, this.x - 24 / 2, this.y, 0.8);
 
     // Draw shooting angle indicator
     // Technically, the origin can be derived from a player position as shown below
@@ -65,6 +79,38 @@ class Player extends Entity { //Add button to enter portal
       this.shootingAngle.originX + this.shootingAngle.radius * Math.cos(radian),
       this.shootingAngle.originY + this.shootingAngle.radius * Math.sin(radian));
     ctx.stroke();
+
+    ctx.save();
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillStyle = "white";
+    ctx.fillText(Math.round((1 - this.damageTaken) * 100, 2) + "%", this.x + this.w / 2, this.y + this.h);
+    ctx.restore();
+  }
+
+  /**
+   * Call this whenever damage needs to be done to a player.
+   * @param {Point} Origin - where the damage came from
+   */
+  damage(origin, power) {
+    // Add knock back
+    if (Math.abs(this.x - origin.x) > 1) {
+      this.vel.x = 1000 / ((this.x - origin.x));
+    } else {
+      this.vel.x = 1000;
+    }
+
+    if (Math.abs(this.y - origin.y) > 1) {
+      this.vel.y = 1000 / ((this.y - origin.y));
+    } else {
+      this.vel.y = 1000;
+    }
+
+    this.damageTaken += power / 100;
+    if (this.damageTaken > 1) {
+      // If the total damage dealt is greater than 1 then the player is dead.
+      // TODO
+    }
   }
 
   /**
@@ -99,6 +145,17 @@ class Player extends Entity { //Add button to enter portal
       this.onGround = false;
     }
     this.y -= 1;
+  }
+
+  /**
+   * Determine whether a player is stand still.
+   * When the player is on ground, if there is no movement to left and right
+   *  then the user is not moving.
+   */
+  isStandStill() {
+    let flag = true;
+    this.onGround && this.vel.x === 0 ? flag = true : flag = false;
+    return flag;
   }
 
   /**
@@ -140,6 +197,27 @@ class Player extends Entity { //Add button to enter portal
     this.privateHandleHorizontalMovement(movement.x, world.map);
     this.privateHandleVerticalMovement(movement.y, world.map);
 
+
+    // If the player is on the ground then slow them down through friction
+    if (this.onGround) {
+      this.vel.x /= (4 * deltaT) + 1;
+    }
+
+    // If the player is going really fast then slow them down fast
+    if (this.vel.x > this.LUDICROUS_SPEED) {
+       this.vel.x /= (3 * deltaT) + 1;
+    }
+
+    if (this.vel.y > this.LUDICROUS_SPEED) {
+       this.vel.y /= (3 * deltaT) + 1;
+    }
+
+    if (Math.abs(this.vel.x) < 4) {
+      this.vel.x = 0;
+    }
+    if (Math.abs(this.vel.y) < 4) {
+      this.vel.y = 0;
+    }
   }
 
   /**
@@ -148,10 +226,19 @@ class Player extends Entity { //Add button to enter portal
    * @params {World} - The world object that should be referenced
    * @params {Controls} - The controls to get the user input from
    */
-  updateInputs(world, controls) {
-    if (controls.jump && this.onGround) {
-      this.vel.y = -this.JUMP_POWER;
+  updateInputs(world, controls, deltaT) {
+
+    if (this.onGround) {
+      this.airTimer = 0;
+    } else {
+      this.airTimer += deltaT * 100;
     }
+
+    if (controls.jump && this.airTimer < this.jumpTolerance) {
+      this.vel.y = -this.JUMP_POWER;
+      this.airTimer = this.jumpTolerance;
+    }
+
 
     // If the player move in either direction
     if (controls.left && !controls.right) {
@@ -237,6 +324,7 @@ class Player extends Entity { //Add button to enter portal
       world.camera.zoomOut();
     }
   }
+
 
   loadAnimations() {
     for (var i = 0; i < 3; i++) { //states

@@ -37,10 +37,11 @@ class TeleportGun extends Entity {
         if (world.map.collideWithRectangle(this)) {
             // Destroy this bullet if we hit something
             this.active = false;
-            //Teleports the player where the bullet lands
-            //-50 buffer so the player falls to that position.
+            // Teleports the player where the bullet lands
+            // -50 buffer so the player falls to that position.
             // (prevent player from entering the ground).
             // Problem: Posibility getting stuck inside of a ceiling
+            // while loop until no more collide with ground
             world.currentPlayer.x = this.x;
             world.currentPlayer.y = this.y - 50;
         }

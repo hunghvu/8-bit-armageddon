@@ -29,9 +29,12 @@ class Entity extends Rectangle {
     this.acc = new Point(0, 0);
 
     // Default gravity acceleration
-    this.acc.y = 500;
+    this.acc.y = 300;
 
     this.onGround = false;
+
+    this.projectileCanEndTurn = null; // Declare whether a projectile allows a turn to be ended.
+                                      // null for non-projectile, true means yes, and false is otherwise.
   }
 
 
@@ -63,7 +66,6 @@ class Entity extends Rectangle {
     this.vel = newVel;
   }
 
-
   /** 
    * Boiler plate nothing
    */
@@ -74,11 +76,13 @@ class Entity extends Rectangle {
    * Returns a point that represents the new offset that the entity should have.
    *
    * @params {deltaT} - The number of ms since the last update
+   * @params {windX} - The X accleration from wind
+   * @params {windY} - The Y acceleration from wind
    */
-  desiredMovement(deltaT) {
+  desiredMovement(deltaT, windX = 0, windY = 0) {
     // Update the acceleration
-    this.vel.x += this.acc.x * deltaT;
-    this.vel.y += this.acc.y * deltaT;
+    this.vel.x += (windX + this.acc.x) * deltaT;
+    this.vel.y += (windY + this.acc.y) * deltaT;
 
     let xWholePixels = Math.round(this.vel.x * deltaT + this.subPixelPosition.x);
     let yWholePixels = Math.round(this.vel.y * deltaT + this.subPixelPosition.y);
@@ -91,4 +95,5 @@ class Entity extends Rectangle {
 
     return new Point(xWholePixels, yWholePixels);
   }
+
 }

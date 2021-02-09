@@ -18,6 +18,7 @@ class Bullet extends Entity{
         this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
 
         this.animations = [];
+        this.projectileCanEndTurn = false;
         this.loadAnimations();
     }
 
@@ -28,7 +29,7 @@ class Bullet extends Entity{
      * @params {deltaT} - The number of ms since the last update
      */
     update(world, deltaT){
-        this.add(this.desiredMovement(deltaT))
+        this.add(this.desiredMovement(deltaT, Wind.x, Wind.y))
 
         // update direction/facing
         if (this.vel.x < 0) this.facing = 1;
@@ -37,10 +38,22 @@ class Bullet extends Entity{
         if (world.map.collideWithRectangle(this)) {
             // Destroy this bullet if we hit something
             this.active = false;
+            this.projectileCanEndTurn = true;
             //let destructionRect = new Rectangle(this.x, this.y, 20, 20);
             //destructionRect.center = this.center;
             //world.map.destroyRectangle(destructionRect);
             world.map.destroyCircle(this.center.x, this.center.y, 10);
+            // Find any players in the blast range
+            for (let i = 0; i < world.players.length; i++) {
+                let playerThisLoop = world.players[i];
+                console.log(playerThisLoop);
+                // If we are close enough then damage a player
+                let difference = playerThisLoop.center
+                difference.sub(this.center);
+                if (difference.magnitude < 32) {
+                    playerThisLoop.damage(this.center, 4);
+                }
+            }
         }
     }
 

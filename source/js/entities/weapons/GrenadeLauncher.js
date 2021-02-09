@@ -11,13 +11,14 @@ class GrenadeLauncher extends Entity{
         this.y = y;
         this.vel.x = Math.cos(angle) * power;
         this.vel.y = -Math.sin(angle) * power;
-
         // this.upgrade = upgrade;
 
         this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
 
         this.animations = [];
         this.loadAnimations();
+
+        this.projectileCanEndTurn = false; // It is not used as of now.
     }
 
     /**
@@ -32,6 +33,8 @@ class GrenadeLauncher extends Entity{
         // update direction/facing
         if (this.vel.x < 0) this.facing = 1;
         if (this.vel.x > 0) this.facing = 0;
+      
+        this.add(this.desiredMovement(deltaT, Wind.x, Wind.y))
     }
 
     /**

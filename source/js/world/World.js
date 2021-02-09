@@ -12,6 +12,13 @@ class World {
     this.currentPlayer.isInTurn = true;
 
     this.entities = [];
+    this.entityOnMap = new EntityOnMap();
+    // parameter sets the players design
+    this.players = this.entityOnMap.playerOnMapList;
+    this.currentPlayer = this.players[this.players.length - 1];
+    this.currentPlayer.isInTurn = true;
+
+    this.entities = this.entityOnMap.entityOnMapList;
 
     this.camera = new Camera(500, 500, 1);
 
@@ -34,7 +41,7 @@ class World {
     this.camera.transformContext(ctx, 1);
 
     // Draw the map foreground
-    ctx.drawImage(this.map.mapCanvas, 0, 0);
+    this.map.draw(ctx);
 
     // Draw players
     this.drawPlayers(ctx);
@@ -59,6 +66,7 @@ class World {
   }
 
   update(deltaT, controls) {
+    this.map.update(this, deltaT);
     this.updatePlayers(deltaT, controls);
     this.currentPlayer.updateActive(this, controls, deltaT);
     this.updateEntities(deltaT);
@@ -67,7 +75,7 @@ class World {
     this.camera.target.x = this.currentPlayer.center.x;
     this.camera.target.y = this.currentPlayer.center.y;
 
-    this.camera.glideToTarget(8);
+    this.camera.glideToTarget(8, deltaT);
   }
 
 
@@ -96,8 +104,14 @@ class World {
     this.entities.forEach(entity => {
       entity.update(this, deltaT);
     });
+
+    // Replicate. Only need to filter out, the info of each referenced bullet is updated above.
+    this.entityOnMap.entityOnMapList = this.entityOnMap.entityOnMapList.filter((entity) => entity.active);
+
   }
   spawn(entity) {
     this.entities.push(entity);
+    // Replicate for bulletOnMap
+    this.entityOnMap.entityOnMapList.push(entity)
   }
 }

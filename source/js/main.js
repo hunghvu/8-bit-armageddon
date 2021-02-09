@@ -7,6 +7,7 @@ window.onload = function () {
   MANAGER.queueDownload('./assets/character.png');
   MANAGER.queueDownload('./assets/weapons.png');
   MANAGER.queueDownload('./assets/HealthBar.png');
+  MANAGER.queueDownload('./assets/shoot.wav');
 
   MANAGER.downloadAll(function () {
 
