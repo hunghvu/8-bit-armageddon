@@ -45,10 +45,11 @@ class Camera extends Point {
    *                         the camera movement.
    *                         Speed must be greater than 1
    */  
-  glideToTarget(speed) {
+  glideToTarget(speed, deltaT) {
+    deltaT *= 10;
     // Slowly glide the camera to the position that the target is
     // This fuction needs to be called multiple times between frames.
-    let xSpeed = (this.x - this.target.x) / speed;
+    let xSpeed = (this.x - this.target.x) / (speed / (deltaT + 1));
     let xDifference = this.x - this.target.x;
     // If the difference between the disired position and the real 
     // position is less than 1/100th then just snap to it.
@@ -58,7 +59,7 @@ class Camera extends Point {
       this.x -= xSpeed;
     }
 
-    let ySpeed = (this.y - this.target.y) / speed;
+    let ySpeed = (this.y - this.target.y) / (speed / (deltaT + 1));
     let yDifference = this.y - this.target.y;
     // If the difference between the disired position and the real 
     // position is less than 1/100th then just snap to it.
@@ -70,7 +71,7 @@ class Camera extends Point {
 
     // Update the zoom level
     
-    let zoomSpeed = (this.zoom - this.targetZoom) / speed;
+    let zoomSpeed = (this.zoom - this.targetZoom) / (speed / (deltaT + 1));
     let zoomDifference = this.zoom - this.targetZoom;
     // If the difference between the disired zoom and the real 
     // zoom is less than 1/100th then just snap to it.

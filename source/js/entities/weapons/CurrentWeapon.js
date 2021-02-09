@@ -59,6 +59,11 @@ class CurrentWeapon {
      * @returns {Bullet} The current weapon.
      */
     spawnCurrentWeapon(x, y, angle) {
+        // Reset the sound, stop it from looping, and the play it
+        MANAGER.getAsset("./assets/shoot.wav").loop = false;
+        MANAGER.getAsset("./assets/shoot.wav").pause();
+        MANAGER.getAsset("./assets/shoot.wav").currentTime = 0;
+        MANAGER.getAsset("./assets/shoot.wav").play();
         return new this.myCurrentWeapon(x, y, angle.radians, this.power)
     }
 }

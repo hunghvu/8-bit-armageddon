@@ -12,10 +12,21 @@ class DestructibleMap {
     // Draw the image onto the map for further use
     this.ctx.drawImage(img, 0, 0);
 
+    this.platform = new MovingPlatform(400, this.height * (4/7), (this.width * 1/8), (this.width * 7/8));
+
     // Generate and draw a random map.
     let mapGenerator = new MapGenerator(img.width, img.height);
     mapGenerator.privateGenerateGroundCoord();
     mapGenerator.drawMap(this.ctx);
+  }
+
+  update(game, deltaT) {
+    this.platform.update(game, deltaT);
+  }
+
+  draw(ctx) {
+    ctx.drawImage(this.mapCanvas, 0, 0);
+    this.platform.draw(ctx);
   }
 
   // Destory a single pixel of the map by replacing it with a pixel of transparency.
@@ -32,10 +43,16 @@ class DestructibleMap {
   // Destory a circle of the map by replacing it with pixels of transparency.
   destroyCircle(x, y, r) {
     for (let i = -r; i <= r; i++) {
+      // Use the equation of a circle to determine the area to destroy
       let thisWidth = Math.sqrt(1 - Math.pow(i / r, 2)) * r;
       this.ctx.clearRect(x - thisWidth, i + y, 
                          thisWidth * 2, 1);
+    }
 
+    let EXPLOSION_DISTANCE = 10;
+    // The platform has taken damage if it is close enough to the explosion
+    if (this.platform.doesCollide(new Rectangle(x - EXPLOSION_DISTANCE / 2, y - EXPLOSION_DISTANCE / 2, EXPLOSION_DISTANCE, EXPLOSION_DISTANCE))) {
+        this.platform.damageTaken = 1;
     }
   }
   
@@ -49,6 +66,10 @@ class DestructibleMap {
         // If any of the pixels in the rect aren't transparent then it's a collision
         return true;
       }
+    }
+
+    if (this.platform.doesCollide(rect)) {
+      return true;
     }
     return false;
   }
