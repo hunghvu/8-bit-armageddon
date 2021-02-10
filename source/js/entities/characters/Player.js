@@ -255,38 +255,36 @@ class Player extends Entity { //Add button to enter portal
       this.acc.x = 0;
     }
 
-    // @todo Add portal variables once portal gun is made.
-    // initial thought on condition option: (controls.enterPortalDownThisLoop && this.onGround)
-    // Don't know how big the portal will be so 13 and 16 are inserted as testers
-    // Problem: Entering loop without M key pressed
-    if (controls.enterPortalDownThisLoop) {
-      console.log("entered before loop"); //no problem
+    if (controls.enterPortalDownThisLoop && this.onGround) {
       for(var i = 0; i < world.entities.length; i++)
       {
-        console.log("world team: " + world.entities[i].design);
-        console.log("player team: " + this.team);
-        console.log("world x: " + world.entities[i].x);
-        console.log("player x: " + this.x);
-        console.log("world y: " + world.entities[i].y);
-        console.log("player y: " + this.y);
+        // TESTING PURPOSES
+        // console.log("world team: " + world.entities[i].design);
+        // console.log("player team: " + this.team);
+        // console.log("position: " + world.entities[i].position);
+        // console.log("world x: " + world.entities[i].x);
+        // console.log("player x: " + this.x);
+        // console.log("test x: " + (this.x < world.entities[i].x + 40 && this.x > world.entities[i].x - 40));
+        // console.log("world y: " + world.entities[i].y);
+        // console.log("player y: " + this.y);
+        // console.log("test y: " + (this.y < world.entities[i].y + 25 && this.y > world.entities[i].y - 25));
         if(world.entities[i].design == this.team &&
-          world.entities[i].position == 1 &&
           i < world.entities.length - 1 &&
-          (this.x < world.entities[i].x + 100 && this.x > world.entities[i].x - 100) &&
-          (this.y < world.entities[i].y + 16 && this.y > world.entities[i].y - 16))
+          world.entities[i+1].design == this.team &&
+          (this.x < world.entities[i].x + 40 && this.x > world.entities[i].x - 40) &&
+          (this.y < world.entities[i].y + 25 && this.y > world.entities[i].y - 25))
           {
-            console.log("inside if blue");
             this.x = world.entities[i+1].x;
-            this.y = world.entities[i+1].y;
+            this.y = world.entities[i+1].y - 32;
             break;
           }
           else if(world.entities[i].design == this.team &&
-            world.entities[i].position == 0 &&
+            i >= 1 &&
+            world.entities[i-1].design == this.team &&
             (this.x < world.entities[i].x + 40 && this.x > world.entities[i].x - 40) &&
-            (this.y < world.entities[i].y + 16 && this.y > world.entities[i].y - 16)) {
-              console.log("inside if orange");
+            (this.y < world.entities[i].y + 25 && this.y > world.entities[i].y - 25)) {
               this.x = world.entities[i-1].x;
-              this.y = world.entities[i-1].y;
+              this.y = world.entities[i-1].y - 32;
               break;
           }
       }

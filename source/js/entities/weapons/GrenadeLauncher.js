@@ -6,7 +6,7 @@ class GrenadeLauncher extends Entity{
      * Constructor for the grenade laucher that extends the entity class.
      */
     constructor(x, y, angle, power) {
-        super();
+        super(x,y,8,8);
         this.x = x;
         this.y = y;
         this.vel.x = Math.cos(angle) * power;
@@ -33,8 +33,31 @@ class GrenadeLauncher extends Entity{
         // update direction/facing
         if (this.vel.x < 0) this.facing = 1;
         if (this.vel.x > 0) this.facing = 0;
-      
+
         this.add(this.desiredMovement(deltaT, Wind.x, Wind.y))
+
+        if (world.map.collideWithRectangle(this)) {
+          // this.vel.x = (this.vel.x * .5);
+          // this.vel.y = (this.vel.y * -1);
+          // if (this.vel.x < 0) this.facing = 1;
+          // if (this.vel.x > 0) this.facing = 0;
+          // if (world.map.collideWithRectangle(this)) {
+            // Destroy this bullet if we hit something
+            this.active = false;
+            this.projectileCanEndTurn = true;
+            world.map.destroyCircle(this.center.x, this.center.y, 30);
+            // Find any players in the blast range
+            for (let i = 0; i < world.players.length; i++) {
+                let playerThisLoop = world.players[i];
+                // If we are close enough then damage a player
+                let difference = playerThisLoop.center
+                difference.sub(this.center);
+                if (difference.magnitude < 32) {
+                    playerThisLoop.damage(this.center, 4);
+                }
+            }
+          }
+        }
     }
 
     /**
@@ -56,17 +79,17 @@ class GrenadeLauncher extends Entity{
       // Grenade = no set number
       //buffer padding current build = 17
       //facing right = 0,
-      // this.animations[0] = new Animator(this.spritesheet, 9, 7, 12, 14, 4, 0.5, 17, false, true);
-      //
-      // //facing left = 1,
-      // this.animations[1] = new Animator(this.spritesheet, 137, 7, 12, 14, 4, 0.5, 17, true, true);
-
-      // Dynomite (upgrade lvl 2) = no set number
-      //buffer padding current build = 
-      //facing right = 0,
-      this.animations[0] = new Animator(this.spritesheet, 2, 35, 28, 28, 4, 0.5, 14, false, true);
+      this.animations[0] = new Animator(this.spritesheet, 9, 7, 12, 14, 4, 0.5, 17, false, true);
 
       //facing left = 1,
-      this.animations[1] = new Animator(this.spritesheet, 2, 35, 28, 28, 4, 0.5, 14, true, true);
+      this.animations[1] = new Animator(this.spritesheet, 137, 7, 12, 14, 4, 0.5, 17, true, true);
+
+      // // Dynomite (upgrade lvl 2) = no set number
+      // //buffer padding current build =
+      // //facing right = 0,
+      // this.animations[0] = new Animator(this.spritesheet, 2, 35, 28, 28, 4, 0.5, 14, false, true);
+      //
+      // //facing left = 1,
+      // this.animations[1] = new Animator(this.spritesheet, 2, 35, 28, 28, 4, 0.5, 14, true, true);
     }
 }

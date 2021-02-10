@@ -38,12 +38,19 @@ class TeleportGun extends Entity {
             // Destroy this bullet if we hit something
             this.active = false;
             // Teleports the player where the bullet lands
-            // -50 buffer so the player falls to that position.
+
+            // Initial: -50 buffer so the player falls to that position.
             // (prevent player from entering the ground).
             // Problem: Posibility getting stuck inside of a ceiling
+
+            // New problem with loop: leaves loop when top left pixel out of ground
+            // But the whole character is still stuck. Have to -character height but
+            // only Player.draw() knows the height
+
             // while loop until no more collide with ground
             world.currentPlayer.x = this.x;
-            world.currentPlayer.y = this.y - 50;
+            // world.currentPlayer.y = this.y;
+            world.currentPlayer.y = this.y - 55;
         }
     }
 

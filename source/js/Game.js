@@ -40,8 +40,9 @@ class Game {
   }
 
   draw() {
-    this.world.update(this.timer.tick(), this.controls);
-    this.turn.countdownTurn();
+    //Problem: skipped over weapons, basically: a double click e/q
+    // this.world.update(this.timer.tick(), this.controls);
+    // this.turn.countdownTurn();
     this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
 
     //Top display bar
@@ -119,16 +120,47 @@ class Game {
       for (var i = 0; i <= this.world.currentPlayer.currentWeapon.myWeaponBag.length; i++)
       {
         this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
-        if (this.world.currentPlayer.currentWeapon.currentIndex == 0) //Bullet
+        //Bullet
+        if (this.world.currentPlayer.currentWeapon.currentIndex == 0)
         {
-          this.ctx.drawImage(this.spritesheet, 9, 7, 12, 14, 200, 35, 48, 56);
+          //Normal Bullet/Gun
+          // if (this.world.currentPlayer.currentWeapon.myWeaponBag.upgraded == 0)
+          // {
+          this.ctx.drawImage(this.spritesheet, 6, 70, 23, 16, 200, 35, 92, 64);
+          // }
+          //Sniper Bullet/Gun
+          // else {}
         }
-        else { //GrenadeLauncher
-          this.ctx.drawImage(this.spritesheet, 38, 38, 23, 16, 200, 35, 92, 64);
+        //GrenadeLauncher
+        else if (this.world.currentPlayer.currentWeapon.currentIndex == 1)
+        {
+          //Grenade
+          // if (this.world.currentPlayer.currentWeapon.myWeaponBag.upgraded == 0)
+          // {
+          this.ctx.drawImage(this.spritesheet, 10, 7, 11, 14, 200, 35, 44, 56);
+          //}
+          //dynomite
+          // else {}
+        }
+        //PortalGun
+        else if (this.world.currentPlayer.currentWeapon.currentIndex == 2){
+          this.ctx.fillText('Portal IMG', 200, 70);
+        }
+        //TeleportGun
+        else {
+          this.ctx.fillText('Teleport IMG', 200, 70);
         }
       }
 
-      this.ctx.fillText("Wind(X): " + Wind.x + ", Wind(Y): " + Wind.y, 343, 31);
+      this.spritesheet = MANAGER.getAsset('./assets/HealthBar.png');
+
+      //No test yet since player health not implemented
+      this.ctx.fillText('Health: ', 343, 31);
+      this.ctx.drawImage(this.spritesheet, 83, 1, 29, 26, 343, 32, 92, 64);
+
+      // this.ctx.fillText("Wind(X): " + Wind.x + ", Wind(Y): " + Wind.y, 343, 31);
+      this.ctx.fillText("Wind(X): " + Wind.x + ", Wind(Y): " + Wind.y, 455, 31);
+
 
       // For testing only.
       this.ctx.font = "30px Arial";

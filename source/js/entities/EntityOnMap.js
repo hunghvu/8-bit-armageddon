@@ -6,13 +6,13 @@ class EntityOnMap {
     constructor() {
         this.spritesheet = MANAGER.getAsset('./assets/character.png');
         this.entityOnMapList = [];
-        this.playerOnMapList = [new Player(this.spritesheet, 344, 650, 0), new Player(this.spritesheet, 500, 650, 1)];
+        this.playerOnMapList = [new Player(this.spritesheet, 344, 650, 0, 0), new Player(this.spritesheet, 500, 650, 1, 1), new Player(this.spritesheet,400,650,2, 1)];
 
     }
-    
+
     /**
      * Check if all entities are stopped.
-     * This function can be updated down the road if entityOnMap contains 
+     * This function can be updated down the road if entityOnMap contains
      *   something other than a Bullet
      */
     isAllEntityStop(){

@@ -93,7 +93,7 @@ class PortalGun extends Entity{
    */
   draw(ctx){
     if (this.team) {
-      ctx.fillStyle = "yellow";
+      ctx.fillStyle = "purple";
       ctx.beginPath();
       ctx.fillRect(this.x, this.y, 10, 10);
     }

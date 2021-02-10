@@ -13,15 +13,20 @@ class Portal extends Entity{
     // this.animationsOrangePortalstart = new Animator(this.spritesheet, 6, 96, 26, 31, 4, 0.5, 7, false, false);
     // this.animationsBluePortalstart = new Animator(this.spritesheet, 6, 127, 26, 31, 4, 0.5, 7, false, false);
     this.animationsOrangePortal = new Animator(this.spritesheet, 131, 96, 26, 31, 3, 0.5, 7, false, true);
-    this.animationsBluePortal = new Animator(this.spritesheet, 131, 127, 26, 31, 3, 0.5, 7, false, true);
+    // this.animationsBluePortal = new Animator(this.spritesheet, 131, 127, 26, 31, 3, 0.5, 7, false, true);
     //Team 1 (food) set of portals
     this.animationsPurplePortal = new Animator(this.spritesheet, 131, 160, 26, 31, 3, 0.5, 7, false, true);
-    this.animationsYellowPortal = new Animator(this.spritesheet, 131, 192, 26, 31, 3, 0.5, 7, false, true);
+    // this.animationsYellowPortal = new Animator(this.spritesheet, 131, 192, 26, 31, 3, 0.5, 7, false, true);
 
     this.position = portal;
     this.design = teamDesign;
+
+    // Since portals are in the entity list and always moving,
+    // it'll never end turn without this
+    this.projectileCanEndTurn = true;
   }
 
+  // ToDo: after a certain amount of turns/time, the portals should disappear
   // /**
   //  * Update the bullet flying through the air.
   //  *
@@ -39,25 +44,25 @@ class Portal extends Entity{
   {
     //human team portals
     if (this.design == 0){
-      if (this.position == 0)
+      // if (this.position == 0)
       {
         this.animationsOrangePortal.drawFrame(.1, ctx, this.x, this.y - 30, 1.5);
       }
-      else
-      {
-        this.animationsBluePortal.drawFrame(.1, ctx, this.x, this.y, 1.5);
-      }
+      // else
+      // {
+      //   this.animationsBluePortal.drawFrame(.1, ctx, this.x, this.y, 1.5);
+      // }
     }
     //food team portals
     else
     {
-      if (this.position == 0)
-      {
-        this.animationsYellowPortal.drawFrame(.1, ctx, this.x, this.y - 30, 1.5);
-      }
-      else {
+      // if (this.position == 0)
+      // {
+      //   this.animationsYellowPortal.drawFrame(.1, ctx, this.x, this.y - 30, 1.5);
+      // }
+      // else {
         this.animationsPurplePortal.drawFrame(.1, ctx, this.x, this.y, 1.5);
-      }
+      // }
     }
   }
 }
