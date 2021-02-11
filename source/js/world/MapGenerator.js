@@ -14,37 +14,45 @@ class MapGenerator {
      * @param {CanvasContext} ctx 
      */
     drawMap(ctx) {
-        ctx.beginPath();
-        for (var  i = 0; i < this.pixelArray.length; i++){
-          ctx.moveTo(i, this.pixelArray[i]);
-          // Arc radius is 60, so I use 70 here to draw some spike
-          //  on the bottom of circumference, which resembles stalactite on cave floor.
-          //  It seems like using arc in the same path will undo line, so the stalactite
-          //  "effect" is achivable. 
-          // However, the more circle we draw, the more natural the map is. I use arc as a way
-          //  to smooth out the surface, but it's CPU intensive.
-          ctx.lineTo(i, this.pixelArray[i] + 70);
-          ctx.moveTo(i, this.pixelArray[i]);
-          ctx.lineTo(i + 1, this.pixelArray[i + 1]);
-          if (Math.random() < 0.3) {
-            ctx.arc(i, this.pixelArray[i], 60, 0, Math.PI*2, false);
-            // Reduce the rate of drawing a circle and line, so it can reduce hardware load.
-            i += 3;
-          }
-          ctx.fill();
-          ctx.stroke();
+        // Clear the entire canvas that we were given
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        // Make an array of adjacent circles and their radii so that we 
+        // can draw them and their center color seperately
+        let circles = []
+        let currentCircle = new Point(0, ctx.canvas.height * (4/5));
+        while (currentCircle.x < ctx.canvas.width) {
+          let offset = new Point(50 * Math.random() + 50, 100 * Math.random() - 50)
+          circles.push([new Point(currentCircle.x, currentCircle.y), offset.magnitude])
+          currentCircle.add(offset);
+          currentCircle.y = Math.min(currentCircle.y, ctx.canvas.height);
         }
-        ctx.closePath()
-        
-        // Drawing the bottom of map (this inherently forms caves.
-        ctx.beginPath()
-        for (var  i = 0; i < this.width; i += 30){
-          if (Math.random() < 0.2) {
-            ctx.arc(i, this.height, 80, 0, Math.PI*2, false);
-          }   
+
+        // Draw the out green circles
+        ctx.fillStyle = 'green';
+        circles.forEach((circle) => {
+          ctx.beginPath();
+          ctx.arc(circle[0].x, circle[0].y, circle[1], 0, Math.PI * 2, true);
           ctx.fill();
-        }
-        ctx.closePath();
+          ctx.closePath();
+        });
+
+        // Draw the inner brown circles and draw the ground as going all 
+        // the way to the bottom of the map
+        ctx.fillStyle = '#51361a';
+        circles.forEach((circle) => {
+          let smallerRadius = circle[1] * (4/5);
+          ctx.beginPath();
+          ctx.arc(circle[0].x, circle[0].y, smallerRadius, 0, Math.PI * 2, true);
+          ctx.fill();
+          ctx.closePath();
+
+          // Draw the ground to the bottom of the map
+          ctx.beginPath();
+          ctx.rect(circle[0].x - smallerRadius, circle[0].y, smallerRadius * 2, 600);
+          ctx.fill();
+          ctx.closePath();
+        });
+
     }
 
     /**
