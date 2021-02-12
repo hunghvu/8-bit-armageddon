@@ -5,8 +5,12 @@ class Portal extends Entity{
 
     this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
 
+    this.position = portal;
+    this.design = teamDesign;
+
     this.x = x;
-    this.y = y;
+    if (this.position == 0) this.y = y - 40;
+    else this.y = y;
 
     // Notes: frame count 4 or 5, testing 4
     // Team 0 (humans) set of portals
@@ -17,9 +21,6 @@ class Portal extends Entity{
     //Team 1 (food) set of portals
     this.animationsPurplePortal = new Animator(this.spritesheet, 131, 160, 26, 31, 3, 0.5, 7, false, true);
     // this.animationsYellowPortal = new Animator(this.spritesheet, 131, 192, 26, 31, 3, 0.5, 7, false, true);
-
-    this.position = portal;
-    this.design = teamDesign;
 
     // Since portals are in the entity list and always moving,
     // it'll never end turn without this
@@ -33,12 +34,16 @@ class Portal extends Entity{
   //  * @params {World} - The world object that should be referenced
   //  * @params {deltaT} - The number of ms since the last update
   //  */
-  // update(world, deltaT){
-  //     // this.add(this.desiredMovement(deltaT))
-  //     if (world.currentPlayer.currentWeapon.myWeaponBag[2].active){
-  //       this.active = false;
-  //     }
-  // }
+  update(world, deltaT){
+      // this.add(this.desiredMovement(deltaT));
+      // while (world.map.collideWithRectangle(this))
+      // {
+      //   this.y--;
+      // }
+      // if (world.currentPlayer.currentWeapon.myWeaponBag[2].active){
+      //   this.active = false;
+      // }
+  }
 
   draw(ctx)
   {
@@ -46,7 +51,7 @@ class Portal extends Entity{
     if (this.design == 0){
       // if (this.position == 0)
       {
-        this.animationsOrangePortal.drawFrame(.1, ctx, this.x, this.y - 30, 1.5);
+        this.animationsOrangePortal.drawFrame(.1, ctx, this.x, this.y, 1.5);
       }
       // else
       // {

@@ -56,7 +56,6 @@ class GrenadeLauncher extends Entity{
                     playerThisLoop.damage(this.center, 4);
                 }
             }
-          }
         }
     }
 

@@ -35,8 +35,6 @@ class TeleportGun extends Entity {
         if (this.vel.x > 0) this.facing = 0;
 
         if (world.map.collideWithRectangle(this)) {
-            // Destroy this bullet if we hit something
-            this.active = false;
             // Teleports the player where the bullet lands
 
             // Initial: -50 buffer so the player falls to that position.
@@ -47,10 +45,17 @@ class TeleportGun extends Entity {
             // But the whole character is still stuck. Have to -character height but
             // only Player.draw() knows the height
 
-            // while loop until no more collide with ground
+            // while loop until no more collide with ground,
+            // moves until top left pixel is free
             world.currentPlayer.x = this.x;
-            // world.currentPlayer.y = this.y;
-            world.currentPlayer.y = this.y - 55;
+            while (world.map.collideWithRectangle(this))
+            {
+              this.y--;
+            }
+            // 60 is max height for a player
+            world.currentPlayer.y = this.y - 60;
+            // Destroy this bullet if we hit something
+            this.active = false;
         }
     }
 

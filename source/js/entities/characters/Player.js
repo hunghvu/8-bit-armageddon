@@ -275,7 +275,7 @@ class Player extends Entity { //Add button to enter portal
           (this.y < world.entities[i].y + 25 && this.y > world.entities[i].y - 25))
           {
             this.x = world.entities[i+1].x;
-            this.y = world.entities[i+1].y - 32;
+            this.y = world.entities[i+1].y;
             break;
           }
           else if(world.entities[i].design == this.team &&
@@ -287,7 +287,11 @@ class Player extends Entity { //Add button to enter portal
               this.y = world.entities[i-1].y - 32;
               break;
           }
-      }
+       }
+       while(world.map.collideWithRectangle(this))
+       {
+         this.y--;
+       }
     }
 
     /**

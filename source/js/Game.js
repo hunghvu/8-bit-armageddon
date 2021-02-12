@@ -95,9 +95,40 @@ class Game {
 
     this.spritesheet = MANAGER.getAsset('./assets/HealthBar.png');
 
-    //No test yet since player health not implemented
     this.ctx.fillText('Health: ', 343, 31);
-    this.ctx.drawImage(this.spritesheet, 83, 1, 29, 26, 343, 32, 92, 64);
+    if(this.world.currentPlayer.damageTaken >= 0 && this.world.currentPlayer.damageTaken < 0.1) {
+      this.ctx.drawImage(this.spritesheet, 83, 1, 29, 26, 343, 32, 92, 64);
+    }
+    else if(this.world.currentPlayer.damageTaken >= 0.1 && this.world.currentPlayer.damageTaken < 0.2) {
+      this.ctx.drawImage(this.spritesheet, 147, 1, 29, 26, 343, 32, 92, 64);
+    }
+    else if(this.world.currentPlayer.damageTaken >= 0.2 && this.world.currentPlayer.damageTaken < 0.3) {
+      this.ctx.drawImage(this.spritesheet, 211, 1, 29, 26, 343, 32, 92, 64);
+    }
+    else if(this.world.currentPlayer.damageTaken >= 0.3 && this.world.currentPlayer.damageTaken < 0.4) {
+      this.ctx.drawImage(this.spritesheet, 275, 1, 29, 26, 343, 32, 92, 64);
+    }
+    else if(this.world.currentPlayer.damageTaken >= 0.4 && this.world.currentPlayer.damageTaken < 0.5) {
+      this.ctx.drawImage(this.spritesheet, 339, 1, 29, 26, 343, 32, 92, 64);
+    }
+    else if(this.world.currentPlayer.damageTaken >= 0.5 && this.world.currentPlayer.damageTaken < 0.6) {
+      this.ctx.drawImage(this.spritesheet, 403, 1, 29, 26, 343, 32, 92, 64);
+    }
+    else if(this.world.currentPlayer.damageTaken >= 0.6 && this.world.currentPlayer.damageTaken < 0.7) {
+      this.ctx.drawImage(this.spritesheet, 467, 1, 29, 26, 343, 32, 92, 64);
+    }
+    else if(this.world.currentPlayer.damageTaken >= 0.7 && this.world.currentPlayer.damageTaken < 0.8) {
+      this.ctx.drawImage(this.spritesheet, 531, 1, 29, 26, 343, 32, 92, 64);
+    }
+    else if(this.world.currentPlayer.damageTaken >= 0.8 && this.world.currentPlayer.damageTaken < 0.9) {
+      this.ctx.drawImage(this.spritesheet, 595, 1, 29, 26, 343, 32, 92, 64);
+    }
+    else if(this.world.currentPlayer.damageTaken >= 0.9 && this.world.currentPlayer.damageTaken < 1) {
+      this.ctx.drawImage(this.spritesheet, 659, 1, 29, 26, 343, 32, 92, 64);
+    }
+    else { //this.world.currentPlayer.damageTaken == 1
+      this.ctx.drawImage(this.spritesheet, 723, 1, 29, 26, 343, 32, 92, 64);
+    }
 
     if (this.status == "PLAYING") {
       this.world.update(this.timer.tick(), this.controls);
@@ -154,10 +185,44 @@ class Game {
 
       this.spritesheet = MANAGER.getAsset('./assets/HealthBar.png');
 
-      //No test yet since player health not implemented
       this.ctx.fillText('Health: ', 343, 31);
-      this.ctx.drawImage(this.spritesheet, 83, 1, 29, 26, 343, 32, 92, 64);
+      if(this.world.currentPlayer.damageTaken >= 0 && this.world.currentPlayer.damageTaken < 0.1) {
+        this.ctx.drawImage(this.spritesheet, 83, 1, 29, 26, 343, 32, 92, 64);
+      }
+      else if(this.world.currentPlayer.damageTaken >= 0.1 && this.world.currentPlayer.damageTaken < 0.2) {
+        this.ctx.drawImage(this.spritesheet, 147, 1, 29, 26, 343, 32, 92, 64);
+      }
+      else if(this.world.currentPlayer.damageTaken >= 0.2 && this.world.currentPlayer.damageTaken < 0.3) {
+        this.ctx.drawImage(this.spritesheet, 211, 1, 29, 26, 343, 32, 92, 64);
+      }
+      else if(this.world.currentPlayer.damageTaken >= 0.3 && this.world.currentPlayer.damageTaken < 0.4) {
+        this.ctx.drawImage(this.spritesheet, 275, 1, 29, 26, 343, 32, 92, 64);
+      }
+      else if(this.world.currentPlayer.damageTaken >= 0.4 && this.world.currentPlayer.damageTaken < 0.5) {
+        this.ctx.drawImage(this.spritesheet, 339, 1, 29, 26, 343, 32, 92, 64);
+      }
+      else if(this.world.currentPlayer.damageTaken >= 0.5 && this.world.currentPlayer.damageTaken < 0.6) {
+        this.ctx.drawImage(this.spritesheet, 403, 1, 29, 26, 343, 32, 92, 64);
+      }
+      else if(this.world.currentPlayer.damageTaken >= 0.6 && this.world.currentPlayer.damageTaken < 0.7) {
+        this.ctx.drawImage(this.spritesheet, 467, 1, 29, 26, 343, 32, 92, 64);
+      }
+      else if(this.world.currentPlayer.damageTaken >= 0.7 && this.world.currentPlayer.damageTaken < 0.8) {
+        this.ctx.drawImage(this.spritesheet, 531, 1, 29, 26, 343, 32, 92, 64);
+      }
+      else if(this.world.currentPlayer.damageTaken >= 0.8 && this.world.currentPlayer.damageTaken < 0.9) {
+        this.ctx.drawImage(this.spritesheet, 595, 1, 29, 26, 343, 32, 92, 64);
+      }
+      else if(this.world.currentPlayer.damageTaken >= 0.9 && this.world.currentPlayer.damageTaken < 1) {
+        this.ctx.drawImage(this.spritesheet, 659, 1, 29, 26, 343, 32, 92, 64);
+      }
+      else { //this.world.currentPlayer.damageTaken == 1
+        this.ctx.drawImage(this.spritesheet, 723, 1, 29, 26, 343, 32, 92, 64);
+      }
+      this.ctx.font = "20px Arial";
+      this.ctx.fillText((1.0 - this.world.currentPlayer.damageTaken)*100, 375, 66);
 
+      this.ctx.font = "30px Arial";
       // this.ctx.fillText("Wind(X): " + Wind.x + ", Wind(Y): " + Wind.y, 343, 31);
       this.ctx.fillText("Wind(X): " + Wind.x + ", Wind(Y): " + Wind.y, 455, 31);
 
