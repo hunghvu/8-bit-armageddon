@@ -26,11 +26,30 @@
     <script src="js/world/World.js"></script>
     <script src="js/Game.js"></script>
     <script src="js/AssetManager.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/menu/MainMenu.js"></script>
+    <!-- <script src="js/main.js"></script> -->
+
+    <!-- Library for main menu. -->
+    <script src="js/menu/MainMenu.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <style>
+      .bg {
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), url("assets/background-menu.jpg");
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+    }
+    </style>
   </head>
   <body>
-    <div class="container">
-      <canvas id="display"></canvas>
+    <div class="bg" id="main-menu">
+      <!-- <p>abc</p> -->
     </div>
+    <!-- <div class="container" id="game-canvas">
+      <canvas id="display"></canvas>
+    </div> -->
   </body>
 </html>
