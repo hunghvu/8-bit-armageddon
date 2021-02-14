@@ -1,3 +1,7 @@
+/**
+ * This script provides functionality for main menu page.
+ * This can be think of a new version of main.js
+ */
 var MANAGER = new AssetManager(); // User var to avoid variable has been declared exception.
 window.onload = function () {
     // Set responsive size
@@ -29,8 +33,8 @@ window.onload = function () {
     function startGame() {
         let turnLimit = $("#limit-turn-input").val();
         let timePerTurnLimit = $("#limit-turn-time-input").val();
-        if(isEmpty(turnLimit) || isEmpty(timePerTurnLimit)
-            || (turnLimit < 20 || turnLimit % 2 === 1)
+        if(isEmpty(timePerTurnLimit)
+            || (((turnLimit < 20) || turnLimit % 2 === 1) && !isEmpty(turnLimit))
             || (timePerTurnLimit < 5 || timePerTurnLimit > 10 || !Number.isInteger(Number(timePerTurnLimit)))) { // Require parse to Number before comparison.
             alert("Invalid input(s) detected. Please try again.")
             return;
@@ -64,6 +68,12 @@ window.onload = function () {
         });
     }
 
+    /**
+     * This function check whether an input is empty.
+     * This is used instead of "required" attribute to 
+     *  centralize all the properties to this script.
+     * @param {string} inputValue 
+     */
     function isEmpty(inputValue) {
         return inputValue === "" || inputValue === null || inputValue === undefined;
     }

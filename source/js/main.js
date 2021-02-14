@@ -1,22 +1,25 @@
-var MANAGER = new AssetManager();
+/**
+ * This script is unused at the moment. May need to be deleted later on.
+ */
+// var MANAGER = new AssetManager();
 
-window.onload = function () {
-  // Load a map image
-  // asset_manager here
+// window.onload = function () {
+//   // Load a map image
+//   // asset_manager here
 
-  MANAGER.queueDownload('./assets/character.png');
-  MANAGER.queueDownload('./assets/weapons.png');
-  MANAGER.queueDownload('./assets/shoot.wav');
-  MANAGER.queueDownload('./assets/shoot.wav');
-  MANAGER.queueDownload('./assets/background-cloud.jpg');
-  MANAGER.queueDownload('./assets/background.jpg');
+//   MANAGER.queueDownload('./assets/character.png');
+//   MANAGER.queueDownload('./assets/weapons.png');
+//   MANAGER.queueDownload('./assets/shoot.wav');
+//   MANAGER.queueDownload('./assets/shoot.wav');
+//   MANAGER.queueDownload('./assets/background-cloud.jpg');
+//   MANAGER.queueDownload('./assets/background.jpg');
 
 
-  MANAGER.downloadAll(function () {
+//   MANAGER.downloadAll(function () {
 
-    //destructionMap = new DestructableMap('map/map.png');
-    gg = new Game();
+//     //destructionMap = new DestructableMap('map/map.png');
+//     gg = new Game();
 
-  });
+//   });
 
-}
+// }
