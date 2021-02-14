@@ -8,6 +8,8 @@ class Portal extends Entity{
     this.position = portal;
     this.design = teamDesign;
 
+    this.numOfTurns = 0;
+
     this.x = x;
     if (this.position == 0) this.y = y - 40;
     else this.y = y;
@@ -40,9 +42,9 @@ class Portal extends Entity{
       // {
       //   this.y--;
       // }
-      // if (world.currentPlayer.currentWeapon.myWeaponBag[2].active){
-      //   this.active = false;
-      // }
+      if (this.numOfTurns == 6){
+        this.active = false;
+      }
   }
 
   draw(ctx)

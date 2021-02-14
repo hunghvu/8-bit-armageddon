@@ -1,6 +1,6 @@
 /**
  * This class define the concept "Turn" of this game.
- * It has turn timer and handled defined turn-related rules 
+ * It has turn timer and handled defined turn-related rules
  * of this game.
  */
 class Turn {
@@ -49,7 +49,7 @@ class Turn {
             this.timer.turnTime = this.timePerTurn - this.timer.maxStep * 2;
         }
     }
-    
+
     /**
      * This function handle changing the turns when the turn can be ended.
      */
@@ -67,22 +67,29 @@ class Turn {
                 if(this.world.currentPlayer.onGround) {
                     if (this.playerNumber === -1) {
                         this.playerNumber = this.world.players.length - 1;
-                    } 
+                    }
                     this.world.currentPlayer.vel.x = 0;
                     this.world.currentPlayer.acc.x = 0;
                     this.world.currentPlayer.isInTurn = false;
-                    this.world.currentPlayer = this.world.players[this.playerNumber];  
+                    this.world.currentPlayer = this.world.players[this.playerNumber];
 
                     // Explanation.
                     //  countdownTurn() is origninally run once per approximately 5 secs.
                     //  with the introduction of inReadyPeriod flag, it will be set to true when a player is in ready period, false otherwise.
-                    //  the camera will always change player per X secs due to line 31, however, 
+                    //  the camera will always change player per X secs due to line 31, however,
                     //    it will only give that user control permission if after a ready period.
                     //  Now the timer will run in this interleaving order: 5 secs action => 3 secs waiting => 5 secs action => ...
-                    if (this.inReadyPeriod) {  
+                    if (this.inReadyPeriod) {
                         this.world.currentPlayer.isInTurn = true;
-                        this.inReadyPeriod = false;                  
+                        this.inReadyPeriod = false;
                         this.playerNumber--;
+                        for(var i = 0; i < this.world.entities.length; i++)
+                        {
+                          if (this.world.entities[i] instanceof Portal)
+                          {
+                            this.world.entities[i].numOfTurns++;
+                          }
+                        }
                     } else {
                         this.timer.turnTime -= this.readyTime; // Minus the ready time.
                         this.inReadyPeriod = true;
@@ -98,4 +105,4 @@ class Turn {
 
         }
     }
-}   
+}
