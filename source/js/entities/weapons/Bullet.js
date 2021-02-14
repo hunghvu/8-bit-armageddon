@@ -29,7 +29,7 @@ class Bullet extends Entity{
      * @params {deltaT} - The number of ms since the last update
      */
     update(world, deltaT){
-        this.add(this.desiredMovement(deltaT, Wind.x, Wind.y))
+        this.moveUntilCollision(world, this.desiredMovement(deltaT, Wind.x, Wind.y));
 
         // update direction/facing
         if (this.vel.x < 0) this.facing = 1;
@@ -57,22 +57,6 @@ class Bullet extends Entity{
             }
         }
     }
-
-    moveUntilCollision(world, movement) {
-        while (movement.x >= 1 || movement.x <= 1
-               && world.map.collideWithRectangle(this)) {
-            let direction = movement.x >= 1 ? 1 : -1;
-            this.x += direction;
-            movement.x -= direction;
-        }
-        while (movement.y >= 1 || movement.y <= 1
-               && world.map.collideWithRectangle(this)) {
-            let direction = movement.y >= 1 ? 1 : -1;
-            this.y += direction;
-            movement.y -= direction;
-        }
-    }
-
 
     /**
      * Draw the bullet.

@@ -95,43 +95,6 @@ class Game {
       }
     }
 
-    this.spritesheet = MANAGER.getAsset('./assets/HealthBar.png');
-
-    this.ctx.fillText('Health: ', 343, 31);
-    if(this.world.currentPlayer.damageTaken >= 0 && this.world.currentPlayer.damageTaken < 0.1) {
-      this.ctx.drawImage(this.spritesheet, 83, 1, 29, 26, 343, 32, 92, 64);
-    }
-    else if(this.world.currentPlayer.damageTaken >= 0.1 && this.world.currentPlayer.damageTaken < 0.2) {
-      this.ctx.drawImage(this.spritesheet, 147, 1, 29, 26, 343, 32, 92, 64);
-    }
-    else if(this.world.currentPlayer.damageTaken >= 0.2 && this.world.currentPlayer.damageTaken < 0.3) {
-      this.ctx.drawImage(this.spritesheet, 211, 1, 29, 26, 343, 32, 92, 64);
-    }
-    else if(this.world.currentPlayer.damageTaken >= 0.3 && this.world.currentPlayer.damageTaken < 0.4) {
-      this.ctx.drawImage(this.spritesheet, 275, 1, 29, 26, 343, 32, 92, 64);
-    }
-    else if(this.world.currentPlayer.damageTaken >= 0.4 && this.world.currentPlayer.damageTaken < 0.5) {
-      this.ctx.drawImage(this.spritesheet, 339, 1, 29, 26, 343, 32, 92, 64);
-    }
-    else if(this.world.currentPlayer.damageTaken >= 0.5 && this.world.currentPlayer.damageTaken < 0.6) {
-      this.ctx.drawImage(this.spritesheet, 403, 1, 29, 26, 343, 32, 92, 64);
-    }
-    else if(this.world.currentPlayer.damageTaken >= 0.6 && this.world.currentPlayer.damageTaken < 0.7) {
-      this.ctx.drawImage(this.spritesheet, 467, 1, 29, 26, 343, 32, 92, 64);
-    }
-    else if(this.world.currentPlayer.damageTaken >= 0.7 && this.world.currentPlayer.damageTaken < 0.8) {
-      this.ctx.drawImage(this.spritesheet, 531, 1, 29, 26, 343, 32, 92, 64);
-    }
-    else if(this.world.currentPlayer.damageTaken >= 0.8 && this.world.currentPlayer.damageTaken < 0.9) {
-      this.ctx.drawImage(this.spritesheet, 595, 1, 29, 26, 343, 32, 92, 64);
-    }
-    else if(this.world.currentPlayer.damageTaken >= 0.9 && this.world.currentPlayer.damageTaken < 1) {
-      this.ctx.drawImage(this.spritesheet, 659, 1, 29, 26, 343, 32, 92, 64);
-    }
-    else { //this.world.currentPlayer.damageTaken == 1
-      this.ctx.drawImage(this.spritesheet, 723, 1, 29, 26, 343, 32, 92, 64);
-    }
-
     if (this.status == "PLAYING") {
       this.world.update(this.timer.tick(), this.controls);
       this.turn.countdownTurn();
@@ -182,7 +145,6 @@ class Game {
         //TeleportGun
         else {
           this.ctx.fillText('Teleport IMG', 200, 70);
-        }
       }
 
       this.spritesheet = MANAGER.getAsset('./assets/HealthBar.png');
