@@ -1,9 +1,11 @@
+var MANAGER = new AssetManager(); // User var to avoid variable has been declared exception.
 window.onload = function () {
     // Set responsive size
     let mainMenu = document.getElementById("main-menu");
-    let gameCanvas = document.getElementById("game-canvas");
+    // let gameCanvas = document.getElementById("game-canvas");
     setResponsiveSize(mainMenu);
-    setResponsiveSize(gameCanvas);
+    // setResponsiveSize(gameCanvas); For some reasons, not work with game canvas, so i still use its own approach in Game.js
+    document.getElementById("start-game").addEventListener("click", () => startGame());
 
     /**
      * Make a HTML object becomes size responsive.
@@ -21,43 +23,48 @@ window.onload = function () {
         })
     }
 
-}
-
-/**
- * This function will start the game with provided information.
- */
-function startGame () {
-    let turnLimit = $("#limit-turn-input").val();
-    let timePerTurnLimit = $("#limit-turn-time-input").val();
-    let playMode = null;
-    let playModeChoices = document.getElementsByName("playModeChoices");
-    playModeChoices.forEach(element => {
-        if(element.checked) {
-            playMode = element.value;
+    /**
+     * This function will start the game with provided information.
+     */
+    function startGame() {
+        let turnLimit = $("#limit-turn-input").val();
+        let timePerTurnLimit = $("#limit-turn-time-input").val();
+        if(isEmpty(turnLimit) || isEmpty(timePerTurnLimit)
+            || (turnLimit < 20 || turnLimit % 2 === 1)
+            || (timePerTurnLimit < 5 || timePerTurnLimit > 10 || !Number.isInteger(Number(timePerTurnLimit)))) { // Require parse to Number before comparison.
+            alert("Invalid input(s) detected. Please try again.")
+            return;
         }
-    })
+        let playMode = null;
+        let playModeChoices = document.getElementsByName("playModeChoices");
+        playModeChoices.forEach(element => {
+            if (element.checked) {
+                playMode = element.value;
+            }
+        })
 
-    // Hide main menu and show ingame canvas.
-    $("main-menu").css({
-        "visibility": "hidden",
-    });
-    $("game-canvas").css({
-        "visibility": "hidden",
-    });
+        // Hide main menu and show ingame canvas.
+        document.getElementById("main-menu").style.visibility = "hidden";
+        document.getElementById("game-canvas").style.visibility = "visible";
+        // console.log(document.getElementById("main-menu").style.visibility)
 
-    // Start the game
-    let MANAGER = new AssetManager();
-    MANAGER.queueDownload('./assets/character.png');
-    MANAGER.queueDownload('./assets/weapons.png');
-    MANAGER.queueDownload('./assets/shoot.wav');
-    MANAGER.queueDownload('./assets/shoot.wav');
-    MANAGER.queueDownload('./assets/background-cloud.jpg');
-    MANAGER.queueDownload('./assets/background.jpg');
+        // Start the game
+        MANAGER.queueDownload('./assets/character.png');
+        MANAGER.queueDownload('./assets/weapons.png');
+        MANAGER.queueDownload('./assets/shoot.wav');
+        MANAGER.queueDownload('./assets/shoot.wav');
+        MANAGER.queueDownload('./assets/background-cloud.jpg');
+        MANAGER.queueDownload('./assets/background.jpg');
 
-    MANAGER.downloadAll(function () {
+        MANAGER.downloadAll(function () {
 
-        //destructionMap = new DestructableMap('map/map.png');
-        gg = new Game(turnLimit, timePerTurnLimit, playMode);
-    
-    });
+            //destructionMap = new DestructableMap('map/map.png');
+            gg = new Game(turnLimit, timePerTurnLimit, playMode);
+
+        });
+    }
+
+    function isEmpty(inputValue) {
+        return inputValue === "" || inputValue === null || inputValue === undefined;
+    }
 }

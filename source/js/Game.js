@@ -1,7 +1,7 @@
 class Game {
   constructor(turnLimit, timePerTurnLimit, playMode) {
     Object.assign(this, {turnLimit, timePerTurnLimit, playMode});
-    
+
     let newMapImg = new Image();
     newMapImg.src = 'assets/emptyMap.png'; // An image with all transparent pixels.
     newMapImg.onload = (function () {
@@ -11,15 +11,15 @@ class Game {
 
 
       // Set responsive size
-      // this.canvas.width = window.innerWidth;
-      // this.canvas.height = window.innerHeight;
-      // this.canvas.style.left = "0px";
-      // this.canvas.style.top = "0px";
-      // this.canvas.style.position = "absolute";
-      // window.addEventListener('resize', event => {
-      //   this.canvas.width = window.innerWidth;
-      //   this.canvas.height = window.innerHeight;
-      // })
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
+      this.canvas.style.left = "0px";
+      this.canvas.style.top = "0px";
+      this.canvas.style.position = "absolute";
+      window.addEventListener('resize', event => {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      })
 
       this.ctx = this.canvas.getContext('2d');
       //console.log(ctx);
