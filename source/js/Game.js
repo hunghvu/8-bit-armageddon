@@ -1,5 +1,7 @@
 class Game {
-  constructor() {
+  constructor(turnLimit, timePerTurnLimit, playMode) {
+    Object.assign(this, {turnLimit, timePerTurnLimit, playMode});
+    
     let newMapImg = new Image();
     newMapImg.src = 'assets/emptyMap.png'; // An image with all transparent pixels.
     newMapImg.onload = (function () {

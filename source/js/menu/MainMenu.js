@@ -21,7 +21,43 @@ window.onload = function () {
         })
     }
 
-    function setupMatch () {
+}
 
-    }
+/**
+ * This function will start the game with provided information.
+ */
+function startGame () {
+    let turnLimit = $("#limit-turn-input").val();
+    let timePerTurnLimit = $("#limit-turn-time-input").val();
+    let playMode = null;
+    let playModeChoices = document.getElementsByName("playModeChoices");
+    playModeChoices.forEach(element => {
+        if(element.checked) {
+            playMode = element.value;
+        }
+    })
+
+    // Hide main menu and show ingame canvas.
+    $("main-menu").css({
+        "visibility": "hidden",
+    });
+    $("game-canvas").css({
+        "visibility": "hidden",
+    });
+
+    // Start the game
+    let MANAGER = new AssetManager();
+    MANAGER.queueDownload('./assets/character.png');
+    MANAGER.queueDownload('./assets/weapons.png');
+    MANAGER.queueDownload('./assets/shoot.wav');
+    MANAGER.queueDownload('./assets/shoot.wav');
+    MANAGER.queueDownload('./assets/background-cloud.jpg');
+    MANAGER.queueDownload('./assets/background.jpg');
+
+    MANAGER.downloadAll(function () {
+
+        //destructionMap = new DestructableMap('map/map.png');
+        gg = new Game(turnLimit, timePerTurnLimit, playMode);
+    
+    });
 }
