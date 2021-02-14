@@ -13,10 +13,9 @@ class World {
     this.camera = new Camera(500, 500, 1);
 
     // Background images.
-    this.imgFar = new Image();
-    this.imgFar.src = "./assets/background.jpg";
-    this.imgNear = new Image();
-    this.imgNear.src = "./assets/background-cloud.jpg";
+    this.imgFar = MANAGER.getAsset('./assets/background.jpg');
+    this.imgNear = MANAGER.getAsset('./assets/background-cloud.jpg') 
+
     // The sX in drawImage will be updated as the player moves in a way it create an opposite movement effect.
 
   }
