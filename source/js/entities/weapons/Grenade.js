@@ -1,22 +1,18 @@
 /**
  * An upgraded weapon, the Grenade Launcher, can be spawned from an item crate.
  */
-class GrenadeLauncher extends Entity {
+class GrenadeLauncher extends Projectile{
     /**
      * Constructor for the grenade laucher that extends the entity class.
      */
     constructor(x, y, angle, power) {
-        super(x,y,8,8);
-        this.vel.x = Math.cos(angle) * power;
-        this.vel.y = -Math.sin(angle) * power;
-        // this.upgrade = upgrade;
+      this.projectileCanEndTurn = false; // It is not used as of now.
+      super(x, y, angle, power);
+      this.projectileCanEndTurn = false; // It is not used as of now.
+      this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
 
-        this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
-
-        this.animations = [];
-        this.loadAnimations();
-
-        this.projectileCanEndTurn = false; // It is not used as of now.
+      this.animations = [];
+      this.loadAnimations();
     }
 
     /**
