@@ -85,7 +85,7 @@ class Turn {
                     this.world.currentPlayer.acc.x = 0;
                     this.world.currentPlayer.isInTurn = false;
                     this.world.currentPlayer = this.world.players[this.playerNumber];  
-                    console.log(this.world.currentPlayer.playerNo, "current")
+                    // console.log(this.world.currentPlayer.playerNo, "current")
 
                     // Explanation.
                     //  countdownTurn() is origninally run once per approximately 5 secs.
