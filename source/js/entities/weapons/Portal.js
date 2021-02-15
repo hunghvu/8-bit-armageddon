@@ -42,7 +42,7 @@ class Portal extends Entity{
       // {
       //   this.y--;
       // }
-      if (this.numOfTurns == 6){
+      if (this.numOfTurns == (world.players.length * 2)){
         this.active = false;
       }
   }

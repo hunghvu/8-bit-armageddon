@@ -7,6 +7,8 @@ class EntityOnMap {
         this.spritesheet = MANAGER.getAsset('./assets/character.png');
         this.entityOnMapList = [];
         this.playerOnMapList = [new Player(this.spritesheet, 344, 650, 0, 0), new Player(this.spritesheet, 500, 650, 1, 1), new Player(this.spritesheet,400,650,2, 1)];
+        //TESTING PURPOSES (adds two more human players)
+        // this.playerOnMapList = [new Player(this.spritesheet, 344, 650, 0, 0), new Player(this.spritesheet, 360, 650, 0, 0), new Player(this.spritesheet, 500, 650, 0, 0), new Player(this.spritesheet, 500, 650, 1, 1), new Player(this.spritesheet,400,650,2, 1)];
 
     }
 
