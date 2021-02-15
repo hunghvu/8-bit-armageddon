@@ -7,7 +7,9 @@ class Turn {
     constructor(timer, world, timePerTurn, controls) {
         this.timePerTurn = timePerTurn;
         this.world = world;
-        this.playerNumber = this.world.players.length - 2;
+        this.playerNumber = this.world.players.length - 2; // The last player in list will get turn at first by default.
+                                                           //  minus 2 means this.playerNumber indicates the next one.
+                                                           //  After the first turn, this var will indicate current player.
         this.timer = timer;
         this.readyTime = 3; // Preparation period after ending each turn.
                             // This can be changed to a set-by-user
@@ -20,6 +22,9 @@ class Turn {
         // console.log(new Date())
 
         Wind.change(); // Wind is changed per turn.
+
+        this.playerAmount = this.world.players.length // Save the original length of player list.
+        this.playerBuffer = []; // List of already-finish-turn players
     }
 
     /**
@@ -96,6 +101,27 @@ class Turn {
                 // console.log(Wind.x, Wind.y);
             }
 
+        }
+    }
+
+    /**
+     * This function helps randomize team-interleaved turns.
+     */
+    privateShuffleTurn() {
+        let playerToRemove = this.playerNumber + 1 // this.playerNumber is currrent player, plus 1 means previous player b/c of 
+                                                   //  traversing from the end.
+        if (this.playerBuffer.length === this.playerAmount) {
+            let recentTeam = null;
+            while(this.playerBuffer.length !== 0) {
+                let nextPlayerIndex = Math.floor(Math.random() * (this.playerBuffer.length - 0) + 0);
+                if(this.playerBuffer[nextPlayerIndex].team === recentTeam) {
+                    continue
+                }
+                let firstPlayer = this.playerBuffer.splice(nextPlayerIndex, 1)[0];
+                recentTeam =  firstPlayer.team;
+            }
+        } else {
+            this.playerBuffer.push(this.world.players.splice(playerToRemove, 1)[0]);
         }
     }
 }   
