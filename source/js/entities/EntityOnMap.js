@@ -6,7 +6,11 @@ class EntityOnMap {
     constructor() {
         this.spritesheet = MANAGER.getAsset('./assets/character.png');
         this.entityOnMapList = [];
-        this.playerOnMapList = [new Player(this.spritesheet, 344, 650, 0), new Player(this.spritesheet, 500, 650, 1)];
+        // Hard coded team indicator for each player for now, might change later on.
+        this.playerOnMapList = [
+            new Player(this.spritesheet, 344, 650, 0, 1), new Player(this.spritesheet, 500, 650, 1, 2),
+            new Player(this.spritesheet, 344, 950, 0, 1), new Player(this.spritesheet, 500, 950, 1, 2),
+        ];
 
     }
     

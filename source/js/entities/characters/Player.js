@@ -8,7 +8,7 @@ class Player extends Entity {
    * @param {number} x - The x position where the player is spawned
    * @param {number} y - The y position where the player is spawned
    */
-  constructor(spriteSheet, x, y, design) {
+  constructor(spriteSheet, x, y, design, team) {
     //Used as hitbox
     super(x - 3, y, 6, 48);
     this.WALK_SPEED = 64;
@@ -52,6 +52,7 @@ class Player extends Entity {
     var a = new Date();
     a.setMilliseconds(500);
     this.airTimer = a.getMilliseconds();
+    this.team = team;
   }
 
   /**
