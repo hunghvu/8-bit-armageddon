@@ -31,6 +31,8 @@ class Turn {
      * This function is called by draw() in Game.js, it will trigger this turn mechanism.
      */
     countdownTurn(){
+        // this.privateShuffleTurn();
+        // console.log(this.world.players);
         this.privateExtendTurn();
         this.privateUpdateTurn();
     }
@@ -71,6 +73,8 @@ class Turn {
                 this.timer.turnTime = Math.round(this.timer.turnTime % this.timePerTurn);
                 if(this.world.currentPlayer.onGround) {
                     if (this.playerNumber === -1) {
+                        this.privateShuffleTurn();
+                        // console.log(this.world.players);
                         this.playerNumber = this.world.players.length - 1;
                     } 
                     this.world.currentPlayer.vel.x = 0;
@@ -92,6 +96,7 @@ class Turn {
                         this.timer.turnTime -= this.readyTime; // Minus the ready time.
                         this.inReadyPeriod = true;
                         Wind.change(); // Change the wind when a turn starts (begins at ready period).
+                        this.privateShuffleTurn();
                     }
 
                 } else { // Extend timer.
@@ -117,11 +122,16 @@ class Turn {
                 if(this.playerBuffer[nextPlayerIndex].team === recentTeam) {
                     continue
                 }
-                let firstPlayer = this.playerBuffer.splice(nextPlayerIndex, 1)[0];
-                recentTeam =  firstPlayer.team;
+                let nextPlayer = this.playerBuffer.splice(nextPlayerIndex, 1)[0];
+                this.world.players.push(nextPlayer);
+                recentTeam =  nextPlayer.team;
             }
+            this.world.players.splice(0, 4);
+            // this.world.players.forEach(element => console.log(element.y))
+            // @todo: Fix wrong shuffle?
         } else {
-            this.playerBuffer.push(this.world.players.splice(playerToRemove, 1)[0]);
+            this.playerBuffer.push(this.world.players[playerToRemove]);
         }
+        // console.log(this.playerBuffer.length)
     }
 }   
