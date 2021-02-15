@@ -37,7 +37,8 @@ class Bullet extends Entity{
         if (this.vel.x < 0) this.facing = 1;
         if (this.vel.x > 0) this.facing = 0;
 
-        if (world.map.collideWithRectangle(this)) {
+        // Add y-threshold for the bullet so that i can end turns.
+        if (world.map.collideWithRectangle(this) || this.y > world.map.height) {
             // Destroy this bullet if we hit something
             this.active = false;
             this.projectileCanEndTurn = true;
@@ -73,6 +74,7 @@ class Bullet extends Entity{
             movement.y -= direction;
         }
     }
+
 
     /**
      * Draw the bullet.
