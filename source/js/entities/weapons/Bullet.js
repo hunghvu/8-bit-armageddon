@@ -15,8 +15,6 @@ class Bullet extends Entity{
         this.vel.x = Math.cos(angle) * power;
         this.vel.y = -Math.sin(angle) * power;
 
-        //this.type = 0; Type of weapon gun = 0, grenade = 1, teleport gun = 2, portal gun = 3
-
         this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
 
         this.animations = [];
@@ -37,7 +35,8 @@ class Bullet extends Entity{
         if (this.vel.x < 0) this.facing = 1;
         if (this.vel.x > 0) this.facing = 0;
 
-        if (world.map.collideWithRectangle(this)) {
+        // Add y-threshold for the bullet so that i can end turns.
+        if (world.map.collideWithRectangle(this) || this.y > world.map.height) {
             // Destroy this bullet if we hit something
             this.active = false;
             this.projectileCanEndTurn = true;
@@ -74,19 +73,18 @@ class Bullet extends Entity{
         }
     }
 
+
     /**
      * Draw the bullet.
      *
      * @param {CanvasRenderingContext2D} ctx - The context to draw to
      */
     draw(ctx){
-        // ctx.drawImage(this.spritesheet, 9, 7, 12, 14, this.x, this.y, 12, 14);
-        this.animations[this.facing].drawFrame(.17, ctx, this.x, this.y, 0.8);
+        this.animations[this.facing].drawFrame(.17, ctx, this.x, this.y, 0.9);
 
         ctx.fillStyle = "white";
         ctx.strokeRect(this.x, this.y, 16, 16);
 
-        //fix and add load animation
     }
     loadAnimations() {
       for (var j = 0; j < 2; j++) { //facing
@@ -94,10 +92,10 @@ class Bullet extends Entity{
       }
       //buffer padding current build =
       //facing right = 0,
-      this.animations[0] = new Animator(this.spritesheet, 9, 7, 12, 14, 4, 0.5, 17, false, true);
+      this.animations[0] = new Animator(this.spritesheet, 70, 74, 20, 9, 1, 0.5, null, false, true);
 
       //facing left = 1,
-      this.animations[1] = new Animator(this.spritesheet, 137, 7, 12, 14, 4, 0.5, 17, true, true);
+      this.animations[1] = new Animator(this.spritesheet, 102, 74, 12, 14, 1, 0.5, null, false, true);
 
     }
 }

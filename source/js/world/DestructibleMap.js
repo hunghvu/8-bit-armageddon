@@ -40,7 +40,7 @@ class DestructibleMap {
                        rectangle.w, rectangle.h);
   }
 
-  // Destory a circle of the map by replacing it with pixels of transparency.
+  // Destroy a circle of the map by replacing it with pixels of transparency.
   destroyCircle(x, y, r) {
     for (let i = -r; i <= r; i++) {
       // Use the equation of a circle to determine the area to destroy
@@ -73,6 +73,34 @@ class DestructibleMap {
     }
     return false;
   }
+
+  // destroyPixelIsland(rect) {
+  //   var imgd = this.ctx.getImageData(rect.x, rect.y, 1, 1);
+  //   var pix = imgd.data;
+  //   var transparent = {r:0, g:0, b:0, a:0};
+  //
+  //   // if the turn ended and there is collision.
+  //   if (this.world.currentPlayer.isInTurn === false && this.platform.doesCollide(rect)) {
+  //     //
+  //     // if the black pixel size is smaller than size 4 (hard code for now)
+  //       for (var i = 0, n = pix.length; i < n; i+=4) {
+  //         var r = pix[i];
+  //         var g = pix[i+1];
+  //         var b = pix[i+2];
+  //
+  //         // check if alpha is anything other than transparent, change to transparent.
+  //         if (pix[i+3] > 0 ) {
+  //           pix[i] = transparent.r;
+  //           pix[i+1] = transparent.g;
+  //           pix[i+2] = transparent.b;
+  //           pix[i+3] = transparent.a;
+  //         }
+  //       }
+  //
+  //       this.ctx.putImageData(imgd, 0, 0);
+  //   }
+  // }
+
 
   get width() {
     return this.mapCanvas.width;

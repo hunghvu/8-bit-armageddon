@@ -1,5 +1,6 @@
-/** 
+/**
  * The base entity that other entities like bullets and players extend from
+ * TODO: add a function that can either count turns or time
  */
 class Entity extends Rectangle {
   /**
@@ -15,12 +16,12 @@ class Entity extends Rectangle {
     //can change x and y but not w and d
     super(x, y, w, h);
 
-    // This variable keeps track of whether an entity is to be 
+    // This variable keeps track of whether an entity is to be
     // removed or not
     this.active = true;
 
     // The players are locked to a single pixel with no decimal part
-    // so when the player moves 1.3pixels the sub pixel position is 
+    // so when the player moves 1.3pixels the sub pixel position is
     // incremented by 0.3 pixel and the player is moved a single pixel.
     // this subPixel can then be later added to further movement
     this.subPixelPosition = new Point(0, 0);
@@ -66,7 +67,7 @@ class Entity extends Rectangle {
     this.vel = newVel;
   }
 
-  /** 
+  /**
    * Boiler plate nothing
    */
   update(world, deltaT) {

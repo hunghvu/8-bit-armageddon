@@ -1,14 +1,16 @@
 /**
  * The class for player characters
  */
-class Player extends Entity {
+class Player extends Entity { //Add button to enter portal
   /**
    * The constructor for the player
    * @param {Image} spriteSheet - The players spritesheet
    * @param {number} x - The x position where the player is spawned
    * @param {number} y - The y position where the player is spawned
    */
+
   constructor(spriteSheet, x, y, design, team, playerNo) {
+
     //Used as hitbox
     super(x - 3, y, 6, 48);
     this.WALK_SPEED = 64;
@@ -19,7 +21,8 @@ class Player extends Entity {
 
     this.spritesheet = spriteSheet;
 
-    this.design = design; //0 = human, 1 = food
+    this.team = team;
+    this.design = design; //different designs of characters
     this.facing = 0; // 0 = right, 1 = left
     this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling? 3 = shooting
     // this.dead = false; ??
@@ -39,7 +42,7 @@ class Player extends Entity {
 
     this.animations = [];
 
-    // Determine if it's this player's turn 
+    // Determine if it's this player's turn
     // Lock user's input if false (when the turns end)
     this.isInTurn = false;
     this.loadAnimations();
@@ -257,6 +260,45 @@ class Player extends Entity {
       this.acc.x = 0;
     }
 
+    if (controls.enterPortalDownThisLoop && this.onGround) {
+      for(var i = 0; i < world.entities.length; i++)
+      {
+        // TESTING PURPOSES
+        // console.log("world team: " + world.entities[i].design);
+        // console.log("player team: " + this.team);
+        // console.log("position: " + world.entities[i].position);
+        // console.log("world x: " + world.entities[i].x);
+        // console.log("player x: " + this.x);
+        // console.log("test x: " + (this.x < world.entities[i].x + 40 && this.x > world.entities[i].x - 40));
+        // console.log("world y: " + world.entities[i].y);
+        // console.log("player y: " + this.y);
+        // console.log("test y: " + (this.y < world.entities[i].y + 25 && this.y > world.entities[i].y - 25));
+        if(world.entities[i].design == this.team &&
+          i < world.entities.length - 1 &&
+          world.entities[i+1].design == this.team &&
+          (this.x < world.entities[i].x + 40 && this.x > world.entities[i].x - 40) &&
+          (this.y < world.entities[i].y + 25 && this.y > world.entities[i].y - 25))
+          {
+            this.x = world.entities[i+1].x;
+            this.y = world.entities[i+1].y;
+            break;
+          }
+          else if(world.entities[i].design == this.team &&
+            i >= 1 &&
+            world.entities[i-1].design == this.team &&
+            (this.x < world.entities[i].x + 40 && this.x > world.entities[i].x - 40) &&
+            (this.y < world.entities[i].y + 25 && this.y > world.entities[i].y - 25)) {
+              this.x = world.entities[i-1].x;
+              this.y = world.entities[i-1].y - 32;
+              break;
+          }
+       }
+       while(world.map.collideWithRectangle(this))
+       {
+         this.y--;
+       }
+    }
+
     /**
      * Adjust shooting angle
      * @todo Have a better handler when pressing multiple button at once
@@ -276,13 +318,11 @@ class Player extends Entity {
 
     if(controls.nextWeaponDownThisLoop) {
       this.currentWeapon.nextWeapon();
-      console.log(this.currentWeapon);
     }
 
     if(controls.previousWeaponDownThisLoop) {
       this.currentWeapon.previousWeapon();
     }
-
 
     // If the user scrolls then zoom in or out
     if (controls.scrollDelta > 0) {
@@ -306,7 +346,7 @@ class Player extends Entity {
     //facing right = 0,
     this.animations[0][0][0] = new Animator(this.spritesheet, 11, 128, 23, 61, 1, 0.5, null, false, true);
 
-    //facing left = 1,
+    // facing left = 1,
     this.animations[0][0][1] = new Animator(this.spritesheet, 11, 193, 23, 61, 1, 0.5, null, false, true);
 
     //NOTES:
@@ -322,25 +362,38 @@ class Player extends Entity {
 
     //Jumping/Falling = 2
     //facing right = 0
-    //this.animations[0][2][0]
+    // this.animations[0][2][0] = new Animator(this.spritesheet, 11, 193, 23, 61, 7, 0.5, 25, true, true);
 
 
     //Shooting = 3
     // should have an angle check so function know what angle
     // frame it should be on (should this be another for above?)
 
-    //Food = 1;
+    //Boba = 1;
 
     //Idle = 0;
     //facing right
-    this.animations[1][0][0] = new Animator(this.spritesheet, 102, 320, 36, 59, 1, 0.5, null, false, true);
+    this.animations[1][0][0] = new Animator(this.spritesheet, 102, 384, 36, 59, 1, 0.5, null, false, true);
     //facing left = 1;
-    this.animations[1][0][1] = new Animator(this.spritesheet, 54, 320, 36, 59, 1, 0.5, null, false, true);
+    this.animations[1][0][1] = new Animator(this.spritesheet, 54, 384, 36, 59, 1, 0.5, null, false, true);
 
 
     //walk = 1;
-    this.animations[1][1][0] = new Animator(this.spritesheet, 102, 320, 36, 59, 1, 0.5, null, false, true);
-    this.animations[1][1][1] = new Animator(this.spritesheet, 54, 320, 36, 59, 1, 0.5, null, false, true);
+    this.animations[1][1][0] = new Animator(this.spritesheet, 102, 384, 36, 59, 1, 0.5, null, false, true);
+    this.animations[1][1][1] = new Animator(this.spritesheet, 54, 384, 36, 59, 1, 0.5, null, false, true);
+
+    // Cup of Noodle = 2
+
+    //Idle = 0;
+    //facing right
+    this.animations[2][0][0] = new Animator(this.spritesheet, 240, 384, 41, 54, 1, 0.5, null, false, true);
+    //facing left = 1;
+    this.animations[2][0][1] = new Animator(this.spritesheet, 197, 386, 41, 54, 1, 0.5, null, false, true);
+
+
+    //walk = 1;
+    this.animations[2][1][0] = new Animator(this.spritesheet, 240, 384, 41, 54, 1, 0.5, null, false, true);
+    this.animations[2][1][1] = new Animator(this.spritesheet, 197, 386, 41, 54, 1, 0.5, null, false, true);
 
 
   };
