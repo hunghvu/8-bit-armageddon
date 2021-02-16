@@ -7,13 +7,13 @@ class World {
     // 3rd parameter sets the player or food
     //TESTING PURPOSES (adds 2 more humans players)
     // this.players = [new Player(this.spritesheet, 344, 650, 0, 0), new Player(this.spritesheet, 360, 650, 0, 0), new Player(this.spritesheet, 500, 650, 0, 0), new Player(this.spritesheet, 500, 650, 1, 1), new Player(this.spritesheet,400,650,2, 1)];
-    this.players = [new Player(this.spritesheet, 344, 650, 0, 0), new Player(this.spritesheet, 500, 650, 1, 1), new Player(this.spritesheet,400,650,2, 1)];
+    // this.players = [new Player(this.spritesheet, 344, 650, 0, 0), new Player(this.spritesheet, 500, 650, 1, 1), new Player(this.spritesheet,400,650,2, 1)];
 
     // TEST PURPOSES, implement a way to seperate food and human as well as seperate by design
     // this.players = [new Player(this.spritesheet, 344, 650, 0, 0)];
     //Needed?
-    this.currentPlayer = this.players[this.players.length - 1];
-    this.currentPlayer.isInTurn = true;
+    // this.currentPlayer = this.players[this.players.length - 1];
+    // this.currentPlayer.isInTurn = true;
 
     this.entities = [];
     this.entityOnMap = new EntityOnMap();
