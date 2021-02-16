@@ -7,7 +7,9 @@ class Turn {
     constructor(timer, world, timePerTurn, controls) {
         this.timePerTurn = timePerTurn;
         this.world = world;
-        this.playerNumber = this.world.players.length - 2;
+        this.playerNumber = this.world.players.length - 2; // The last player in list will get turn at first by default.
+                                                           //  minus 2 means this.playerNumber indicates the next one.
+                                                           //  After the first turn, this var will indicate current player.
         this.timer = timer;
         this.readyTime = 3; // Preparation period after ending each turn.
                             // This can be changed to a set-by-user
@@ -20,12 +22,21 @@ class Turn {
         // console.log(new Date())
 
         Wind.change(); // Wind is changed per turn.
+
+        this.playerAmount = this.world.players.length // Save the original length of player list.
+        this.playerBuffer = [this.world.players[this.playerNumber + 1]]; // List of already-finish-turn players
+                                                                         //  The first turn currently has fixed order [4, 3, 2, 1];
+                                                                         // Only on the second iteration, we can have a randomized turn.
+                                                                         // Therefore, the very first player must be put in manually.
+        this.recentTeam = null;
     }
 
     /**
      * This function is called by draw() in Game.js, it will trigger this turn mechanism.
      */
     countdownTurn(){
+        // this.privateShuffleTurn();
+        // console.log(this.world.players);
         this.privateExtendTurn();
         this.privateUpdateTurn();
     }
@@ -66,12 +77,16 @@ class Turn {
                 this.timer.turnTime = Math.round(this.timer.turnTime % this.timePerTurn);
                 if(this.world.currentPlayer.onGround) {
                     if (this.playerNumber === -1) {
+                        this.privateShuffleTurn();
+                        // console.log(this.world.players);
                         this.playerNumber = this.world.players.length - 1;
                     }
                     this.world.currentPlayer.vel.x = 0;
                     this.world.currentPlayer.acc.x = 0;
                     this.world.currentPlayer.isInTurn = false;
-                    this.world.currentPlayer = this.world.players[this.playerNumber];
+
+                    this.world.currentPlayer = this.world.players[this.playerNumber];  
+                    // console.log(this.world.currentPlayer.playerNo, "current")
 
                     // Explanation.
                     //  countdownTurn() is origninally run once per approximately 5 secs.
@@ -94,6 +109,9 @@ class Turn {
                         this.timer.turnTime -= this.readyTime; // Minus the ready time.
                         this.inReadyPeriod = true;
                         Wind.change(); // Change the wind when a turn starts (begins at ready period).
+
+                        this.privateShuffleTurn(); // Add player to "already-finished-turn" player.
+                        this.recentTeam = this.world.currentPlayer.team; // Keep track of recent player to interleavev.
                     }
 
                 } else { // Extend timer.
@@ -105,4 +123,35 @@ class Turn {
 
         }
     }
-}
+
+    /**
+     * This function helps randomize team-interleaved turns.
+     * In 1 iteration, no team can have adjacent turns. 
+     * However, the next iteration is completely random.
+     * For example: Iteration 1 - 1, 1, 2, 2 is not allowed.
+     * But, Iteration 1 - 1, 2, 1, 2 / Iteration 2: 2, 1, 2, 1 is allowed (Team 2 has consecutive turns when changing iteration);
+     */
+    privateShuffleTurn() {
+        let playerToRemove = this.playerNumber // this.playerNumber is currrent player, plus 1 means previous player b/c of 
+                                                   //  traversing from the end.
+        if (this.playerBuffer.length === this.playerAmount) {
+            while(this.playerBuffer.length !== 0) {
+                let nextPlayerIndex = Math.floor(Math.random() * (this.playerBuffer.length - 0) + 0);
+                if(this.playerBuffer[nextPlayerIndex].team === this.recentTeam) {
+                    continue
+                }
+                let nextPlayer = this.playerBuffer.splice(nextPlayerIndex, 1)[0];
+                this.world.players.push(nextPlayer);
+                this.recentTeam =  nextPlayer.team; // Keep track of recent player to interleave team.
+            }
+            this.world.players.splice(0, 4);
+            this.world.players.forEach(element => console.log(element.playerNo))
+            this.recentTeam = null;
+            // console.log(this.world.players);
+        } else {
+            this.playerBuffer.push(this.world.players[playerToRemove]);
+        }
+        // console.log(this.playerBuffer.length)
+    }
+}   
+

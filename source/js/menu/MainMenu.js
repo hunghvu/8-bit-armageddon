@@ -44,8 +44,13 @@ window.onload = function () {
         playModeChoices.forEach(element => {
             if (element.checked) {
                 playMode = element.value;
-            }
+            } 
         })
+
+        if(playMode === null) {
+            alert("Please choose play mode.");
+            return;
+        }
 
         // Hide main menu and show ingame canvas.
         document.getElementById("main-menu").style.visibility = "hidden";
