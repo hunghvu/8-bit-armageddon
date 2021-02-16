@@ -76,9 +76,9 @@ class Entity extends Rectangle {
   /**
    * Returns a point that represents the new offset that the entity should have.
    *
-   * @params {number} deltaT - The number of ms since the last update
-   * @params {number} windX - The X accleration from wind
-   * @params {number} windY - The Y acceleration from wind
+   * @params {deltaT} - The number of ms since the last update
+   * @params {windX} - The X accleration from wind
+   * @params {windY} - The Y acceleration from wind
    */
   desiredMovement(deltaT, windX = 0, windY = 0) {
     // Update the acceleration

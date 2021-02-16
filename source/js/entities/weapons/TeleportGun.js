@@ -1,7 +1,7 @@
 /**
  *
  */
-class TeleportGun extends Projectile {
+class TeleportGun extends Entity {
     /**
      * Constructor for a bullet entity
      * @param {number} x - The starting x position
@@ -11,7 +11,9 @@ class TeleportGun extends Projectile {
      *                         projectile. higher is further
      */
     constructor(x, y, angle, power) {
-        super(x, y, angle, power);
+        super(x, y, 8, 8);
+        this.vel.x = Math.cos(angle) * power;
+        this.vel.y = -Math.sin(angle) * power;
 
         this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
 
@@ -26,7 +28,7 @@ class TeleportGun extends Projectile {
      * @params {deltaT} - The number of ms since the last update
      */
     update(world, deltaT){
-        this.moveUntilCollision(world, this.desiredMovement(deltaT, Wind.x, Wind.y));
+        this.add(this.desiredMovement(deltaT))
 
         // update direction/facing
         if (this.vel.x < 0) this.facing = 1;

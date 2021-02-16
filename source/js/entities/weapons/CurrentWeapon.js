@@ -7,7 +7,7 @@ class CurrentWeapon {
         this.y = y;
         this.power = power;
         this.angle = angle;
-        this.myWeaponBag = [Bullet, Grenade, PortalGun, TeleportGun];
+        this.myWeaponBag = [Bullet, GrenadeLauncher, PortalGun, TeleportGun];
         this.currentIndex = 0;
         this.myCurrentWeapon = this.myWeaponBag[this.currentIndex];
     }

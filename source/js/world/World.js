@@ -31,7 +31,6 @@ class World {
     this.imgNear = MANAGER.getAsset('./assets/background-cloud.jpg') 
 
     // The sX in drawImage will be updated as the player moves in a way it create an opposite movement effect.
-    this.resetCrates();
 
   }
 
@@ -82,17 +81,6 @@ class World {
     this.camera.glideToTarget(8, deltaT);
   }
 
-  /**
-   * Removes all the current creates and replaces them with new crates in different positions
-   */
-  resetCrates() {
-    // Get rid of all the crates
-    this.entities = this.entities.filter((entity) => !(entity instanceof Crate));
-    // Just spawn 3 crates all over
-    for (let i = 0; i < 3; i++) {
-      this.spawn(new Crate(Math.random() * this.map.width, Math.random() * this.map.height));
-    }
-  }
 
   drawPlayers(ctx) {
     this.players.forEach(player => {

@@ -3,7 +3,7 @@
 * and creates a second portal (portal1) on top of the player. If portal doesn't
 * hit any ground, no portal is created and the weapon is used once/gone.
 */
-class PortalGun extends Projectile {
+class PortalGun extends Entity{
   /**
   * Constructor for a Portal entity
   * @param {number} x - The starting x position
@@ -13,7 +13,7 @@ class PortalGun extends Projectile {
   *                         projectile. higher is further
   */
   constructor(x,y,angle,power) {
-    super(x, y, angle, power);
+    super(x,y,8,8);
 
     // this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
     // this.animationsOrangePortal = new Animator(this.spritesheet, 0, 96, 32, 32, 4, 0.5, 0, false, false);
@@ -32,7 +32,7 @@ class PortalGun extends Projectile {
    * @params {deltaT} - The number of ms since the last update
    */
   update(world, deltaT){
-    this.moveUntilCollision(world, this.desiredMovement(deltaT, Wind.x, Wind.y));
+    this.add(this.desiredMovement(deltaT))
 
     //sets this.team, needed for drawing
     this.team = world.currentPlayer.team;

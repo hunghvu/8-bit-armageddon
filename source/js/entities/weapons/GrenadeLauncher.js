@@ -1,17 +1,24 @@
 /**
  * An upgraded weapon, the Grenade Launcher, can be spawned from an item crate.
  */
-class Grenade extends Projectile{
+class GrenadeLauncher extends Entity{
     /**
      * Constructor for the grenade laucher that extends the entity class.
      */
     constructor(x, y, angle, power) {
-      super(x, y, angle, power);
-      this.projectileCanEndTurn = false; // It is not used as of now.
-      this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
+        super(x,y,8,8);
+        this.x = x;
+        this.y = y;
+        this.vel.x = Math.cos(angle) * power;
+        this.vel.y = -Math.sin(angle) * power;
+        // this.upgrade = upgrade;
 
-      this.animations = [];
-      this.loadAnimations();
+        this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
+
+        this.animations = [];
+        this.loadAnimations();
+
+        this.projectileCanEndTurn = false; // It is not used as of now.
     }
 
     /**
@@ -21,23 +28,27 @@ class Grenade extends Projectile{
      * @params {deltaT} - The number of ms since the last update
      */
     update(world, deltaT){
+        this.add(this.desiredMovement(deltaT))
+
         // update direction/facing
         if (this.vel.x < 0) this.facing = 1;
         if (this.vel.x > 0) this.facing = 0;
 
-        this.moveUntilCollision(world, this.desiredMovement(deltaT, Wind.x, Wind.y));
+        this.add(this.desiredMovement(deltaT, Wind.x, Wind.y))
+
         if (world.map.collideWithRectangle(this)) {
+          // this.vel.x = (this.vel.x * .5);
+          // this.vel.y = (this.vel.y * -1);
+          // if (this.vel.x < 0) this.facing = 1;
+          // if (this.vel.x > 0) this.facing = 0;
+          // if (world.map.collideWithRectangle(this)) {
             // Destroy this bullet if we hit something
             this.active = false;
             this.projectileCanEndTurn = true;
-            //let destructionRect = new Rectangle(this.x, this.y, 20, 20);
-            //destructionRect.center = this.center;
-            //world.map.destroyRectangle(destructionRect);
-            world.map.destroyCircle(this.center.x, this.center.y, 20);
+            world.map.destroyCircle(this.center.x, this.center.y, 30);
             // Find any players in the blast range
             for (let i = 0; i < world.players.length; i++) {
                 let playerThisLoop = world.players[i];
-                console.log(playerThisLoop);
                 // If we are close enough then damage a player
                 let difference = playerThisLoop.center
                 difference.sub(this.center);
