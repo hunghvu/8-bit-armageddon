@@ -1,5 +1,7 @@
 class Game {
-  constructor() {
+  constructor(turnLimit, timePerTurnLimit, playMode) {
+    Object.assign(this, {turnLimit, timePerTurnLimit, playMode});
+
     let newMapImg = new Image();
     newMapImg.src = 'assets/emptyMap.png'; // An image with all transparent pixels.
     newMapImg.onload = (function () {
@@ -34,7 +36,7 @@ class Game {
       this.controls.addMouseListener(this.canvas);
 
       // Turn mechanism
-      this.turn = new Turn(this.timer, this.world, 5, this.controls);
+      this.turn = new Turn(this.timer, this.world, this.timePerTurnLimit, this.controls);
       requestAnimationFrame(this.draw.bind(this));
     }).bind(this);
   }
@@ -144,7 +146,7 @@ class Game {
       this.ctx.font = "30px Arial";
       this.ctx.fillText('Timer ', 7, 31);
       // this.ctx.fillText(5 - Math.round(this.timer.turnTime % 5), 200, 200);
-      this.ctx.fillText(5 - Math.round(this.timer.turnTime % 5), 29, 56);
+      this.ctx.fillText(this.timePerTurnLimit - Math.round(this.timer.turnTime % this.timePerTurnLimit), 29, 56);
 
       this.ctx.fillText('Weapon: ', 175, 31);
       //current build: 2 weapons only, fix once more weapons added
@@ -228,8 +230,8 @@ class Game {
 
 
       // For testing only.
-      this.ctx.font = "30px Arial";
-      this.ctx.fillText(5 - Math.round(this.timer.turnTime % 5), 200, 200);
+      // this.ctx.font = "30px Arial";
+      // this.ctx.fillText(this.timePerTurnLimit - Math.round(this.timer.turnTime % this.timePerTurnLimit), 200, 200);
       if (this.controls.enterDownThisLoop) {
         // Allow the player to move from the playing state to the paused state
         this.status = "PAUSED";
