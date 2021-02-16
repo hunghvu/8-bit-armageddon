@@ -226,11 +226,11 @@ class Game {
 
       this.ctx.font = "30px Arial";
       // this.ctx.fillText("Wind(X): " + Wind.x + ", Wind(Y): " + Wind.y, 343, 31);
-      this.ctx.fillText("Wind(X): " + Wind.x + ", Wind(Y): " + Wind.y, 455, 31);
+      this.ctx.fillText("Wind(X): " + Wind.x + ", Wind(Y): " + Wind.y, 465, 31);
       
       let turnIteration = [];
       this.world.players.forEach(element => turnIteration.push(element.playerNo));
-      this.ctx.fillText("Turn iteration (player No.): " + turnIteration, 343, 70);
+      this.ctx.fillText("Turn iteration (player No.): " + turnIteration, 465, 70);
 
       // For testing only.
       // this.ctx.font = "30px Arial";
