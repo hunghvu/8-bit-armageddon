@@ -105,3 +105,6 @@ dist
 
 # VS Code config
 jsconfig.json
+
+# vim files
+*.swp
