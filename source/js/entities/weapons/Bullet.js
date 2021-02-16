@@ -48,8 +48,9 @@ class Bullet extends Projectile {
         // If we are close enough then damage a player
         let difference = playerThisLoop.center
         difference.sub(this.center);
-      if (difference.magnitude < 32) {
-        playerThisLoop.damage(this.center, 4);
+        if (difference.magnitude < 32) {
+          playerThisLoop.damage(this.center, 4);
+        }
       }
     }
   }

@@ -1,12 +1,11 @@
 /**
  * An upgraded weapon, the Grenade Launcher, can be spawned from an item crate.
  */
-class GrenadeLauncher extends Projectile{
+class Grenade extends Projectile{
     /**
      * Constructor for the grenade laucher that extends the entity class.
      */
     constructor(x, y, angle, power) {
-      this.projectileCanEndTurn = false; // It is not used as of now.
       super(x, y, angle, power);
       this.projectileCanEndTurn = false; // It is not used as of now.
       this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
@@ -22,6 +21,10 @@ class GrenadeLauncher extends Projectile{
      * @params {deltaT} - The number of ms since the last update
      */
     update(world, deltaT){
+        // update direction/facing
+        if (this.vel.x < 0) this.facing = 1;
+        if (this.vel.x > 0) this.facing = 0;
+
         this.moveUntilCollision(world, this.desiredMovement(deltaT, Wind.x, Wind.y));
         if (world.map.collideWithRectangle(this)) {
             // Destroy this bullet if we hit something

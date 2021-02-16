@@ -117,7 +117,7 @@ class Game {
       {
         this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
         //Bullet
-        if (this.world.currentPlayer.currentWeapon.currentIndex == 0)
+        if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Bullet)
         {
           //Normal Bullet/Gun
           // if (this.world.currentPlayer.currentWeapon.myWeaponBag.upgraded == 0)
@@ -128,7 +128,7 @@ class Game {
           // else {}
         }
         //GrenadeLauncher
-        else if (this.world.currentPlayer.currentWeapon.currentIndex == 1)
+        else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Grenade)
         {
           //Grenade
           // if (this.world.currentPlayer.currentWeapon.myWeaponBag.upgraded == 0)
@@ -139,12 +139,13 @@ class Game {
           // else {}
         }
         //PortalGun
-        else if (this.world.currentPlayer.currentWeapon.currentIndex == 2){
+        else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == PortalGun){
           this.ctx.fillText('Portal IMG', 200, 70);
         }
         //TeleportGun
         else {
           this.ctx.fillText('Teleport IMG', 200, 70);
+        }
       }
 
       this.spritesheet = MANAGER.getAsset('./assets/HealthBar.png');
