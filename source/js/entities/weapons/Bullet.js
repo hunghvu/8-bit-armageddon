@@ -44,7 +44,7 @@ class Bullet extends Projectile {
       // Find any players in the blast range
       for (let i = 0; i < world.players.length; i++) {
         let playerThisLoop = world.players[i];
-        console.log(playerThisLoop);
+        // console.log(playerThisLoop);
         // If we are close enough then damage a player
         let difference = playerThisLoop.center
         difference.sub(this.center);

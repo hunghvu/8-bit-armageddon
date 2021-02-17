@@ -25,7 +25,7 @@ class Player extends Entity { //Add button to enter portal
     this.design = design; //different designs of characters
     this.facing = 0; // 0 = right, 1 = left
     this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling? 3 = shooting
-    // this.dead = false; ??
+    this.dead = false;
 
     this.onGround = false;
 
@@ -155,11 +155,13 @@ class Player extends Entity { //Add button to enter portal
   /**
    * Determine whether a player is stand still.
    * When the player is on ground, if there is no movement to left and right
-   *  then the user is not moving.
+   *  then the user is not moving. A dead player is also consider not moving.
    */
   isStandStill() {
     let flag = true;
-    this.onGround && this.vel.x === 0 ? flag = true : flag = false;
+
+    ((this.onGround && this.vel.x ===0) || this.dead) ? flag = true : flag = false;
+
     return flag;
   }
 
@@ -223,6 +225,10 @@ class Player extends Entity { //Add button to enter portal
     if (Math.abs(this.vel.y) < 4) {
       this.vel.y = 0;
     }
+
+    if (this.dead === false && (this.damageTaken === 1 || this.y > world.map.height)) {
+      this.dead = true;
+    } // Set dead flag if player runs out of health or fall out of map.
   }
 
   /**
