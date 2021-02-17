@@ -32,19 +32,21 @@ class Bullet extends Projectile {
     if (this.vel.x < 0) this.facing = 1;
     if (this.vel.x > 0) this.facing = 0;
 
+    // Check if the bullet collides with any of the players
+    let hasCollidedWithAPlayer = this.collidesWithRects(world.players);
+
     // Add y-threshold for the bullet so that i can end turns.
-    if (world.map.collideWithRectangle(this) || this.y > world.map.height) {
+    if (world.map.collideWithRectangle(this) || 
+        this.y > world.map.height || 
+        hasCollidedWithAPlayer) {
       // Destroy this bullet if we hit something
       this.active = false;
       this.projectileCanEndTurn = true;
-      //let destructionRect = new Rectangle(this.x, this.y, 20, 20);
-      //destructionRect.center = this.center;
-      //world.map.destroyRectangle(destructionRect);
+      // Destroy the map
       world.map.destroyCircle(this.center.x, this.center.y, 10);
       // Find any players in the blast range
       for (let i = 0; i < world.players.length; i++) {
         let playerThisLoop = world.players[i];
-        console.log(playerThisLoop);
         // If we are close enough then damage a player
         let difference = playerThisLoop.center
         difference.sub(this.center);
@@ -53,6 +55,7 @@ class Bullet extends Projectile {
         }
       }
     }
+
   }
 
   /**
