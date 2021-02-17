@@ -24,13 +24,13 @@ class Turn {
         Wind.change(); // Wind is changed per turn.
 
         this.playerAmount = this.world.players.length // Save the original length of player list.
-        this.playerEndOfTurnTwo = [this.world.players[this.playerNumber + 1]]; // List of already-finish-turn players
+        this.playerEndOfTurnTwo = [this.world.currentPlayer]; // List of already-finish-turn players
                                                                          //  The first turn currently has fixed order [4, 3, 2, 1];
                                                                          // Only on the second iteration, we can have a randomized turn.
                                                                          // Therefore, the very first player must be put in manually.
         this.playerEndOfTurnOne = []
         // this.recentTeam = null;
-        this.referenceToRecentPlayers = [this.world.currentPlayer];
+        // this.referenceToRecentPlayers = [this.world.currentPlayer];
     }
 
     /**
@@ -90,18 +90,18 @@ class Turn {
                     this.world.currentPlayer = this.world.players[this.playerNumber];  
                     // console.log(this.world.currentPlayer.playerNo, "current")
 
-                    while (this.world.currentPlayer.dead) {
-                        this.world.currentPlayer.team === 0 
-                            ? this.playerEndOfTurnOne.push(this.world.currentPlayer) 
-                            : this.playerEndOfTurnTwo.push(this.world.currentPlayer);
-                        this.referenceToRecentPlayers.push(this.world.currentPlayer);
-                        this.inReadyPeriod = false;
-                        this.playerNumber--;
-                        this.world.currentPlayer = this.world.players[this.playerNumber]; 
-                        if (this.playerNumber === -1) {
-                            break;
-                        }
-                    }
+                    // while (this.world.currentPlayer.dead) {
+                    //     this.world.currentPlayer.team === 0 
+                    //         ? this.playerEndOfTurnOne.push(this.world.currentPlayer) 
+                    //         : this.playerEndOfTurnTwo.push(this.world.currentPlayer);
+                    //     // this.referenceToRecentPlayers.push(this.world.currentPlayer);
+                    //     this.inReadyPeriod = false;
+                    //     this.playerNumber--;
+                    //     this.world.currentPlayer = this.world.players[this.playerNumber]; 
+                    //     if (this.playerNumber === -1) {
+                    //         break;
+                    //     }
+                    // }
                     // Explanation.
                     //  countdownTurn() is origninally run once per approximately 5 secs.
                     //  with the introduction of inReadyPeriod flag, it will be set to true when a player is in ready period, false otherwise.
@@ -121,10 +121,7 @@ class Turn {
                         }
                     } else {
                         // console.log(this.world.currentPlayer.team)
-                        this.world.currentPlayer.team === 0 
-                        ? this.playerEndOfTurnOne.push(this.world.currentPlayer) 
-                        : this.playerEndOfTurnTwo.push(this.world.currentPlayer);
-                        this.referenceToRecentPlayers.push(this.world.currentPlayer);
+                        // this.referenceToRecentPlayers.push(this.world.currentPlayer);
                         this.timer.turnTime -= this.readyTime; // Minus the ready time.
                         this.inReadyPeriod = true;
                         Wind.change(); // Change the wind when a turn starts (begins at ready period).
@@ -151,31 +148,62 @@ class Turn {
      * But, Iteration 1 - 1, 2, 1, 2 / Iteration 2: 2, 1, 2, 1 is allowed (Team 2 has consecutive turns when changing iteration);
      */
     privateShuffleTurn() {
-        console.log(this.playerEndOfTurnOne)
+        // let playerToRemove = this.playerNumber // this.playerNumber is currrent player, plus 1 means previous player b/c of 
+        //                                            //  traversing from the end.
+        // if (this.playerBuffer.length === this.playerAmount) {
+        //     while(this.playerBuffer.length !== 0) {
+        //         let nextPlayerIndex = Math.floor(Math.random() * (this.playerBuffer.length - 0) + 0);
+        //         if(this.playerBuffer[nextPlayerIndex].team === this.recentTeam) {
+        //             continue
+        //         }
+        //         let nextPlayer = this.playerBuffer.splice(nextPlayerIndex, 1)[0];
+        //         this.world.players.push(nextPlayer);
+        //         this.recentTeam =  nextPlayer.team; // Keep track of recent player to interleave team.
+        //     }
+        //     this.world.players.splice(0, 4);
+        //     this.world.players.forEach(element => console.log(element.playerNo))
+        //     this.recentTeam = null;
+        //     // console.log(this.world.players);
+        // } else {
+        //     this.playerBuffer.push(this.world.players[playerToRemove]);
+        // }
+        // console.log(this.playerBuffer.length)
+        // console.log(this.playerEndOfTurnOne)
         if ((this.playerEndOfTurnOne.length + this.playerEndOfTurnTwo.length) === this.playerAmount) {
             let firstTeam = Math.round(Math.random());
+            // console.log(1, this.playerEndOfTurnOne)
+            // console.log(2, this.playerEndOfTurnTwo)
             if (firstTeam === 0) {
-                this.privateInterleavePlayers((i) => {
-                    if (i < this.playerEndOfTurnOne.length) this.world.players.push(this.playerEndOfTurnOne[i])
-                    if (i < this.playerEndOfTurnTwo.length) this.world.players.push(this.playerEndOfTurnTwo[i])
+                this.privateInterleavePlayers(() => {
+                    if (this.playerEndOfTurnOne.length > 0) this.world.players.push(this.playerEndOfTurnOne.pop());
+                    if (this.playerEndOfTurnTwo.length > 0) this.world.players.push(this.playerEndOfTurnTwo.pop());
                 })
             } else {
-                this.privateInterleavePlayers((i) => {
-                    if (i < this.playerEndOfTurnTwo.length) this.world.players.push(this.playerEndOfTurnTwo[i])
-                    if (i < this.playerEndOfTurnOne.length) this.world.players.push(this.playerEndOfTurnOne[i])
+                this.privateInterleavePlayers(() => {
+                    if (this.playerEndOfTurnTwo.length > 0) this.world.players.push(this.playerEndOfTurnTwo.pop());
+                    if (this.playerEndOfTurnOne.length > 0) this.world.players.push(this.playerEndOfTurnOne.pop());
                 })
             }
+            // this.playerEndOfTurnOne.length = 0; //not clear?
+            // this.playerEndOfTurnTwo.length = 0;
+            // this.playerEndOfTurnOne.splice(0, this.playerEndOfTurnOne.length);
+            // this.playerEndOfTurnTwo.splice(0, this.playerEndOfTurnTwo.length);
+            // this.referenceToRecentPlayers.length = 0;
+            // console.log(this.world.players);
             this.world.players.splice(0, this.playerAmount);
-            this.playerEndOfTurnOne.length = 0;
-            this.playerEndOfTurnTwo.length = 0;
-            this.referenceToRecentPlayers.length = 0;
+            // console.log(this.world.players);
+        } else {
+            this.world.currentPlayer.team === 0 
+            ? this.playerEndOfTurnOne.push(this.world.currentPlayer) 
+            : this.playerEndOfTurnTwo.push(this.world.currentPlayer);
+            console.log(this.world.currentPlayer.team, "playerNo,", this.world.currentPlayer.playerNo);
         }
     }
 
     privateInterleavePlayers(callbackRule) {
         let maxLength = Math.max(this.playerEndOfTurnOne.length, this.playerEndOfTurnTwo.length);
         for (let i = 0; i < maxLength; i++) {
-            callbackRule(i);
+            callbackRule();
         }
     }
 }   
