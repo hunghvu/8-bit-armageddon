@@ -148,50 +148,21 @@ class Turn {
      * But, Iteration 1 - 1, 2, 1, 2 / Iteration 2: 2, 1, 2, 1 is allowed (Team 2 has consecutive turns when changing iteration);
      */
     privateShuffleTurn() {
-        // let playerToRemove = this.playerNumber // this.playerNumber is currrent player, plus 1 means previous player b/c of 
-        //                                            //  traversing from the end.
-        // if (this.playerBuffer.length === this.playerAmount) {
-        //     while(this.playerBuffer.length !== 0) {
-        //         let nextPlayerIndex = Math.floor(Math.random() * (this.playerBuffer.length - 0) + 0);
-        //         if(this.playerBuffer[nextPlayerIndex].team === this.recentTeam) {
-        //             continue
-        //         }
-        //         let nextPlayer = this.playerBuffer.splice(nextPlayerIndex, 1)[0];
-        //         this.world.players.push(nextPlayer);
-        //         this.recentTeam =  nextPlayer.team; // Keep track of recent player to interleave team.
-        //     }
-        //     this.world.players.splice(0, 4);
-        //     this.world.players.forEach(element => console.log(element.playerNo))
-        //     this.recentTeam = null;
-        //     // console.log(this.world.players);
-        // } else {
-        //     this.playerBuffer.push(this.world.players[playerToRemove]);
-        // }
-        // console.log(this.playerBuffer.length)
-        // console.log(this.playerEndOfTurnOne)
+        // Start shuffle after all players end their turn.
         if ((this.playerEndOfTurnOne.length + this.playerEndOfTurnTwo.length) === this.playerAmount) {
-            let firstTeam = Math.round(Math.random());
-            // console.log(1, this.playerEndOfTurnOne)
-            // console.log(2, this.playerEndOfTurnTwo)
+            let firstTeam = Math.round(Math.random()); // Increase randomness by having 2 algorithms.
             if (firstTeam === 0) {
-                this.privateInterleavePlayers(() => {
-                    if (this.playerEndOfTurnOne.length > 0) this.world.players.push(this.playerEndOfTurnOne.pop());
-                    if (this.playerEndOfTurnTwo.length > 0) this.world.players.push(this.playerEndOfTurnTwo.pop());
+                this.privateInterleavePlayers(() => { // Increase randomness by randomly pick a player in a turn-finished array.
+                    if (this.playerEndOfTurnOne.length > 0) this.world.players.push(this.playerEndOfTurnOne.splice(Math.floor(Math.random()*this.playerEndOfTurnOne.length), 1)[0]);
+                    if (this.playerEndOfTurnTwo.length > 0) this.world.players.push(this.playerEndOfTurnTwo.splice(Math.floor(Math.random()*this.playerEndOfTurnTwo.length), 1)[0]);
                 })
             } else {
                 this.privateInterleavePlayers(() => {
-                    if (this.playerEndOfTurnTwo.length > 0) this.world.players.push(this.playerEndOfTurnTwo.pop());
-                    if (this.playerEndOfTurnOne.length > 0) this.world.players.push(this.playerEndOfTurnOne.pop());
+                    if (this.playerEndOfTurnTwo.length > 0) this.world.players.push(this.playerEndOfTurnTwo.splice(Math.floor(Math.random()*this.playerEndOfTurnTwo.length), 1)[0]);
+                    if (this.playerEndOfTurnOne.length > 0) this.world.players.push(this.playerEndOfTurnOne.splice(Math.floor(Math.random()*this.playerEndOfTurnOne.length), 1)[0]);
                 })
             }
-            // this.playerEndOfTurnOne.length = 0; //not clear?
-            // this.playerEndOfTurnTwo.length = 0;
-            // this.playerEndOfTurnOne.splice(0, this.playerEndOfTurnOne.length);
-            // this.playerEndOfTurnTwo.splice(0, this.playerEndOfTurnTwo.length);
-            // this.referenceToRecentPlayers.length = 0;
-            // console.log(this.world.players);
             this.world.players.splice(0, this.playerAmount);
-            // console.log(this.world.players);
         } else {
             this.world.currentPlayer.team === 0 
             ? this.playerEndOfTurnOne.push(this.world.currentPlayer) 
@@ -200,6 +171,11 @@ class Turn {
         }
     }
 
+    /**
+     * This function will populate new turn order by adding players to a this.world.players array
+     * based on a given algorithm.
+     * @param {function} callbackRule 
+     */
     privateInterleavePlayers(callbackRule) {
         let maxLength = Math.max(this.playerEndOfTurnOne.length, this.playerEndOfTurnTwo.length);
         for (let i = 0; i < maxLength; i++) {
