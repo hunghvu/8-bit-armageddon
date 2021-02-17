@@ -20,7 +20,7 @@ class Projectile extends Entity {
    * @params {World} world - The world object to check collisions with
    * @params {Point} displacement - The vector along which to move this entity
    */
-  moveUntilCollision(world, displacement){
+  moveUntilCollision(world, displacement, collideWithPlayers = false){
     let hasCollidedWithAPlayer = false;
     if (Math.abs(displacement.x) > Math.abs(displacement.y)) {
       // If the x side is longer that the y side 
@@ -46,8 +46,10 @@ class Projectile extends Entity {
           ySoFar += Math.sign(displacement.y);
           this.y += Math.sign(displacement.y);
         }
-        // Check if the bullet collides with any of the players
-        hasCollidedWithAPlayer = this.collidesWithRects(world.players);
+        if (collideWithPlayers) {
+          // Check if the bullet collides with any of the players
+          hasCollidedWithAPlayer = this.collidesWithRects(world.players);
+        }
       }
     } else {
       // If the y side is longer that the x side 
@@ -73,7 +75,10 @@ class Projectile extends Entity {
           xSoFar += Math.sign(displacement.x);
           this.x += Math.sign(displacement.x);
         }
-        hasCollidedWithAPlayer = this.collidesWithRects(world.players);
+        if (collideWithPlayers) {
+          // Check if the bullet collides with any of the players
+          hasCollidedWithAPlayer = this.collidesWithRects(world.players);
+        }
       }
     }
   }

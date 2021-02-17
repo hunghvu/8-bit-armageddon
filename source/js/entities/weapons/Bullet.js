@@ -26,7 +26,7 @@ class Bullet extends Projectile {
    * @params {deltaT} - The number of ms since the last update
    */
   update(world, deltaT){
-    this.moveUntilCollision(world, this.desiredMovement(deltaT, Wind.x, Wind.y));
+    this.moveUntilCollision(world, this.desiredMovement(deltaT, Wind.x, Wind.y), true);
 
     // update direction/facing
     if (this.vel.x < 0) this.facing = 1;
