@@ -226,7 +226,7 @@ class Player extends Entity { //Add button to enter portal
       this.vel.y = 0;
     }
 
-    if (this.dead === false && (this.damageTaken === 1 || this.y > world.map.height)) {
+    if (this.dead === false && (this.damageTaken >= 1 || this.y > world.map.height)) {
       this.dead = true;
     } // Set dead flag if player runs out of health or fall out of map.
   }
