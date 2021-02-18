@@ -29,8 +29,9 @@ class Turn {
                                                                          // Only on the second iteration, we can have a randomized turn.
                                                                          // Therefore, the very first player must be put in manually.
         this.playerEndOfTurnOne = []
-        // this.recentTeam = null;
-        // this.referenceToRecentPlayers = [this.world.currentPlayer];
+        this.checkDeathStatus = false; // This flag is similar to isShot, however, it's used to
+                                       //  see whether a test to see if a current player is dead has been performed.
+                                       //  false mean not yet, true means otherwise.
     }
 
     /**
@@ -55,11 +56,18 @@ class Turn {
             this.world.currentPlayer.isInTurn = false;
         }
         // console.log(this.world.entityOnMap.isAllEntityStop());
-        if (this.world.entityOnMap.isAllEntityStop() && this.isShot === true) {
+
+        // This test will make a turn directly end and jump to the next READY period if one of following conditions is met.
+        //  1. We have a shot resolution.
+        //  2. The player is dead.
+        if ((this.world.entityOnMap.isAllEntityStop() && this.isShot) 
+            || (this.world.currentPlayer.dead && !this.checkDeathStatus)) {
             this.isShot = false;
+            this.checkDeathStatus = true;
             // There is another turnTick() inside private updateTurn, so minus maxStep*2
             //  can directly change to ready period.
             this.timer.turnTime = this.timePerTurn - this.timer.maxStep * 2;
+            console.log(true);
         }
     }
 
@@ -70,7 +78,6 @@ class Turn {
         if (!this.isShot) {
             // Turn.js will control its own tick
             this.timer.turnTick();
-
             // Approximately 0 (max timer step).
             // this.timePerTurn is currently 5 secs, so minus maxStep turns it to 4.95;
             // The maxStep is 0.05 is timer will always happens at least one time during *.95 and (*+1).00 range.
@@ -87,21 +94,11 @@ class Turn {
                     this.world.currentPlayer.acc.x = 0;
                     this.world.currentPlayer.isInTurn = false;
 
-                    this.world.currentPlayer = this.world.players[this.playerNumber];  
+                    this.world.currentPlayer = this.world.players[this.playerNumber];
+
+                    this.checkDeathStatus = false; // Reset death checker flag when we jump to the next player.
                     // console.log(this.world.currentPlayer.playerNo, "current")
 
-                    // while (this.world.currentPlayer.dead) {
-                    //     this.world.currentPlayer.team === 0 
-                    //         ? this.playerEndOfTurnOne.push(this.world.currentPlayer) 
-                    //         : this.playerEndOfTurnTwo.push(this.world.currentPlayer);
-                    //     // this.referenceToRecentPlayers.push(this.world.currentPlayer);
-                    //     this.inReadyPeriod = false;
-                    //     this.playerNumber--;
-                    //     this.world.currentPlayer = this.world.players[this.playerNumber]; 
-                    //     if (this.playerNumber === -1) {
-                    //         break;
-                    //     }
-                    // }
                     // Explanation.
                     //  countdownTurn() is origninally run once per approximately 5 secs.
                     //  with the introduction of inReadyPeriod flag, it will be set to true when a player is in ready period, false otherwise.
@@ -127,7 +124,6 @@ class Turn {
                         Wind.change(); // Change the wind when a turn starts (begins at ready period).
                         // console.log(referenceToRecentPlayers)
                         this.privateShuffleTurn(); // Add player to "already-finished-turn" player.
-                        // this.recentTeam = this.world.currentPlayer.team; // Keep track of recent player to interleavev.
                     }
 
                 } else { // Extend timer.
@@ -150,7 +146,7 @@ class Turn {
     privateShuffleTurn() {
         // Start shuffle after all players end their turn.
         if ((this.playerEndOfTurnOne.length + this.playerEndOfTurnTwo.length) === this.playerAmount) {
-            let firstTeam = Math.round(Math.random()); // Increase randomness by having 2 algorithms.
+            let firstTeam = Math.round(Math.random()); // Increase randomness by having 2 different algorithms.
             if (firstTeam === 0) {
                 this.privateInterleavePlayers(() => { // Increase randomness by randomly pick a player in a turn-finished array.
                     if (this.playerEndOfTurnOne.length > 0) this.world.players.push(this.playerEndOfTurnOne.splice(Math.floor(Math.random()*this.playerEndOfTurnOne.length), 1)[0]);
