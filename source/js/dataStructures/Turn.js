@@ -32,6 +32,7 @@ class Turn {
         this.checkDeathStatus = false; // This flag is similar to isShot, however, it's used to
                                        //  see whether a test to see if a current player is dead has been performed.
                                        //  false mean not yet, true means otherwise.
+        this.turnCounter = 1; // A counter for ingame turn.
     }
 
     /**
@@ -118,7 +119,7 @@ class Turn {
                         }
                     } else {
                         // console.log(this.world.currentPlayer.team)
-                        // this.referenceToRecentPlayers.push(this.world.currentPlayer);
+                        this.turnCounter++;
                         this.timer.turnTime -= this.readyTime; // Minus the ready time.
                         this.inReadyPeriod = true;
                         Wind.change(); // Change the wind when a turn starts (begins at ready period).

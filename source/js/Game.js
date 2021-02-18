@@ -198,6 +198,8 @@ class Game {
       }
       this.ctx.fillText("Turn iteration (player No.): " + turnIteration, 465, 70);
 
+      this.ctx.fillText("Turn number: " + this.turn.turnCounter, 950, 31)
+
       // For testing only.
       // this.ctx.font = "30px Arial";
       // this.ctx.fillText(this.timePerTurnLimit - Math.round(this.timer.turnTime % this.timePerTurnLimit), 200, 200);
