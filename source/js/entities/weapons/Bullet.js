@@ -37,7 +37,8 @@ class Bullet extends Entity{
         if (this.vel.x < 0) this.facing = 1;
         if (this.vel.x > 0) this.facing = 0;
 
-        if (world.map.collideWithRectangle(this) || this.y > 1000) {
+        // Add y-threshold for the bullet so that i can end turns.
+        if (world.map.collideWithRectangle(this) || this.y > world.map.height) {
             // Destroy this bullet if we hit something
             this.active = false;
             this.projectileCanEndTurn = true;
@@ -83,12 +84,17 @@ class Bullet extends Entity{
     draw(ctx){
         // ctx.drawImage(this.spritesheet, 9, 7, 12, 14, this.x, this.y, 12, 14);
         this.animations[this.facing].drawFrame(.17, ctx, this.x, this.y, 0.8);
-
         ctx.fillStyle = "white";
         ctx.strokeRect(this.x, this.y, 16, 16);
 
         //fix and add load animation
     }
+
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "Green";
+        ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
+    }
+
     loadAnimations() {
       for (var j = 0; j < 2; j++) { //facing
         this.animations.push([]);

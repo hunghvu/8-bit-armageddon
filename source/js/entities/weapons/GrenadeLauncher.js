@@ -34,6 +34,8 @@ class GrenadeLauncher extends Entity{
         ctx.beginPath();
         ctx.arc(this.x, this.y, 30, 0,2 * Math.PI);
         ctx.fill();
+    }
 
+    drawMinimap(ctx, mmX, mmY) {
     }
 }

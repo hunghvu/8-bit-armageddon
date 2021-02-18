@@ -1,7 +1,7 @@
 class World {
   constructor(map) {
     this.map = map;
-
+    this.minimap = new Minimap(20,600, this.map.width/7, this.map.height/ 10);
     this.entityOnMap = new EntityOnMap();
     // parameter sets the players design
     this.players = this.entityOnMap.playerOnMapList;
@@ -13,15 +13,19 @@ class World {
     this.camera = new Camera(500, 500, 1);
 
     // Background images.
-    this.imgFar = new Image();
-    this.imgFar.src = "./assets/background.jpg";
-    this.imgNear = new Image();
-    this.imgNear.src = "./assets/background-cloud.jpg";
+    this.imgFar = MANAGER.getAsset('./assets/background.jpg');
+    this.imgNear = MANAGER.getAsset('./assets/background-cloud.jpg')
+
     // The sX in drawImage will be updated as the player moves in a way it create an opposite movement effect.
 
   }
 
+
   draw(ctx, w, h) {
+
+    //this.players.drawMinimap(ctx,20,600);
+   // this.players.drawMinimap(ctx,this.minimap.x,this.minimap.y);
+
     // Clear the screen without worrying about transforms
     ctx.clearRect(0, 0, w, h);
 
@@ -36,15 +40,25 @@ class World {
     // Draw players
     this.drawPlayers(ctx);
     this.drawEntities(ctx);
+ //   this.drawPlayersMinimap(ctx,this.minimap.x,this.minimap.y);
 
     // Untransform ctx
     this.camera.restoreContext(ctx);
+
+    // After restoring, add a minimap, ratio for width is 1/7 of normal size, and ratio for height is 1/10 of normal size.
+    ctx.drawImage(this.imgFar, 0, 0, this.map.width, this.map.height, 20, 600, this.map.width/7, this.map.height/10);
+    ctx.drawImage(this.imgNear, 0, 0, this.map.width, this.map.height, 20, 600, this.map.width/7, this.map.height/10);
+    this.drawPlayersMinimap(ctx,this.minimap.x,this.minimap.y);
+    this.drawEntitiesMinimap(ctx,this.minimap.x,this.minimap.y);
+    this.map.drawMinimap(ctx, 0, 0);
+    this.minimap.draw(ctx, this);
+
   }
 
   /*
     This function will draw a parralax background.
   */
-  drawBackground(ctx){
+  drawBackground(ctx) {
     this.camera.transformContext(ctx, 3);
     ctx.drawImage(this.imgFar, -this.imgNear.width / 2, -this.imgFar.height / 2);
     this.camera.restoreContext(ctx);
@@ -54,6 +68,7 @@ class World {
     ctx.drawImage(this.imgNear, -this.imgNear.width / 2, -this.imgNear.height / 2);
     this.camera.restoreContext(ctx);
   }
+
 
   update(deltaT, controls) {
     this.map.update(this, deltaT);
@@ -68,10 +83,22 @@ class World {
     this.camera.glideToTarget(8, deltaT);
   }
 
+  drawPlayersMinimap(ctx, mmX, mmY) {
+    this.players.forEach(player =>{
+      player.drawMinimap(ctx, mmX,mmY)
+    });
+  }
 
   drawPlayers(ctx) {
     this.players.forEach(player => {
       player.draw(ctx);
+    });
+
+  }
+
+  drawEntitiesMinimap(ctx, mmX, mmY) {
+    this.players.forEach(entity =>{
+      entity.drawMinimap(ctx, mmX,mmY)
     });
   }
 
@@ -79,6 +106,7 @@ class World {
     this.entities.forEach(entity => {
       entity.draw(ctx);
     });
+
   }
 
   updatePlayers(deltaT, controls) {
@@ -99,9 +127,36 @@ class World {
     this.entityOnMap.entityOnMapList = this.entityOnMap.entityOnMapList.filter((entity) => entity.active);
 
   }
+
   spawn(entity) {
     this.entities.push(entity);
     // Replicate for bulletOnMap
     this.entityOnMap.entityOnMapList.push(entity)
   }
+
+
 }
+  /*
+  This is an inner class that creates a minimap of the game. With players represented as red dots and
+  green dots as grenade bullets for now.
+   */
+  class Minimap {
+
+    constructor(x,y, width, height) {
+      Object.assign(this, {x,y, width, height})
+    };
+
+    update(){
+    };
+
+    draw(ctx, world) {
+      ctx.strokeStyle = "Black";
+      ctx.strokeRect(this.x, this.y, world.map.width/7, world.map.height/10);
+
+
+      for (var i = 0; i < world.entities.length; i++) {
+        world.entities[i].drawMinimap(ctx, this.x, this.y);
+        }
+    }
+};
+
