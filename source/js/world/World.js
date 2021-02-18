@@ -1,7 +1,7 @@
 class World {
   constructor(map) {
     this.map = map;
-    this.minimap = new Minimap(20,600, this.map.width/7, this.map.height/ 10);
+
     this.entityOnMap = new EntityOnMap();
     // parameter sets the players design
     this.players = this.entityOnMap.playerOnMapList;
@@ -19,7 +19,6 @@ class World {
     // The sX in drawImage will be updated as the player moves in a way it create an opposite movement effect.
 
   }
-
 
   draw(ctx, w, h) {
 
@@ -40,7 +39,6 @@ class World {
     // Draw players
     this.drawPlayers(ctx);
     this.drawEntities(ctx);
- //   this.drawPlayersMinimap(ctx,this.minimap.x,this.minimap.y);
 
     // Untransform ctx
     this.camera.restoreContext(ctx);
@@ -58,7 +56,7 @@ class World {
   /*
     This function will draw a parralax background.
   */
-  drawBackground(ctx) {
+  drawBackground(ctx){
     this.camera.transformContext(ctx, 3);
     ctx.drawImage(this.imgFar, -this.imgNear.width / 2, -this.imgFar.height / 2);
     this.camera.restoreContext(ctx);
@@ -68,7 +66,6 @@ class World {
     ctx.drawImage(this.imgNear, -this.imgNear.width / 2, -this.imgNear.height / 2);
     this.camera.restoreContext(ctx);
   }
-
 
   update(deltaT, controls) {
     this.map.update(this, deltaT);
