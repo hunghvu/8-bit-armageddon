@@ -41,14 +41,14 @@ class Turn {
     countdownTurn(){
         // this.privateShuffleTurn();
         // console.log(this.world.players);
-        this.privateExtendTurn();
+        this.privateExtendAndEndTurn();
         this.privateUpdateTurn();
     }
 
     /**
      * This function extends the turn until there is a shot resolution.
      */
-    privateExtendTurn() {
+    privateExtendAndEndTurn() {
         if (this.controls.shooting && !this.inReadyPeriod) {
             // console.log(this.inReadyPeriod);
             this.isShot = true;
@@ -61,8 +61,10 @@ class Turn {
         // This test will make a turn directly end and jump to the next READY period if one of following conditions is met.
         //  1. We have a shot resolution.
         //  2. The player is dead.
+        //  3. Key P is pressed (pass/skip a turn) during inTurn period.
         if ((this.world.entityOnMap.isAllEntityStop() && this.isShot) 
-            || (this.world.currentPlayer.dead && !this.checkDeathStatus)) {
+            || (this.world.currentPlayer.dead && !this.checkDeathStatus)
+            || (this.controls.pass && !this.inReadyPeriod)) {
             this.isShot = false;
             this.checkDeathStatus = true;
             // There is another turnTick() inside private updateTurn, so minus maxStep*2
