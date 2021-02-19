@@ -24,11 +24,15 @@ class Turn {
         Wind.change(); // Wind is changed per turn.
 
         this.playerAmount = this.world.players.length // Save the original length of player list.
-        this.playerBuffer = [this.world.players[this.playerNumber + 1]]; // List of already-finish-turn players
+        this.playerEndOfTurnTwo = [this.world.currentPlayer]; // List of already-finish-turn players
                                                                          //  The first turn currently has fixed order [4, 3, 2, 1];
                                                                          // Only on the second iteration, we can have a randomized turn.
                                                                          // Therefore, the very first player must be put in manually.
-        this.recentTeam = null;
+        this.playerEndOfTurnOne = []
+        this.checkDeathStatus = false; // This flag is similar to isShot, however, it's used to
+                                       //  see whether a test to see if a current player is dead has been performed.
+                                       //  false mean not yet, true means otherwise.
+        this.turnCounter = 1; // A counter for ingame turn.
     }
 
     /**
@@ -37,14 +41,14 @@ class Turn {
     countdownTurn(){
         // this.privateShuffleTurn();
         // console.log(this.world.players);
-        this.privateExtendTurn();
+        this.privateExtendAndEndTurn();
         this.privateUpdateTurn();
     }
 
     /**
      * This function extends the turn until there is a shot resolution.
      */
-    privateExtendTurn() {
+    privateExtendAndEndTurn() {
         if (this.controls.shooting && !this.inReadyPeriod) {
             // console.log(this.inReadyPeriod);
             this.isShot = true;
@@ -53,11 +57,20 @@ class Turn {
             this.world.currentPlayer.isInTurn = false;
         }
         // console.log(this.world.entityOnMap.isAllEntityStop());
-        if (this.world.entityOnMap.isAllEntityStop() && this.isShot === true) {
+
+        // This test will make a turn directly end and jump to the next READY period if one of following conditions is met.
+        //  1. We have a shot resolution.
+        //  2. The player is dead.
+        //  3. Key P is pressed (pass/skip a turn) during inTurn period.
+        if ((this.world.entityOnMap.isAllEntityStop() && this.isShot) 
+            || (this.world.currentPlayer.dead && !this.checkDeathStatus)
+            || (this.controls.pass && !this.inReadyPeriod)) {
             this.isShot = false;
+            this.checkDeathStatus = true;
             // There is another turnTick() inside private updateTurn, so minus maxStep*2
             //  can directly change to ready period.
             this.timer.turnTime = this.timePerTurn - this.timer.maxStep * 2;
+            console.log(true);
         }
     }
 
@@ -68,14 +81,13 @@ class Turn {
         if (!this.isShot) {
             // Turn.js will control its own tick
             this.timer.turnTick();
-
             // Approximately 0 (max timer step).
             // this.timePerTurn is currently 5 secs, so minus maxStep turns it to 4.95;
             // The maxStep is 0.05 is timer will always happens at least one time during *.95 and (*+1).00 range.
             // Because we can have multiple step between *.95 and (*+1).00, e.g: *.975 => need to round up.
             if ((this.timer.turnTime % this.timePerTurn) >= (this.timePerTurn - this.timer.maxStep)) {
                 this.timer.turnTime = Math.round(this.timer.turnTime % this.timePerTurn);
-                if(this.world.currentPlayer.onGround) {
+                if(this.world.currentPlayer.onGround || this.world.currentPlayer.dead) {
                     if (this.playerNumber === -1) {
                         this.privateShuffleTurn();
                         // console.log(this.world.players);
@@ -85,7 +97,9 @@ class Turn {
                     this.world.currentPlayer.acc.x = 0;
                     this.world.currentPlayer.isInTurn = false;
 
-                    this.world.currentPlayer = this.world.players[this.playerNumber];  
+                    this.world.currentPlayer = this.world.players[this.playerNumber];
+
+                    this.checkDeathStatus = false; // Reset death checker flag when we jump to the next player.
                     // console.log(this.world.currentPlayer.playerNo, "current")
 
                     // Explanation.
@@ -106,12 +120,13 @@ class Turn {
                           }
                         }
                     } else {
+                        // console.log(this.world.currentPlayer.team)
+                        this.turnCounter++;
                         this.timer.turnTime -= this.readyTime; // Minus the ready time.
                         this.inReadyPeriod = true;
                         Wind.change(); // Change the wind when a turn starts (begins at ready period).
-
+                        // console.log(referenceToRecentPlayers)
                         this.privateShuffleTurn(); // Add player to "already-finished-turn" player.
-                        this.recentTeam = this.world.currentPlayer.team; // Keep track of recent player to interleavev.
                     }
 
                 } else { // Extend timer.
@@ -132,26 +147,39 @@ class Turn {
      * But, Iteration 1 - 1, 2, 1, 2 / Iteration 2: 2, 1, 2, 1 is allowed (Team 2 has consecutive turns when changing iteration);
      */
     privateShuffleTurn() {
-        let playerToRemove = this.playerNumber // this.playerNumber is currrent player, plus 1 means previous player b/c of 
-                                                   //  traversing from the end.
-        if (this.playerBuffer.length === this.playerAmount) {
-            while(this.playerBuffer.length !== 0) {
-                let nextPlayerIndex = Math.floor(Math.random() * (this.playerBuffer.length - 0) + 0);
-                if(this.playerBuffer[nextPlayerIndex].team === this.recentTeam) {
-                    continue
-                }
-                let nextPlayer = this.playerBuffer.splice(nextPlayerIndex, 1)[0];
-                this.world.players.push(nextPlayer);
-                this.recentTeam =  nextPlayer.team; // Keep track of recent player to interleave team.
+        // Start shuffle after all players end their turn.
+        if ((this.playerEndOfTurnOne.length + this.playerEndOfTurnTwo.length) === this.playerAmount) {
+            let firstTeam = Math.round(Math.random()); // Increase randomness by having 2 different algorithms.
+            if (firstTeam === 0) {
+                this.privateInterleavePlayers(() => { // Increase randomness by randomly pick a player in a turn-finished array.
+                    if (this.playerEndOfTurnOne.length > 0) this.world.players.push(this.playerEndOfTurnOne.splice(Math.floor(Math.random()*this.playerEndOfTurnOne.length), 1)[0]);
+                    if (this.playerEndOfTurnTwo.length > 0) this.world.players.push(this.playerEndOfTurnTwo.splice(Math.floor(Math.random()*this.playerEndOfTurnTwo.length), 1)[0]);
+                })
+            } else {
+                this.privateInterleavePlayers(() => {
+                    if (this.playerEndOfTurnTwo.length > 0) this.world.players.push(this.playerEndOfTurnTwo.splice(Math.floor(Math.random()*this.playerEndOfTurnTwo.length), 1)[0]);
+                    if (this.playerEndOfTurnOne.length > 0) this.world.players.push(this.playerEndOfTurnOne.splice(Math.floor(Math.random()*this.playerEndOfTurnOne.length), 1)[0]);
+                })
             }
-            this.world.players.splice(0, 4);
-            this.world.players.forEach(element => console.log(element.playerNo))
-            this.recentTeam = null;
-            // console.log(this.world.players);
+            this.world.players.splice(0, this.playerAmount);
         } else {
-            this.playerBuffer.push(this.world.players[playerToRemove]);
+            this.world.currentPlayer.team === 0 
+            ? this.playerEndOfTurnOne.push(this.world.currentPlayer) 
+            : this.playerEndOfTurnTwo.push(this.world.currentPlayer);
+            console.log(this.world.currentPlayer.team, "playerNo,", this.world.currentPlayer.playerNo);
         }
-        // console.log(this.playerBuffer.length)
+    }
+
+    /**
+     * This function will populate new turn order by adding players to a this.world.players array
+     * based on a given algorithm.
+     * @param {function} callbackRule 
+     */
+    privateInterleavePlayers(callbackRule) {
+        let maxLength = Math.max(this.playerEndOfTurnOne.length, this.playerEndOfTurnTwo.length);
+        for (let i = 0; i < maxLength; i++) {
+            callbackRule();
+        }
     }
 }   
 
