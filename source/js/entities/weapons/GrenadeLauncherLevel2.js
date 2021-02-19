@@ -1,17 +1,9 @@
-/**
- * An upgraded weapon, the Grenade Launcher, can be spawned from an item crate.
- */
-class GrenadeLauncher extends Entity{
+class GrenadeLauncherLevel2 extends GrenadeLauncher{
     /**
      * Constructor for the grenade laucher that extends the entity class.
      */
-    constructor(x, y, angle, power) {
-        super(x,y,8,8);
-        this.x = x;
-        this.y = y;
-        this.vel.x = Math.cos(angle) * power;
-        this.vel.y = -Math.sin(angle) * power;
-        // this.upgrade = upgrade;
+    constructor(x,y,angle,power) {
+        super(x,y,angle,power);
 
         this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
 
@@ -21,12 +13,6 @@ class GrenadeLauncher extends Entity{
         this.projectileCanEndTurn = false; // It is not used as of now.
     }
 
-    /**
-     * Update the bullet flying through the air.
-     *
-     * @params {World} - The world object that should be referenced
-     * @params {deltaT} - The number of ms since the last update
-     */
     update(world, deltaT){
         this.add(this.desiredMovement(deltaT))
 
@@ -37,15 +23,9 @@ class GrenadeLauncher extends Entity{
         this.add(this.desiredMovement(deltaT, Wind.x, Wind.y))
 
         if (world.map.collideWithRectangle(this)) {
-          // this.vel.x = (this.vel.x * .5);
-          // this.vel.y = (this.vel.y * -1);
-          // if (this.vel.x < 0) this.facing = 1;
-          // if (this.vel.x > 0) this.facing = 0;
-          // if (world.map.collideWithRectangle(this)) {
-            // Destroy this bullet if we hit something
             this.active = false;
             this.projectileCanEndTurn = true;
-            world.map.destroyCircle(this.center.x, this.center.y, 30);
+            world.map.destroyCircle(this.center.x, this.center.y, 60);
             // Find any players in the blast range
             for (let i = 0; i < world.players.length; i++) {
                 let playerThisLoop = world.players[i];
@@ -75,12 +55,12 @@ class GrenadeLauncher extends Entity{
       for (var j = 0; j < 2; j++) { //facing
         this.animations.push([]);
       }
-      // Grenade = no set number
-      //buffer padding current build = 17
+      // Dynomite (upgrade lvl 2) = no set number
+      //buffer padding current build =
       //facing right = 0,
-      this.animations[0] = new Animator(this.spritesheet, 9, 7, 12, 14, 4, 0.5, 17, false, true);
+      this.animations[0] = new Animator(this.spritesheet, 2, 35, 28, 28, 4, 0.5, 14, false, true);
 
       //facing left = 1,
-      this.animations[1] = new Animator(this.spritesheet, 137, 7, 12, 14, 4, 0.5, 17, true, true);
+      this.animations[1] = new Animator(this.spritesheet, 2, 35, 28, 28, 4, 0.5, 14, true, true);
     }
 }

@@ -222,12 +222,12 @@ class Game {
         this.ctx.drawImage(this.spritesheet, 723, 1, 29, 26, 343, 32, 92, 64);
       }
       this.ctx.font = "20px Arial";
-      this.ctx.fillText((1.0 - this.world.currentPlayer.damageTaken)*100, 375, 66);
+      this.ctx.fillText(Math.ceil((1.0 - this.world.currentPlayer.damageTaken)*100) + "%", 375, 66);
 
       this.ctx.font = "30px Arial";
       // this.ctx.fillText("Wind(X): " + Wind.x + ", Wind(Y): " + Wind.y, 343, 31);
       this.ctx.fillText("Wind(X): " + Wind.x + ", Wind(Y): " + Wind.y, 465, 31);
-      
+
       let turnIteration = [];
       this.world.players.forEach(element => turnIteration.push(element.playerNo));
       this.ctx.fillText("Turn iteration (player No.): " + turnIteration, 465, 70);
