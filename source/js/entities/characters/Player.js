@@ -329,11 +329,13 @@ class Player extends Entity { //Add button to enter portal
 
     if(controls.nextWeaponDownThisLoop) {
       this.currentWeapon.nextWeapon();
+      console.log(this.currentWeapon);
     }
 
     if(controls.previousWeaponDownThisLoop) {
       this.currentWeapon.previousWeapon();
     }
+
 
     // If the user scrolls then zoom in or out
     if (controls.scrollDelta > 0) {
@@ -373,7 +375,7 @@ class Player extends Entity { //Add button to enter portal
 
     //Jumping/Falling = 2
     //facing right = 0
-    // this.animations[0][2][0] = new Animator(this.spritesheet, 11, 193, 23, 61, 7, 0.5, 25, true, true);
+    //this.animations[0][2][0]
 
 
     //Shooting = 3
