@@ -6,13 +6,23 @@ class EntityOnMap {
     constructor() {
         this.spritesheet = MANAGER.getAsset('./assets/character.png');
         this.entityOnMapList = [];
-        this.playerOnMapList = [new Player(this.spritesheet, 344, 650, 0), new Player(this.spritesheet, 500, 650, 1)];
+
+        // Hard coded team indicator for each player for now, might change later on.
+        this.playerOnMapList = [
+            new Player(this.spritesheet, 344, 650, 0, 0, 1), new Player(this.spritesheet, 500, 650, 1, 1, 2),
+            new Player(this.spritesheet, 464, 550, 0, 0, 3), new Player(this.spritesheet, 620, 550, 1, 1, 4),
+        ]; // The list hard-coded for testing purpose.
+
+        //this.playerOnMapList = [new Player(this.spritesheet, 344, 650, 0, 0), new Player(this.spritesheet, 500, 650, 1, 1), new Player(this.spritesheet,400,650,2, 1)];
+        //TESTING PURPOSES (adds two more human players)
+        // this.playerOnMapList = [new Player(this.spritesheet, 344, 650, 0, 0), new Player(this.spritesheet, 360, 650, 0, 0), new Player(this.spritesheet, 500, 650, 0, 0), new Player(this.spritesheet, 500, 650, 1, 1), new Player(this.spritesheet,400,650,2, 1)];
+
 
     }
-    
+
     /**
      * Check if all entities are stopped.
-     * This function can be updated down the road if entityOnMap contains 
+     * This function can be updated down the road if entityOnMap contains
      *   something other than a Bullet
      */
     isAllEntityStop(){

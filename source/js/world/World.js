@@ -1,7 +1,7 @@
 class World {
   constructor(map) {
     this.map = map;
-    this.minimap = new Minimap(20, 600, World.width/7, World.height/10)
+    this.minimap = new Minimap(20,600,this.map.width/7, this.map.height/10);
     this.entityOnMap = new EntityOnMap();
     // parameter sets the players design
     this.players = this.entityOnMap.playerOnMapList;
@@ -14,17 +14,14 @@ class World {
 
     // Background images.
     this.imgFar = MANAGER.getAsset('./assets/background.jpg');
-    this.imgNear = MANAGER.getAsset('./assets/background-cloud.jpg')
+    this.imgNear = MANAGER.getAsset('./assets/background-cloud.jpg') 
 
     // The sX in drawImage will be updated as the player moves in a way it create an opposite movement effect.
+    this.resetCrates();
 
   }
 
   draw(ctx, w, h) {
-
-    //this.players.drawMinimap(ctx,20,600);
-   // this.players.drawMinimap(ctx,this.minimap.x,this.minimap.y);
-
     // Clear the screen without worrying about transforms
     ctx.clearRect(0, 0, w, h);
 
@@ -87,6 +84,17 @@ class World {
       player.drawMinimap(ctx, mmX,mmY)
     });
   }
+  /**
+   * Removes all the current creates and replaces them with new crates in different positions
+   */
+  resetCrates() {
+    // Get rid of all the crates
+    this.entities = this.entities.filter((entity) => !(entity instanceof Crate));
+    // Just spawn 3 crates all over
+    for (let i = 0; i < 3; i++) {
+      this.spawn(new Crate(Math.random() * this.map.width, Math.random() * this.map.height));
+    }
+  }
 
   drawPlayers(ctx) {
     this.players.forEach(player => {
@@ -105,7 +113,6 @@ class World {
     this.entities.forEach(entity => {
       entity.draw(ctx);
     });
-
   }
 
   updatePlayers(deltaT, controls) {
@@ -132,8 +139,6 @@ class World {
     // Replicate for bulletOnMap
     this.entityOnMap.entityOnMapList.push(entity)
   }
-
-
 }
   /*
   This is an inner class that creates a minimap of the game. With players represented as red dots and

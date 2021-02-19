@@ -1,4 +1,4 @@
-/** 
+/**
  * Class that maintains the current state of the games controls.
  */
 class Controls {
@@ -26,6 +26,12 @@ class Controls {
     // Q and E for changing weapon
     this.registerKey('nextWeapon', 'KeyE');
     this.registerKey('previousWeapon', 'KeyQ');
+
+    // M for entering a Portal
+    this.registerKey('enterPortal', 'KeyM');
+
+    // P for passing a turn
+    this.registerKey('pass', 'KeyP');
 
     // How much the scroll wheel has been scrolled since last checked
     this.scrollDelta = 0;
@@ -65,7 +71,7 @@ class Controls {
     })
   }
 
-  /** 
+  /**
    * This function resets the controls after every update
    */
   reset() {
@@ -73,7 +79,7 @@ class Controls {
     this.scrollDelta = 0;
     // Reset if the user has clicked this loop
     this.hasClicked = false;
-    // For ever parameter that keeps track of 
+    // For ever parameter that keeps track of
     // a key has been pressed this loop, reset it.
     Object.keys(this).forEach((element) => {
       if (element.endsWith("DownThisLoop")){
@@ -82,9 +88,9 @@ class Controls {
     });
   }
 
-  /** 
+  /**
    * Call this function to register a certain keycode to a certain purpose
-   * For example ("shoot", "KeyZ") to tie the object variable shoot with the 
+   * For example ("shoot", "KeyZ") to tie the object variable shoot with the
    * z key.
    * @param {string} name - The name of the action
    * @param {string} code - The code for the key as defined by javascript
@@ -96,7 +102,7 @@ class Controls {
         // thisobject.name you get the state of the key
         this[name] = true;
         // Set the value to true so that when you use
-        // thisobject.nameDownThisLoop you get the state 
+        // thisobject.nameDownThisLoop you get the state
         // of the key for this loop
         this[name+'DownThisLoop'] = true;
         // Don't allow the window to perform other actions
@@ -111,7 +117,7 @@ class Controls {
         // thisobject.name you get the state of the key
         this[name] = false;
         // Set the value to true so that when you use
-        // thisobject.nameDownThisLoop you get the state 
+        // thisobject.nameDownThisLoop you get the state
         // of the key for this loop
         this[name+'DownThisLoop'] = false;
         // Don't allow the window to perform other actions
@@ -121,4 +127,3 @@ class Controls {
     });
   }
 }
-
