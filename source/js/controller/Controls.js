@@ -28,7 +28,10 @@ class Controls {
     this.registerKey('previousWeapon', 'KeyQ');
 
     // M for entering a Portal
-    this.registerKey('enterPortal', 'KeyM')
+    this.registerKey('enterPortal', 'KeyM');
+
+    // P for passing a turn
+    this.registerKey('pass', 'KeyP');
 
     // How much the scroll wheel has been scrolled since last checked
     this.scrollDelta = 0;
