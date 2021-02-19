@@ -66,6 +66,15 @@ class Bullet extends Projectile {
     ctx.fillStyle = "white";
     ctx.strokeRect(this.x, this.y, 16, 16);
 
+  }
+
+  loadAnimations() {
+    for (var j = 0; j < 2; j++) { //facing
+      this.animations.push([]);
+    }
+    //buffer padding current build =
+    //facing right = 0,
+    this.animations[0] = new Animator(this.spritesheet, 70, 74, 20, 9, 1, 0.5, null, false, true);
         //fix and add load animation
     }
 
@@ -89,8 +98,8 @@ class Bullet extends Projectile {
       //facing right = 0,
       this.animations[0] = new Animator(this.spritesheet, 9, 7, 12, 14, 4, 0.5, 17, false, true);
 
-    //facing left = 1,
-    this.animations[1] = new Animator(this.spritesheet, 102, 74, 12, 14, 1, 0.5, null, false, true);
-    //fix and add load animation
-  }
+      //facing left = 1,
+      this.animations[1] = new Animator(this.spritesheet, 137, 7, 12, 14, 4, 0.5, 17, true, true);
+
+    }
 }

@@ -2,6 +2,21 @@ class World {
   constructor(map) {
     this.map = map;
     this.minimap = new Minimap(20,600,this.map.width/7, this.map.height/10);
+
+    this.spritesheet = MANAGER.getAsset('./assets/character.png');
+
+    // 3rd parameter sets the player or food
+    //TESTING PURPOSES (adds 2 more humans players)
+    // this.players = [new Player(this.spritesheet, 344, 650, 0, 0), new Player(this.spritesheet, 360, 650, 0, 0), new Player(this.spritesheet, 500, 650, 0, 0), new Player(this.spritesheet, 500, 650, 1, 1), new Player(this.spritesheet,400,650,2, 1)];
+    // this.players = [new Player(this.spritesheet, 344, 650, 0, 0), new Player(this.spritesheet, 500, 650, 1, 1), new Player(this.spritesheet,400,650,2, 1)];
+
+    // TEST PURPOSES, implement a way to seperate food and human as well as seperate by design
+    // this.players = [new Player(this.spritesheet, 344, 650, 0, 0)];
+    //Needed?
+    // this.currentPlayer = this.players[this.players.length - 1];
+    // this.currentPlayer.isInTurn = true;
+
+    this.entities = [];
     this.entityOnMap = new EntityOnMap();
     // parameter sets the players design
     this.players = this.entityOnMap.playerOnMapList;
@@ -83,6 +98,17 @@ class World {
     this.players.forEach(player =>{
       player.drawMinimap(ctx, mmX,mmY)
     });
+  }
+  /**
+   * Removes all the current creates and replaces them with new crates in different positions
+   */
+  resetCrates() {
+    // Get rid of all the crates
+    this.entities = this.entities.filter((entity) => !(entity instanceof Crate));
+    // Just spawn 3 crates all over
+    for (let i = 0; i < 3; i++) {
+      this.spawn(new Crate(Math.random() * this.map.width, Math.random() * this.map.height));
+    }
   }
   /**
    * Removes all the current creates and replaces them with new crates in different positions
