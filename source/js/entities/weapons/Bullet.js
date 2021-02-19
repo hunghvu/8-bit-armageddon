@@ -1,29 +1,23 @@
 /**
  * A generic bullet that is spawned when the player shoots
  */
-class Bullet extends Entity{
-    /**
-     * Constructor for a bullet entity
-     * @param {number} x - The starting x position
-     * @param {number} y - The starting y position
-     * @param {number} angle - The angle of the firing direction
-     * @param {number} power - The force with which to fire the
-     *                         projectile. higher is further
-     */
-    constructor(x, y, angle, power) {
-        super(x, y, 8, 8);
-        this.vel.x = Math.cos(angle) * power;
-        this.vel.y = -Math.sin(angle) * power;
+class Bullet extends Projectile {
+  /**
+   * Constructor for a bullet entity
+   * @param {number} x - The starting x position
+   * @param {number} y - The starting y position
+   * @param {number} angle - The angle of the firing direction
+   * @param {number} power - The force with which to fire the
+   *                         projectile. higher is further
+   */
+  constructor(x, y, angle, power) {
+    super(x, y, angle, power);
+    this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
 
-        //this.type = 0; Type of weapon gun = 0, grenade = 1, teleport gun = 2, portal gun = 3
-
-        this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
-
-        this.animations = [];
-        this.projectileCanEndTurn = false;
-        this.loadAnimations();
-    }
-
+    this.animations = [];
+    this.projectileCanEndTurn = false;
+    this.loadAnimations();
+  }
 
   /**
    * Update the bullet flying through the air.
@@ -34,10 +28,9 @@ class Bullet extends Entity{
   update(world, deltaT){
     this.moveUntilCollision(world, this.desiredMovement(deltaT, Wind.x, Wind.y), true);
 
-
-        // update direction/facing
-        if (this.vel.x < 0) this.facing = 1;
-        if (this.vel.x > 0) this.facing = 0;
+    // update direction/facing
+    if (this.vel.x < 0) this.facing = 1;
+    if (this.vel.x > 0) this.facing = 0;
 
     // Check if the bullet collides with any of the players
     let hasCollidedWithAPlayer = this.collidesWithRects(world.players);
@@ -60,38 +53,19 @@ class Bullet extends Entity{
         difference.sub(this.center);
         if (difference.magnitude < 32) {
           playerThisLoop.damage(this.center, 4);
-
         }
+      }
     }
-
 
   }
 
-
-    moveUntilCollision(world, movement) {
-        while (movement.x >= 1 || movement.x <= 1
-               && world.map.collideWithRectangle(this)) {
-            let direction = movement.x >= 1 ? 1 : -1;
-            this.x += direction;
-            movement.x -= direction;
-        }
-        while (movement.y >= 1 || movement.y <= 1
-               && world.map.collideWithRectangle(this)) {
-            let direction = movement.y >= 1 ? 1 : -1;
-            this.y += direction;
-            movement.y -= direction;
-        }
-    }
-
-
-    /**
-     * Draw the bullet.
-     *
-     * @param {CanvasRenderingContext2D} ctx - The context to draw to
-     */
-    draw(ctx){
-        // ctx.drawImage(this.spritesheet, 9, 7, 12, 14, this.x, this.y, 12, 14);
-        this.animations[this.facing].drawFrame(.17, ctx, this.x, this.y, 0.8);
+  /**
+   * Draw the bullet.
+   *
+   * @param {CanvasRenderingContext2D} ctx - The context to draw to
+   */
+  draw(ctx){
+    this.animations[this.facing].drawFrame(.17, ctx, this.x, this.y, 0.9);
 
     ctx.fillStyle = "white";
     ctx.strokeRect(this.x, this.y, 16, 16);
@@ -105,19 +79,21 @@ class Bullet extends Entity{
     //buffer padding current build =
     //facing right = 0,
     this.animations[0] = new Animator(this.spritesheet, 70, 74, 20, 9, 1, 0.5, null, false, true);
-        //fix and add load animation
-    }
 
-    drawMinimap(ctx, mmX, mmY) {
-        //let miniBulletRect = new Rectangle(mmX + this.x / 7, mmY+ this.y / 10, 8, 8);
-        //destructionRect.center = this.center;
-        //world.map.destroyRectangle(destructionRect);
-        ctx.fillStyle = "Green";
+    //facing left = 1,
+    this.animations[1] = new Animator(this.spritesheet, 102, 74, 12, 14, 1, 0.5, null, false, true);
+    //fix and add load animation
+  }
 
-        ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
-        // if ((mmX+this.x/7) > world.map.width/7 || (mmX+this.x/7) < 0) {
-        //     ctx.clearRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
-        // }
-    }
+  drawMinimap(ctx, mmX, mmY) {
+    //let miniBulletRect = new Rectangle(mmX + this.x / 7, mmY+ this.y / 10, 8, 8);
+    //destructionRect.center = this.center;
+    //world.map.destroyRectangle(destructionRect);
+    ctx.fillStyle = "Green";
 
+    ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
+    // if ((mmX+this.x/7) > world.map.width/7 || (mmX+this.x/7) < 0) {
+    //     ctx.clearRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
+    // }
+  }
 }
