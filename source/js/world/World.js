@@ -1,7 +1,7 @@
 class World {
   constructor(map) {
     this.map = map;
-
+    this.minimap = new Minimap(20, 600, World.width/7, World.height/10)
     this.entityOnMap = new EntityOnMap();
     // parameter sets the players design
     this.players = this.entityOnMap.playerOnMapList;
@@ -44,11 +44,13 @@ class World {
     this.camera.restoreContext(ctx);
 
     // After restoring, add a minimap, ratio for width is 1/7 of normal size, and ratio for height is 1/10 of normal size.
+
     ctx.drawImage(this.imgFar, 0, 0, this.map.width, this.map.height, 20, 600, this.map.width/7, this.map.height/10);
     ctx.drawImage(this.imgNear, 0, 0, this.map.width, this.map.height, 20, 600, this.map.width/7, this.map.height/10);
+
+    this.map.drawMinimap(ctx, 0, 0);
     this.drawPlayersMinimap(ctx,this.minimap.x,this.minimap.y);
     this.drawEntitiesMinimap(ctx,this.minimap.x,this.minimap.y);
-    this.map.drawMinimap(ctx, 0, 0);
     this.minimap.draw(ctx, this);
 
   }
