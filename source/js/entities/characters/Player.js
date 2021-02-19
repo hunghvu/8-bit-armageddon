@@ -105,15 +105,15 @@ class Player extends Entity { //Add button to enter portal
   damage(origin, power) {
     // Add knock back
     if (Math.abs(this.x - origin.x) > 1) {
-      this.vel.x = 1000 / ((this.x - origin.x));
+      this.vel.x = 400 / ((this.x - origin.x));
     } else {
-      this.vel.x = 1000;
+      this.vel.x = 400;
     }
 
     if (Math.abs(this.y - origin.y) > 1) {
-      this.vel.y = 1000 / ((this.y - origin.y));
+      this.vel.y = 400 / ((this.y - origin.y));
     } else {
-      this.vel.y = 1000;
+      this.vel.y = 400;
     }
 
     this.damageTaken += power / 100;

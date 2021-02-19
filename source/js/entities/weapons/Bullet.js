@@ -24,40 +24,49 @@ class Bullet extends Entity{
         this.loadAnimations();
     }
 
-    /**
-     * Update the bullet flying through the air.
-     *
-     * @params {World} - The world object that should be referenced
-     * @params {deltaT} - The number of ms since the last update
-     */
-    update(world, deltaT){
-        this.add(this.desiredMovement(deltaT, Wind.x, Wind.y))
+
+  /**
+   * Update the bullet flying through the air.
+   *
+   * @params {World} - The world object that should be referenced
+   * @params {deltaT} - The number of ms since the last update
+   */
+  update(world, deltaT){
+    this.moveUntilCollision(world, this.desiredMovement(deltaT, Wind.x, Wind.y), true);
+
 
         // update direction/facing
         if (this.vel.x < 0) this.facing = 1;
         if (this.vel.x > 0) this.facing = 0;
 
-        if (world.map.collideWithRectangle(this) || this.y > 1000) {
-            // Destroy this bullet if we hit something
-            this.active = false;
-            this.projectileCanEndTurn = true;
-            //let destructionRect = new Rectangle(this.x, this.y, 20, 20);
-            //destructionRect.center = this.center;
-            //world.map.destroyRectangle(destructionRect);
-            world.map.destroyCircle(this.center.x, this.center.y, 10);
-            // Find any players in the blast range
-            for (let i = 0; i < world.players.length; i++) {
-                let playerThisLoop = world.players[i];
-                console.log(playerThisLoop);
-                // If we are close enough then damage a player
-                let difference = playerThisLoop.center
-                difference.sub(this.center);
-                if (difference.magnitude < 32) {
-                    playerThisLoop.damage(this.center, 4);
-                }
-            }
+    // Check if the bullet collides with any of the players
+    let hasCollidedWithAPlayer = this.collidesWithRects(world.players);
+
+    // Add y-threshold for the bullet so that i can end turns.
+    if (world.map.collideWithRectangle(this) || 
+        this.y > world.map.height || 
+        hasCollidedWithAPlayer) {
+      // Destroy this bullet if we hit something
+      this.active = false;
+      this.projectileCanEndTurn = true;
+      // Destroy the map
+      world.map.destroyCircle(this.center.x, this.center.y, 10);
+      // Find any players in the blast range
+      for (let i = 0; i < world.players.length; i++) {
+        let playerThisLoop = world.players[i];
+
+        // If we are close enough then damage the player
+        let difference = playerThisLoop.center
+        difference.sub(this.center);
+        if (difference.magnitude < 32) {
+          playerThisLoop.damage(this.center, 4);
+
         }
     }
+
+
+  }
+
 
     moveUntilCollision(world, movement) {
         while (movement.x >= 1 || movement.x <= 1
