@@ -16,7 +16,7 @@ class MapGenerator {
     drawMap(ctx) {
         // Clear the entire canvas that we were given
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        // Make an array of adjacent circles and their radii so that we 
+        // Make an array of adjacent circles and their radii so that we
         // can draw them and their center color seperately
         let circles = []
         let currentCircle = new Point(0, ctx.canvas.height * (4/5));
@@ -36,7 +36,7 @@ class MapGenerator {
           ctx.closePath();
         });
 
-        // Draw the inner brown circles and draw the ground as going all 
+        // Draw the inner brown circles and draw the ground as going all
         // the way to the bottom of the map
         ctx.fillStyle = '#51361a';
         circles.forEach((circle) => {
@@ -85,3 +85,4 @@ class MapGenerator {
         }
     }
 }
+

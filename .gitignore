@@ -108,3 +108,8 @@ jsconfig.json
 
 # vim files
 *.swp
+
+# Ignore Webstorm IDE files
+.idea/
+
+

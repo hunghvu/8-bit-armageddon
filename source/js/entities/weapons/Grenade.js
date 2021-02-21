@@ -60,6 +60,18 @@ class Grenade extends Projectile{
       ctx.strokeRect(this.x, this.y, 16, 16);
     }
 
+    drawMinimap(ctx, mmX, mmY) {
+        //let miniBulletRect = new Rectangle(mmX + this.x / 7, mmY+ this.y / 10, 8, 8);
+        //destructionRect.center = this.center;
+        //world.map.destroyRectangle(destructionRect);
+        ctx.fillStyle = "Green";
+
+        ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
+        // if ((mmX+this.x/7) > world.map.width/7 || (mmX+this.x/7) < 0) {
+        //     ctx.clearRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
+        // }
+    }
+
     loadAnimations() {
       for (var j = 0; j < 2; j++) { //facing
         this.animations.push([]);

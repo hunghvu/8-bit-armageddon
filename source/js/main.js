@@ -7,6 +7,7 @@
 //   // Load a map image
 //   // asset_manager here
 
+
 //   MANAGER.queueDownload('./assets/character.png');
 //   MANAGER.queueDownload('./assets/weapons.png');
 //   MANAGER.queueDownload('./assets/HealthBar.png');

@@ -93,6 +93,11 @@ class Player extends Entity { //Add button to enter portal
     ctx.restore();
   }
 
+  drawMinimap(ctx, mmX, mmY) {
+    ctx.fillStyle = "Red";
+    ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 10, 10);
+  }
+
   /**
    * Call this whenever damage needs to be done to a player.
    * @param {Point} Origin - where the damage came from
@@ -498,4 +503,5 @@ class Player extends Entity { //Add button to enter portal
       }
     }
   }
+
 }

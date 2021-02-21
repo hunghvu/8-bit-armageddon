@@ -82,4 +82,12 @@ class MovingPlatform extends Entity {
   draw(ctx) {
     ctx.fillRect(this.x, this.y, this.w, this.h);
   }
+  drawMinimap(ctx, mmX, mmY) {
+    ctx.fillStyle = "Black";
+    ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 5, 2);
+  }
+
+  // drawMinimap(ctx, mmX, mmY) {
+  //   ctx.drawImage(this.mapCanvas, 20, 600, this.mapCanvas.width/7, this.mapCanvas.height/10);
+  // }
 }
