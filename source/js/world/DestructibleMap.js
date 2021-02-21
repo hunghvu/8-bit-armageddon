@@ -15,9 +15,8 @@ class DestructibleMap {
     this.platform = new MovingPlatform(400, this.height * (4/7), (this.width * 1/8), (this.width * 7/8));
 
     // Generate and draw a random map.
-    let mapGenerator = new MapGenerator(img.width, img.height);
-    mapGenerator.privateGenerateGroundCoord();
-    mapGenerator.drawMap(this.ctx);
+    this.mapGenerator = new MapGenerator(img.width, img.height);
+    this.mapGenerator.drawMap(this.ctx);
   }
 
   update(game, deltaT) {
