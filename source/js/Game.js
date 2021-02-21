@@ -6,7 +6,15 @@ class Game {
     newMapImg.src = 'assets/emptyMap.png'; // An image with all transparent pixels.
     newMapImg.onload = (function () {
       let destructionMap = new DestructibleMap(newMapImg);
-      this.world = new World(destructionMap);
+
+      // Apply play mode.
+      if (this.playMode === "1v1") {
+        this.world = new World(destructionMap, 2);
+      } else if (this.playMode === "2v2") {
+        this.world = new World(destructionMap, 4);
+      } else if (this.playMode === "4v4") {
+        this.world = new World(destructionMap, 8);
+      }
       this.canvas = document.getElementById('display');
 
 

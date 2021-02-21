@@ -1,5 +1,5 @@
 class World {
-  constructor(map) {
+  constructor(map, playerAmount) {
     this.map = map;
     this.minimap = new Minimap(20,600,this.map.width/7, this.map.height/10);
 
@@ -11,7 +11,7 @@ class World {
 
     this.entities = [];
     this.entityOnMap = new EntityOnMap(this);
-    this.entityOnMap.generatePlayer(4);
+    this.entityOnMap.generatePlayer(playerAmount);
     // parameter sets the players design
     this.players = this.entityOnMap.playerOnMapList;
     this.currentPlayer = this.players[this.players.length - 1];
