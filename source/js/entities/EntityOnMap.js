@@ -9,17 +9,11 @@ class EntityOnMap {
         this.entityOnMapList = [];
 
         // Hard coded team indicator for each player for now, might change later on.
-        this.playerOnMapList = [
-            new Player(this.spritesheet, 344, 650, 0, 0, 1), new Player(this.spritesheet, 500, 650, 1, 1, 2),
-            new Player(this.spritesheet, 464, 550, 0, 0, 3), new Player(this.spritesheet, 620, 550, 1, 1, 4),
-        ]; // The list hard-coded for testing purpose.
+        this.playerOnMapList = []; // The list hard-coded for testing purpose.
 
-        //this.playerOnMapList = [new Player(this.spritesheet, 344, 650, 0, 0), new Player(this.spritesheet, 500, 650, 1, 1), new Player(this.spritesheet,400,650,2, 1)];
-        //TESTING PURPOSES (adds two more human players)
-        // this.playerOnMapList = [new Player(this.spritesheet, 344, 650, 0, 0), new Player(this.spritesheet, 360, 650, 0, 0), new Player(this.spritesheet, 500, 650, 0, 0), new Player(this.spritesheet, 500, 650, 1, 1), new Player(this.spritesheet,400,650,2, 1)];
         this.pixelArray = this.world.map.mapGenerator.circles;
         console.log(this.pixelArray);
-
+        this.highestGroundY = Number.MAX_SAFE_INTEGER;
     }
 
     /**
@@ -45,7 +39,21 @@ class EntityOnMap {
         return true;
     }
 
+    /**
+     * This method generates player at random location in a way that they all stays on the surface.
+     * @param {int} playerAmount number of players in this match.
+     */
     generatePlayer(playerAmount) {
-
+        this.pixelArray.forEach(element => {
+            if (element[0].y - element[1] * 2 < this.highestGroundY) this.highestGroundY = element[0].y - element[1] * 2;
+        }); // element[0].y - element[1] somehow is still not the highest point, so times 2 to element [1], and hopefully it's 
+            //  the highest point. Besides, that make players spawn a bit on air, which is preferred.
+        
+        console.log(this.highestGroundY)
+        for (let i = 0; i < playerAmount; i++) {
+            let spawnX = Math.random() * this.world.map.width;
+            let spawnY = this.highestGroundY;
+            this.playerOnMapList.push(new Player(this.spritesheet, spawnX, spawnY, i % 2, i % 2, i + 1));
+        }
     }
 }
