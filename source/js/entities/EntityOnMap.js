@@ -3,7 +3,8 @@
  *   players and bullets. This class exists to decompose World.js.
  */
 class EntityOnMap {
-    constructor() {
+    constructor(world) {
+        this.world = world;
         this.spritesheet = MANAGER.getAsset('./assets/character.png');
         this.entityOnMapList = [];
 
@@ -16,7 +17,8 @@ class EntityOnMap {
         //this.playerOnMapList = [new Player(this.spritesheet, 344, 650, 0, 0), new Player(this.spritesheet, 500, 650, 1, 1), new Player(this.spritesheet,400,650,2, 1)];
         //TESTING PURPOSES (adds two more human players)
         // this.playerOnMapList = [new Player(this.spritesheet, 344, 650, 0, 0), new Player(this.spritesheet, 360, 650, 0, 0), new Player(this.spritesheet, 500, 650, 0, 0), new Player(this.spritesheet, 500, 650, 1, 1), new Player(this.spritesheet,400,650,2, 1)];
-
+        this.pixelArray = this.world.map.mapGenerator.circles;
+        console.log(this.pixelArray);
 
     }
 
@@ -41,5 +43,9 @@ class EntityOnMap {
             }
         }
         return true;
+    }
+
+    generatePlayer(playerAmount) {
+
     }
 }

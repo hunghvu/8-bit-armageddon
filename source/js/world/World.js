@@ -31,7 +31,7 @@ class World {
     // this.currentPlayer.isInTurn = true;
 
     this.entities = [];
-    this.entityOnMap = new EntityOnMap();
+    this.entityOnMap = new EntityOnMap(this);
     // parameter sets the players design
     this.players = this.entityOnMap.playerOnMapList;
     this.currentPlayer = this.players[this.players.length - 1];
