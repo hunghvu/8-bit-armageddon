@@ -29,7 +29,6 @@ class Portal extends Entity{
     this.projectileCanEndTurn = true;
   }
 
-  // ToDo: after a certain amount of turns/time, the portals should disappear
   // /**
   //  * Update the bullet flying through the air.
   //  *

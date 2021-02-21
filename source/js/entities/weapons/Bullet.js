@@ -32,8 +32,22 @@ class Bullet extends Projectile {
     if (this.vel.x < 0) this.facing = 1;
     if (this.vel.x > 0) this.facing = 0;
 
+    for(var i = 0; i < world.entities.length; i++) {
+      if (world.entities[i] instanceof Crate &&
+        ((this.x < (world.entities[i].x + 90)) && (this.x > world.entities[i].x)) &&
+        ((this.y > world.entities[i].y) && (this.y < (world.entities[i].y + 90))) && //??
+        world.currentPlayer.upgradedOnce == 0) {
+        world.currentPlayer.upgraded++;
+        world.entities[i].active = false;
+        if (world.currentPlayer.upgraded > 3) {
+          world.currentPlayer.upgraded = 1; //reset level
+        }
+        world.currentPlayer.upgradedOnce = 1;
+        console.log("upgraded: " + world.currentPlayer.upgraded);
+        }
+      }
     // Add y-threshold for the bullet so that i can end turns.
-    if (world.map.collideWithRectangle(this) || this.y > world.map.height) {
+    if (world.map.collideWithRectangle(this) || this.y > world.map.height) { //this == Bullet entity
       // Destroy this bullet if we hit something
       this.active = false;
       this.projectileCanEndTurn = true;

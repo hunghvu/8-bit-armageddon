@@ -28,7 +28,7 @@ class World {
 
     // Background images.
     this.imgFar = MANAGER.getAsset('./assets/background.jpg');
-    this.imgNear = MANAGER.getAsset('./assets/background-cloud.jpg') 
+    this.imgNear = MANAGER.getAsset('./assets/background-cloud.jpg')
 
     // The sX in drawImage will be updated as the player moves in a way it create an opposite movement effect.
     this.resetCrates();

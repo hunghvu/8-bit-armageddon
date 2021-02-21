@@ -77,13 +77,15 @@ class Game {
       //GrenadeLauncher
       else if (this.world.currentPlayer.currentWeapon.currentIndex == 1)
       {
-        //Grenade
-        // if (this.world.currentPlayer.currentWeapon.myWeaponBag.upgraded == 0)
-        // {
-        this.ctx.drawImage(this.spritesheet, 10, 7, 11, 14, 200, 35, 44, 56);
-        //}
-        //dynomite
-        // else {}
+        // Grenade
+        if (this.world.currentPlayer.upgraded == 1)
+        {
+          this.ctx.drawImage(this.spritesheet, 10, 7, 11, 14, 200, 35, 44, 56);
+        }
+        // dynomite
+        else { //lvl 2 for right now
+          this.ctx.drawImage(this.spritesheet, 2, 35, 28, 28, 200, 35, 44, 56);
+        }
       }
       //PortalGun
       else if (this.world.currentPlayer.currentWeapon.currentIndex == 2){
@@ -186,11 +188,12 @@ class Game {
       }
       this.ctx.font = "20px Arial";
       this.ctx.fillText((1.0 - this.world.currentPlayer.damageTaken)*100, 375, 66);
+      this.ctx.fillText(Math.ceil((1.0 - this.world.currentPlayer.damageTaken)*100) + "%", 375, 66);
 
       this.ctx.font = "30px Arial";
       // this.ctx.fillText("Wind(X): " + Wind.x + ", Wind(Y): " + Wind.y, 343, 31);
       this.ctx.fillText("Wind(X): " + Wind.x + ", Wind(Y): " + Wind.y, 465, 31);
-      
+
       let turnIteration = [];
       // this.world.players.forEach(element => turnIteration.push(element.playerNo));
       for (let i = this.world.players.length - 1; i >= 0; i --) { // Traverse backward.

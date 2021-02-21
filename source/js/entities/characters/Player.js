@@ -25,12 +25,13 @@ class Player extends Entity { //Add button to enter portal
     this.design = design; //different designs of characters
     this.facing = 0; // 0 = right, 1 = left
     this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling? 3 = shooting
-    this.dead = false;
+    this.dead = false; //false = living, true = dead
 
     this.onGround = false;
 
     // The health of this player
     this.damageTaken = 0;
+    this.playerHit = false;
 
     // The shooting angle is always attached to a player, so this should be
     // a better place than 'world'. The entity shooting angle bounds are defined
@@ -40,13 +41,17 @@ class Player extends Entity { //Add button to enter portal
       this.y + this.h,
       100, 0, 90, 45);
 
+    this.deadAnimation = new Animator(this.spritesheet, 201, 321, 29, 61, 1, 0.5, null, false, true);
     this.animations = [];
 
     // Determine if it's this player's turn
     // Lock user's input if false (when the turns end)
     this.isInTurn = false;
     this.loadAnimations();
-    this.currentWeapon = new CurrentWeapon(this.x, this.y, this.shootingAngle.radians, 600);
+
+    this.upgradedOnce = 0;
+    this.upgraded = 1; //1 = Lvl 1, 2 = Lvl 2, 3 = Lvl 3
+    this.currentWeapon = new CurrentWeapon(this.x, this.y, this.shootingAngle.radians, 600, this.upgraded);
 
     var d = new Date();
     d.setMilliseconds(200);
@@ -70,27 +75,52 @@ class Player extends Entity { //Add button to enter portal
     ctx.strokeStyle = "white";
     ctx.strokeRect(this.x, this.y, this.w, this.h);
 
-    this.animations[this.design][this.state][this.facing].drawFrame(.17, ctx, this.x - 24 / 2, this.y, 0.8);
+    if (this.dead == true)
+    {
+      this.deadAnimation.drawFrame(.17, ctx, this.x - 24 / 2, this.y, 0.8);
+    }
+    else if (this.playerHit == true && this.damageTaken != 1)
+    {
+      this.playerHit = false;
+      if (this.facing == 0 && this.design == 0)
+      {
+        this.playerHitRightAnimation = new Animator(this.spritesheet, 107, 321, 28, 61, 1, 20000000000000, null, false, true);
+        this.playerHitRightAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
+      }
+      else if (this.facing == 1 && this.design == 0)
+      {
+        this.playerHitLeftAnimation = new Animator(this.spritesheet, 150, 321, 20, 61, 1, 20000000000000, null, false, true);
+        this.playerHitLeftAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
+      }
+      else if (this.facing == 0 && this.design == 2)
+      {
+        this.playerHitAnimation = new Animator(this.spritesheet, 293, 386, 41, 54, 1, 20000000000000, null, false, true);
+        this.playerHitAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
+      }
+    }
+    else {
+      this.animations[this.design][this.state][this.facing].drawFrame(.17, ctx, this.x - 24 / 2, this.y, 0.8);
 
-    // Draw shooting angle indicator
-    // Technically, the origin can be derived from a player position as shown below
-    //  but by having a separate query like this, it will increase readability - Hung Vu
-    this.shootingAngle.updateOrigin(this.x, this.y);
-    ctx.beginPath();
-    ctx.moveTo(this.shootingAngle.originX, this.shootingAngle.originY);
-    // The coord system of 2D plane in canvas is reversed compared to in reality, so we need a negative angle here
-    let radian = -this.shootingAngle.defaultAngle * Math.PI / 180;
-    ctx.lineTo(
+      // Draw shooting angle indicator
+      // Technically, the origin can be derived from a player position as shown below
+      //  but by having a separate query like this, it will increase readability - Hung Vu
+      this.shootingAngle.updateOrigin(this.x, this.y);
+      ctx.beginPath();
+      ctx.moveTo(this.shootingAngle.originX, this.shootingAngle.originY);
+      // The coord system of 2D plane in canvas is reversed compared to in reality, so we need a negative angle here
+      let radian = -this.shootingAngle.defaultAngle * Math.PI / 180;
+      ctx.lineTo(
       this.shootingAngle.originX + this.shootingAngle.radius * Math.cos(radian),
       this.shootingAngle.originY + this.shootingAngle.radius * Math.sin(radian));
-    ctx.stroke();
+      ctx.stroke();
 
-    ctx.save();
-    ctx.textAlign = "center";
-    ctx.textBaseline = "top";
-    ctx.fillStyle = "white";
-    ctx.fillText(Math.round((1 - this.damageTaken) * 100, 2) + "%", this.x + this.w / 2, this.y + this.h);
-    ctx.restore();
+      ctx.save();
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      ctx.fillStyle = "white";
+      ctx.fillText(Math.round((1 - this.damageTaken) * 100, 2) + "%", this.x + this.w / 2, this.y + this.h);
+      ctx.restore();
+    }
   }
 
   /**
@@ -112,6 +142,7 @@ class Player extends Entity { //Add button to enter portal
     }
 
     this.damageTaken += power / 100;
+    this.playerHit = true;
     if (this.damageTaken > 1) {
       // If the total damage dealt is greater than 1 then the player is dead.
       // TODO
@@ -269,16 +300,6 @@ class Player extends Entity { //Add button to enter portal
     if (controls.enterPortalDownThisLoop && this.onGround) {
       for(var i = 0; i < world.entities.length; i++)
       {
-        // TESTING PURPOSES
-        // console.log("world team: " + world.entities[i].design);
-        // console.log("player team: " + this.team);
-        // console.log("position: " + world.entities[i].position);
-        // console.log("world x: " + world.entities[i].x);
-        // console.log("player x: " + this.x);
-        // console.log("test x: " + (this.x < world.entities[i].x + 40 && this.x > world.entities[i].x - 40));
-        // console.log("world y: " + world.entities[i].y);
-        // console.log("player y: " + this.y);
-        // console.log("test y: " + (this.y < world.entities[i].y + 25 && this.y > world.entities[i].y - 25));
         if(world.entities[i].design == this.team &&
           i < world.entities.length - 1 &&
           world.entities[i+1].design == this.team &&
