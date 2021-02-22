@@ -2,21 +2,13 @@
  * This class spawns the bullet as the default weapon, but can change to previous/next weapon.
  */
 class CurrentWeapon {
-    constructor(x, y, angle, power, upgradeLvl) {
+    constructor(x, y, angle, power) {
         this.x = x;
         this.y = y;
         this.power = power;
         this.angle = angle;
 
-        if (upgradeLvl == 1) {
-          this.myWeaponBag = [Bullet, Grenade, PortalGun, TeleportGun];
-        }
-        else if (upgradeLvl == 2) {
-          this.myWeaponBag = [Bullet, GrenadeLevel2, PortalGun, TeleportGun];
-        }
-        else {
-          this.myWeaponBag = [Bullet, GrenadeLevel2, PortalGun, TeleportGun]; //change to 3 once implemented
-        }
+        this.myWeaponBag = [Bullet, Grenade, PortalGun, TeleportGun];
 
         this.currentIndex = 0;
         this.myCurrentWeapon = this.myWeaponBag[this.currentIndex];
@@ -76,5 +68,18 @@ class CurrentWeapon {
         MANAGER.getAsset("./assets/shoot.wav").currentTime = 0;
         MANAGER.getAsset("./assets/shoot.wav").play();
         return new this.myCurrentWeapon(x, y, angle.radians, this.power)
+    }
+
+    weaponUpgradeCheck(upgraded)
+    {
+      if (upgraded == 1) {
+        this.myWeaponBag = [Bullet, Grenade, PortalGun, TeleportGun];
+      }
+      else if (upgraded == 2) {
+        this.myWeaponBag = [Bullet, GrenadeLevel2, PortalGun, TeleportGun];
+      }
+      else {
+        this.myWeaponBag = [Bullet, GrenadeLevel2, PortalGun, TeleportGun]; //change to 3 once implemented
+      }
     }
 }

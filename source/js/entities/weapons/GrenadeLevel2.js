@@ -33,11 +33,10 @@ class GrenadeLevel2 extends Projectile{
             //let destructionRect = new Rectangle(this.x, this.y, 20, 20);
             //destructionRect.center = this.center;
             //world.map.destroyRectangle(destructionRect);
-            world.map.destroyCircle(this.center.x, this.center.y, 40); //2x radius than regular grenade
+            world.map.destroyCircle(this.center.x, this.center.y, 100); //2x radius than regular grenade
             // Find any players in the blast range
             for (let i = 0; i < world.players.length; i++) {
                 let playerThisLoop = world.players[i];
-                console.log(playerThisLoop);
                 // If we are close enough then damage a player
                 let difference = playerThisLoop.center
                 difference.sub(this.center);
@@ -67,9 +66,9 @@ class GrenadeLevel2 extends Projectile{
       // Dynomite (upgrade lvl 2) = no set number
       //buffer padding current build =
       //facing right = 0,
-      this.animations[0] = new Animator(this.spritesheet, 2, 35, 28, 28, 4, 0.5, 14, false, true);
+      this.animations[0] = new Animator(this.spritesheet, 0, 34, 29, 28, 4, 0.5, 14, false, true);
 
       //facing left = 1,
-      this.animations[1] = new Animator(this.spritesheet, 2, 35, 28, 28, 4, 0.5, 14, true, true);
+      this.animations[1] = new Animator(this.spritesheet, 0, 34, 29, 28, 4, 0.5, 14, true, true);
     }
 }

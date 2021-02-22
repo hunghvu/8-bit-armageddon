@@ -41,7 +41,7 @@ class Player extends Entity { //Add button to enter portal
       this.y + this.h,
       100, 0, 90, 45);
 
-    this.deadAnimation = new Animator(this.spritesheet, 201, 321, 29, 61, 1, 0.5, null, false, true);
+    this.deadAnimation = new Animator(this.spritesheet, 201, 193, 29, 61, 1, 0.5, null, false, true);
     this.animations = [];
 
     // Determine if it's this player's turn
@@ -51,7 +51,7 @@ class Player extends Entity { //Add button to enter portal
 
     this.upgradedOnce = 0;
     this.upgraded = 1; //1 = Lvl 1, 2 = Lvl 2, 3 = Lvl 3
-    this.currentWeapon = new CurrentWeapon(this.x, this.y, this.shootingAngle.radians, 600, this.upgraded);
+    this.currentWeapon = new CurrentWeapon(this.x, this.y, this.shootingAngle.radians, 600);
 
     var d = new Date();
     d.setMilliseconds(200);
@@ -282,6 +282,9 @@ class Player extends Entity { //Add button to enter portal
     if (Math.abs(this.vel.x) >= MIN_WALK) this.state = 1;
     else this.state = 0;
 
+    //updates weapons
+    this.currentWeapon.weaponUpgradeCheck(this.upgraded);
+
     this.privateHandleHorizontalMovement(movement.x, world.map);
     this.privateHandleVerticalMovement(movement.y, world.map);
 
@@ -348,6 +351,7 @@ class Player extends Entity { //Add button to enter portal
       this.acc.x = 0;
     }
 
+    // Enter portal
     if (controls.enterPortalDownThisLoop && this.onGround) {
       for(var i = 0; i < world.entities.length; i++)
       {

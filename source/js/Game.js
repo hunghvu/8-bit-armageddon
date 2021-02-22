@@ -93,7 +93,7 @@ class Game {
       }
       //TeleportGun
       else {
-        this.ctx.drawImage(this.spritesheet, 70, 223, 18, 31, 200, 35, 54, 93);
+        this.ctx.drawImage(this.spritesheet, 70, 223, 18, 31, 200, 35, 36, 62);
       }
     }
 
@@ -130,7 +130,7 @@ class Game {
           // else {}
         }
         //GrenadeLauncher
-        else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Grenade)
+        else if (this.world.currentPlayer.currentWeapon.currentIndex == 1)
         {
           // Grenade
           if (this.world.currentPlayer.upgraded == 1)
@@ -148,7 +148,7 @@ class Game {
         }
         //TeleportGun
         else {
-          this.ctx.drawImage(this.spritesheet, 70, 223, 18, 31, 200, 35, 54, 93);
+          this.ctx.drawImage(this.spritesheet, 70, 223, 18, 31, 200, 35, 36, 62);
         }
       }
 
