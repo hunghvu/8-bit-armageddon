@@ -89,11 +89,11 @@ class Game {
       }
       //PortalGun
       else if (this.world.currentPlayer.currentWeapon.currentIndex == 2){
-        this.ctx.fillText('Portal IMG', 200, 70);
+        this.ctx.drawImage(this.spritesheet, 2, 233, 28, 12, 200, 35, 112, 48);
       }
       //TeleportGun
       else {
-        this.ctx.fillText('Teleport IMG', 200, 70);
+        this.ctx.drawImage(this.spritesheet, 70, 223, 18, 31, 200, 35, 54, 93);
       }
     }
 
@@ -132,21 +132,23 @@ class Game {
         //GrenadeLauncher
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Grenade)
         {
-          //Grenade
-          // if (this.world.currentPlayer.currentWeapon.myWeaponBag.upgraded == 0)
-          // {
-          this.ctx.drawImage(this.spritesheet, 10, 7, 11, 14, 200, 35, 44, 56);
-          //}
-          //dynomite
-          // else {}
+          // Grenade
+          if (this.world.currentPlayer.upgraded == 1)
+          {
+            this.ctx.drawImage(this.spritesheet, 10, 7, 11, 14, 200, 35, 44, 56);
+          }
+          // dynomite
+          else { //lvl 2 for right now
+            this.ctx.drawImage(this.spritesheet, 2, 35, 28, 28, 200, 35, 44, 56);
+          }
         }
         //PortalGun
-        else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == PortalGun){
-          this.ctx.fillText('Portal IMG', 200, 70);
+        else if (this.world.currentPlayer.currentWeapon.currentIndex == 2){
+          this.ctx.drawImage(this.spritesheet, 2, 233, 28, 12, 200, 35, 112, 48);
         }
         //TeleportGun
         else {
-          this.ctx.fillText('Teleport IMG', 200, 70);
+          this.ctx.drawImage(this.spritesheet, 70, 223, 18, 31, 200, 35, 54, 93);
         }
       }
 

@@ -82,24 +82,74 @@ class Player extends Entity { //Add button to enter portal
     else if (this.playerHit == true && this.damageTaken != 1)
     {
       this.playerHit = false;
-      if (this.facing == 0 && this.design == 0)
+      if (this.design == 0)
       {
-        this.playerHitRightAnimation = new Animator(this.spritesheet, 107, 321, 28, 61, 1, 20000000000000, null, false, true);
-        this.playerHitRightAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
+        if (this.facing == 0)
+        {
+          this.playerHitRightAnimation = new Animator(this.spritesheet, 150, 193, 28, 61, 1, 20000000000000, null, false, true);
+          this.playerHitRightAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
+        }
+        else if (this.facing == 1)
+        {
+          this.playerHitLeftAnimation = new Animator(this.spritesheet, 107, 193, 20, 61, 1, 20000000000000, null, false, true);
+          this.playerHitLeftAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
+        }
       }
-      else if (this.facing == 1 && this.design == 0)
+      else if (this.design == 1)
       {
-        this.playerHitLeftAnimation = new Animator(this.spritesheet, 150, 321, 20, 61, 1, 20000000000000, null, false, true);
-        this.playerHitLeftAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
+        if (this.facing == 0)
+        {
+          this.playerHitRightAnimation = new Animator(this.spritesheet, 534, 322, 28, 61, 1, 20000000000000, null, false, true);
+          this.playerHitRightAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
+        }
+        else if (this.facing == 1)
+        {
+          this.playerHitLeftAnimation = new Animator(this.spritesheet, 492, 322, 20, 61, 1, 20000000000000, null, false, true);
+          this.playerHitLeftAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
+        }
       }
-      else if (this.facing == 0 && this.design == 2)
+      else if (this.design == 2)
       {
-        this.playerHitAnimation = new Animator(this.spritesheet, 293, 386, 41, 54, 1, 20000000000000, null, false, true);
-        this.playerHitAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
+        if (this.facing == 0)
+        {
+          this.playerHitRightAnimation = new Animator(this.spritesheet, 246, 385, 35, 58, 1, 20000000000000, null, false, true);
+          this.playerHitRightAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
+        }
+        else if (this.facing == 1)
+        {
+          this.playerHitLeftAnimation = new Animator(this.spritesheet, 198, 385, 35, 58, 1, 20000000000000, null, false, true);
+          this.playerHitLeftAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
+        }
       }
+      else if (this.design == 3)
+      {
+        if (this.facing == 0)
+        {
+          this.playerHitRightAnimation = new Animator(this.spritesheet, 578, 386, 37, 54, 1, 20000000000000, null, false, true);
+          this.playerHitRightAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
+        }
+        else if (this.facing == 1)
+        {
+          this.playerHitLeftAnimation = new Animator(this.spritesheet, 533, 386, 37, 54, 1, 20000000000000, null, false, true);
+          this.playerHitLeftAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
+        }
+      }
+      // else if (this.design == 4)
+      // {
+      //   if (this.facing == 0)
+      //   {
+      //     this.playerHitRightAnimation = new Animator(this.spritesheet, 107, 321, 28, 61, 1, 20000000000000, null, false, true);
+      //     this.playerHitRightAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
+      //   }
+      //   else if (this.facing == 1)
+      //   {
+      //     this.playerHitLeftAnimation = new Animator(this.spritesheet, 150, 321, 20, 61, 1, 20000000000000, null, false, true);
+      //     this.playerHitLeftAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
+      //   }
+      // }
     }
     else {
-      this.animations[this.design][this.state][this.facing].drawFrame(.17, ctx, this.x - 24 / 2, this.y, 0.8);
+      this.animations[this.state][this.facing].drawFrame(.17, ctx, this.x - 24 / 2, this.y, 0.8);
 
       // Draw shooting angle indicator
       // Technically, the origin can be derived from a player position as shown below
@@ -279,6 +329,7 @@ class Player extends Entity { //Add button to enter portal
     if (controls.jump && this.airTimer < this.jumpTolerance) {
       this.vel.y = -this.JUMP_POWER;
       this.airTimer = this.jumpTolerance;
+      this.state = 2;
     }
 
 
@@ -367,62 +418,110 @@ class Player extends Entity { //Add button to enter portal
         this.animations[i].push([]);
       }
     }
-    //Human = 0;
 
-    //idle = 0
-    //facing right = 0,
-    this.animations[0][0][0] = new Animator(this.spritesheet, 11, 128, 23, 61, 1, 0.5, null, false, true);
+    if (this.design == 0)
+    {
+      //Human 1 = 0;
 
-    // facing left = 1,
-    this.animations[0][0][1] = new Animator(this.spritesheet, 11, 193, 23, 61, 1, 0.5, null, false, true);
+      //idle = 0
+      //facing right = 0,
+      this.animations[0][0] = new Animator(this.spritesheet, 11, 66, 23, 61, 1, 0.5, null, false, true);
 
-    //NOTES:
-    //Buffer space 1.0 build: 23
-    //Buffer space current build: 22
+      // facing left = 1,
+      this.animations[0][1] = new Animator(this.spritesheet, 347, 65, 23, 61, 1, 0.5, null, false, true);
 
-    //walk = 1
-    //facing right = 0
-    this.animations[0][1][0] = new Animator(this.spritesheet, 11, 128, 23, 61, 7, 0.5, 25, false, true);
+      //walk = 1
+      //facing right = 0
+      this.animations[1][0] = new Animator(this.spritesheet, 11, 66, 23, 61, 7, 0.5, 25, false, true);
 
-    //facing left = 1
-    this.animations[0][1][1] = new Animator(this.spritesheet, 11, 193, 23, 61, 7, 0.5, 25, true, true);
+      //facing left = 1
+      this.animations[1][1] = new Animator(this.spritesheet, 347, 65, 23, 61, 7, 0.5, 25, true, true);
 
-    //Jumping/Falling = 2
-    //facing right = 0
-    // this.animations[0][2][0] = new Animator(this.spritesheet, 11, 193, 23, 61, 7, 0.5, 25, true, true);
+      //Jumping/Falling = 2
+      //facing right = 0
+      this.animations[2][0] = new Animator(this.spritesheet, 60, 129, 23, 61, 5, 0.5, 25, false, false);
 
+      // facing left = 1
+      this.animations[2][1] = new Animator(this.spritesheet, 395, 129, 23, 61, 5, 0.5, 25, true, false);
 
-    //Shooting = 3
-    // should have an angle check so function know what angle
-    // frame it should be on (should this be another for above?)
+    }
+    else if (this.design == 1)
+    {
+      //Human 2 = 1;
 
-    //Boba = 1;
+      //idle = 0
+      //facing right = 0,
+      this.animations[0][0] = new Animator(this.spritesheet, 347, 194, 23, 61, 1, 0.5, null, false, true);
 
-    //Idle = 0;
-    //facing right
-    this.animations[1][0][0] = new Animator(this.spritesheet, 102, 384, 36, 59, 1, 0.5, null, false, true);
-    //facing left = 1;
-    this.animations[1][0][1] = new Animator(this.spritesheet, 54, 384, 36, 59, 1, 0.5, null, false, true);
+      // facing left = 1,
+      this.animations[0][1] = new Animator(this.spritesheet, 12, 258, 23, 61, 1, 0.5, null, false, true);
 
+      //walk = 1
+      //facing right = 0
+      this.animations[1][0] = new Animator(this.spritesheet, 347, 194, 23, 61, 7, 0.5, 25, false, true);
 
-    //walk = 1;
-    this.animations[1][1][0] = new Animator(this.spritesheet, 102, 384, 36, 59, 1, 0.5, null, false, true);
-    this.animations[1][1][1] = new Animator(this.spritesheet, 54, 384, 36, 59, 1, 0.5, null, false, true);
+      //facing left = 1
+      this.animations[1][1] = new Animator(this.spritesheet, 12, 258, 23, 61, 7, 0.5, 25, true, true);
 
-    // Cup of Noodle = 2
+      //Jumping/Falling = 2
+      //facing right = 0
+      this.animations[2][0] = new Animator(this.spritesheet, 395, 258, 23, 61, 5, 0.5, 25, false, false);
 
-    //Idle = 0;
-    //facing right
-    this.animations[2][0][0] = new Animator(this.spritesheet, 240, 384, 41, 54, 1, 0.5, null, false, true);
-    //facing left = 1;
-    this.animations[2][0][1] = new Animator(this.spritesheet, 197, 386, 41, 54, 1, 0.5, null, false, true);
+      // facing left = 1
+      this.animations[2][1] = new Animator(this.spritesheet, 59, 321, 23, 61, 5, 0.5, 25, true, false);
+    }
+    else if (this.design == 2)
+    {
+      //Boba = 2;
 
+      //Idle = 0;
+      //facing right
+      this.animations[0][0] = new Animator(this.spritesheet, 150, 385, 36, 59, 1, 0.5, null, false, true);
+      //facing left = 1;
+      this.animations[0][1] = new Animator(this.spritesheet, 102, 385, 36, 59, 1, 0.5, null, false, true);
 
-    //walk = 1;
-    this.animations[2][1][0] = new Animator(this.spritesheet, 240, 384, 41, 54, 1, 0.5, null, false, true);
-    this.animations[2][1][1] = new Animator(this.spritesheet, 197, 386, 41, 54, 1, 0.5, null, false, true);
+      //walk = 1;
+      this.animations[1][0] = new Animator(this.spritesheet, 150, 384, 36, 59, 1, 0.5, null, false, true);
+      this.animations[1][1] = new Animator(this.spritesheet, 102, 384, 36, 59, 1, 0.5, null, false, true);
 
+      //Jump = 2;
+      this.animations[2][0] = new Animator(this.spritesheet, 150, 384, 36, 59, 1, 0.5, null, false, true);
+      this.animations[2][1] = new Animator(this.spritesheet, 102, 384, 36, 59, 1, 0.5, null, false, true);
+    }
+    else if (this.design == 3)
+    {
+      // Cup of Noodle = 3
 
+      //Idle = 0;
+      //facing right
+      this.animations[0][0] = new Animator(this.spritesheet, 481, 384, 41, 54, 1, 0.5, null, false, true);
+      //facing left = 1;
+      this.animations[0][1] = new Animator(this.spritesheet, 437, 386, 41, 54, 1, 0.5, null, false, true);
+
+      //walk = 1;
+      this.animations[1][0] = new Animator(this.spritesheet, 481, 384, 41, 54, 1, 0.5, null, false, true);
+      this.animations[1][1] = new Animator(this.spritesheet, 437, 386, 41, 54, 1, 0.5, null, false, true);
+
+      //Jump = 2;
+      this.animations[2][0] = new Animator(this.spritesheet, 481, 384, 41, 54, 1, 0.5, null, false, true);
+      this.animations[2][1] = new Animator(this.spritesheet, 437, 386, 41, 54, 1, 0.5, null, false, true);
+    }
+    else {
+      // Zan Zan = 4
+      //Idle = 0;
+      //facing right
+      this.animations[0][0] = new Animator(this.spritesheet, 150, 454, 41, 54, 1, 0.5, null, false, true);
+      //facing left = 1;
+      this.animations[0][1] = new Animator(this.spritesheet, 102, 454, 41, 54, 1, 0.5, null, false, true);
+
+      //walk = 1;
+      this.animations[1][0] = new Animator(this.spritesheet, 150, 454, 41, 54, 1, 0.5, null, false, true);
+      this.animations[1][1] = new Animator(this.spritesheet, 102, 454, 41, 54, 1, 0.5, null, false, true);
+
+      //Jump = 2;
+      this.animations[2][0] = new Animator(this.spritesheet, 150, 454, 41, 54, 1, 0.5, null, false, true);
+      this.animations[2][1] = new Animator(this.spritesheet, 102, 454, 41, 54, 1, 0.5, null, false, true);
+    }
   };
 
   /**

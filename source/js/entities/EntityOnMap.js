@@ -9,8 +9,9 @@ class EntityOnMap {
 
         // Hard coded team indicator for each player for now, might change later on.
         this.playerOnMapList = [
-            new Player(this.spritesheet, 344, 650, 0, 0, 1), new Player(this.spritesheet, 500, 650, 1, 1, 2),
-            new Player(this.spritesheet, 464, 550, 0, 0, 3), new Player(this.spritesheet, 620, 550, 2, 1, 4),
+            new Player(this.spritesheet, 344, 650, 0, 0, 1), new Player(this.spritesheet, 500, 650, 1, 0, 2),
+            new Player(this.spritesheet, 464, 550, 2, 1, 3), new Player(this.spritesheet, 620, 550, 3, 1, 4),
+            new Player(this.spritesheet, 570, 550, 4, 1, 5),
         ]; // The list hard-coded for testing purpose.
 
         //this.playerOnMapList = [new Player(this.spritesheet, 344, 650, 0, 0), new Player(this.spritesheet, 500, 650, 1, 1), new Player(this.spritesheet,400,650,2, 1)];
