@@ -72,14 +72,14 @@ class CurrentWeapon {
 
     weaponUpgradeCheck(upgraded)
     {
-      if (upgraded == 1) {
+      if (upgraded == 3) {
         this.myWeaponBag = [Bullet, Grenade, PortalGun, TeleportGun];
       }
       else if (upgraded == 2) {
-        this.myWeaponBag = [Bullet, GrenadeLevel2, PortalGun, TeleportGun];
+        this.myWeaponBag = [Sniper, GrenadeLevel2, PortalGun, TeleportGun];
       }
       else {
-        this.myWeaponBag = [Bullet, GrenadeLevel2, PortalGun, TeleportGun]; //change to 3 once implemented
+        this.myWeaponBag = [Laser, GrenadeLevel3, PortalGun, TeleportGun]; //change to 3 once implemented
       }
     }
 }

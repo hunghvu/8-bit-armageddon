@@ -1,9 +1,10 @@
 /**
- * A generic bullet that is spawned when the player shoots
+ * A Sniper bullet that is spawned when the player shoots
+ * Player must be at upgrade level 2 to use
  */
-class Bullet extends Projectile {
+class Sniper extends Projectile {
   /**
-   * Constructor for a bullet entity
+   * Constructor for a sniper entity
    * @param {number} x - The starting x position
    * @param {number} y - The starting y position
    * @param {number} angle - The angle of the firing direction
@@ -11,7 +12,7 @@ class Bullet extends Projectile {
    *                         projectile. higher is further
    */
   constructor(x, y, angle, power) {
-    super(x, y, angle, power);
+    super(x, y, angle, power*2);
     this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
 
     this.animations = [];
@@ -51,14 +52,10 @@ class Bullet extends Projectile {
       // Destroy this bullet if we hit something
       this.active = false;
       this.projectileCanEndTurn = true;
-      //let destructionRect = new Rectangle(this.x, this.y, 20, 20);
-      //destructionRect.center = this.center;
-      //world.map.destroyRectangle(destructionRect);
-      world.map.destroyCircle(this.center.x, this.center.y, 10);
+      world.map.destroyCircle(this.center.x, this.center.y, 25);
       // Find any players in the blast range
       for (let i = 0; i < world.players.length; i++) {
         let playerThisLoop = world.players[i];
-        // console.log(playerThisLoop);
         // If we are close enough then damage a player
         let difference = playerThisLoop.center
         difference.sub(this.center);
@@ -86,12 +83,10 @@ class Bullet extends Projectile {
     for (var j = 0; j < 2; j++) { //facing
       this.animations.push([]);
     }
-    //buffer padding current build =
     //facing right = 0,
-    this.animations[0] = new Animator(this.spritesheet, 70, 74, 20, 9, 1, 0.5, null, false, true);
+    this.animations[0] = new Animator(this.spritesheet, 130, 74, 29, 9, 1, 0.5, null, false, true);
 
     //facing left = 1,
-    this.animations[1] = new Animator(this.spritesheet, 102, 74, 12, 14, 1, 0.5, null, false, true);
-    //fix and add load animation
+    this.animations[1] = new Animator(this.spritesheet, 162, 74, 29, 9, 1, 0.5, null, false, true);
   }
 }

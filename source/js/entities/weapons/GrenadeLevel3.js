@@ -1,7 +1,7 @@
 /**
- * An upgraded weapon, the Grenade Launcher, can be spawned from an item crate.
+ * An upgraded weapon, the Grenade Lvl 3, can be spawned from an item crate.
  */
-class Grenade extends Projectile{
+class GrenadeLevel3 extends Projectile{
     /**
      * Constructor for the grenade laucher that extends the entity class.
      */
@@ -30,11 +30,10 @@ class Grenade extends Projectile{
             // Destroy this bullet if we hit something
             this.active = false;
             this.projectileCanEndTurn = true;
-            world.map.destroyCircle(this.center.x, this.center.y, 25);
+            world.map.destroyCircle(this.center.x, this.center.y, 75);
             // Find any players in the blast range
             for (let i = 0; i < world.players.length; i++) {
                 let playerThisLoop = world.players[i];
-                console.log(playerThisLoop);
                 // If we are close enough then damage a player
                 let difference = playerThisLoop.center
                 difference.sub(this.center);
@@ -61,20 +60,12 @@ class Grenade extends Projectile{
       for (var j = 0; j < 2; j++) { //facing
         this.animations.push([]);
       }
-      // Grenade = no set number
-      //buffer padding current build = 17
+      // Dynomite (upgrade lvl 2) = no set number
+      //buffer padding current build =
       //facing right = 0,
-      this.animations[0] = new Animator(this.spritesheet, 9, 7, 12, 14, 4, 0.5, 17, false, true);
+      this.animations[0] = new Animator(this.spritesheet, 0, 34, 29, 28, 4, 0.5, 14, false, true);
 
       //facing left = 1,
-      this.animations[1] = new Animator(this.spritesheet, 137, 7, 12, 14, 4, 0.5, 17, true, true);
-
-      // // Dynomite (upgrade lvl 2) = no set number
-      // //buffer padding current build =
-      // //facing right = 0,
-      // this.animations[0] = new Animator(this.spritesheet, 2, 35, 28, 28, 4, 0.5, 14, false, true);
-      //
-      // //facing left = 1,
-      // this.animations[1] = new Animator(this.spritesheet, 2, 35, 28, 28, 4, 0.5, 14, true, true);
+      this.animations[1] = new Animator(this.spritesheet, 0, 34, 29, 28, 4, 0.5, 14, true, true);
     }
 }

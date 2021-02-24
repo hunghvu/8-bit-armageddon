@@ -58,41 +58,41 @@ class Game {
     // this.ctx.fillText(5 - Math.round(this.timer.turnTime % 5), 200, 200);
     this.ctx.fillText(5 - Math.round(this.timer.turnTime % 5), 29, 56);
 
+    // Draws weapons in top UI
     this.ctx.fillText('Weapon: ', 175, 31);
-    //current build: 2 weapons only, fix once more weapons added
-    for (var i = 0; i <= this.world.currentPlayer.currentWeapon.myWeaponBag.length; i++)
-    {
+    for (var i = 0; i <= this.world.currentPlayer.currentWeapon.myWeaponBag.length; i++) {
       this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
       //Bullet
-      if (this.world.currentPlayer.currentWeapon.currentIndex == 0)
-      {
-        //Normal Bullet/Gun
-        // if (this.world.currentPlayer.currentWeapon.myWeaponBag.upgraded == 0)
-        // {
+      if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Bullet) {
         this.ctx.drawImage(this.spritesheet, 6, 70, 23, 16, 200, 35, 92, 64);
-        // }
-        //Sniper Bullet/Gun
-        // else {}
       }
-      //GrenadeLauncher
-      else if (this.world.currentPlayer.currentWeapon.currentIndex == 1)
-      {
-        // Grenade
-        if (this.world.currentPlayer.upgraded == 1)
-        {
-          this.ctx.drawImage(this.spritesheet, 10, 7, 11, 14, 200, 35, 44, 56);
-        }
-        // dynomite
-        else { //lvl 2 for right now
-          this.ctx.drawImage(this.spritesheet, 2, 35, 28, 28, 200, 35, 44, 56);
-        }
+      //Sniper
+      else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Sniper) {
+        this.ctx.drawImage(this.spritesheet, 191, 37, 33, 15, 200, 35, 99, 38);
+      }
+      // Laser
+      else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Laser) {
+        this.ctx.drawImage(this.spritesheet, 224, 37, 32, 19, 200, 35, 92, 64);
+      }
+      // Grenade
+      else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Grenade) {
+        this.ctx.drawImage(this.spritesheet, 10, 7, 11, 14, 200, 35, 44, 56);
+      }
+      // Dynomite
+      else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == GrenadeLevel2) {
+        this.ctx.drawImage(this.spritesheet, 2, 35, 28, 28, 200, 35, 44, 56);
+      }
+      // Grenade Level 3
+      else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == GrenadeLevel3) {
+        this.ctx.fillText('GrenadeLevel3 IMG', 200, 35);
+        // this.ctx.drawImage(this.spritesheet, 2, 35, 28, 28, 200, 35, 44, 56);
       }
       //PortalGun
-      else if (this.world.currentPlayer.currentWeapon.currentIndex == 2){
+      else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == PortalGun) {
         this.ctx.drawImage(this.spritesheet, 2, 233, 28, 12, 200, 35, 112, 48);
       }
       //TeleportGun
-      else {
+      else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == TeleportGun) {
         this.ctx.drawImage(this.spritesheet, 70, 223, 18, 31, 200, 35, 36, 62);
       }
     }
@@ -114,40 +114,39 @@ class Game {
       this.ctx.fillText(this.timePerTurnLimit - Math.round(this.timer.turnTime % this.timePerTurnLimit), 29, 56);
 
       this.ctx.fillText('Weapon: ', 175, 31);
-      //current build: 2 weapons only, fix once more weapons added
-      for (var i = 0; i <= this.world.currentPlayer.currentWeapon.myWeaponBag.length; i++)
-      {
+      for (var i = 0; i <= this.world.currentPlayer.currentWeapon.myWeaponBag.length; i++) {
         this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
         //Bullet
-        if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Bullet)
-        {
-          //Normal Bullet/Gun
-          // if (this.world.currentPlayer.currentWeapon.myWeaponBag.upgraded == 0)
-          // {
+        if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Bullet) {
           this.ctx.drawImage(this.spritesheet, 6, 70, 23, 16, 200, 35, 92, 64);
-          // }
-          //Sniper Bullet/Gun
-          // else {}
         }
-        //GrenadeLauncher
-        else if (this.world.currentPlayer.currentWeapon.currentIndex == 1)
-        {
-          // Grenade
-          if (this.world.currentPlayer.upgraded == 1)
-          {
-            this.ctx.drawImage(this.spritesheet, 10, 7, 11, 14, 200, 35, 44, 56);
-          }
-          // dynomite
-          else { //lvl 2 for right now
-            this.ctx.drawImage(this.spritesheet, 2, 35, 28, 28, 200, 35, 44, 56);
-          }
+        //Sniper
+        else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Sniper) {
+          this.ctx.drawImage(this.spritesheet, 191, 37, 33, 15, 200, 35, 99, 38);
+        }
+        // Laser
+        else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Laser) {
+          this.ctx.drawImage(this.spritesheet, 224, 37, 32, 19, 200, 35, 92, 64);
+        }
+        // Grenade
+        else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Grenade) {
+          this.ctx.drawImage(this.spritesheet, 10, 7, 11, 14, 200, 35, 44, 56);
+        }
+        // Dynomite
+        else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == GrenadeLevel2) {
+          this.ctx.drawImage(this.spritesheet, 2, 35, 28, 28, 200, 35, 44, 56);
+        }
+        // Lvl 3
+        else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == GrenadeLevel3) {
+          this.ctx.fillText('GrenadeLevel3 IMG', 200, 35);
+          // this.ctx.drawImage(this.spritesheet, 2, 35, 28, 28, 200, 35, 44, 56);
         }
         //PortalGun
-        else if (this.world.currentPlayer.currentWeapon.currentIndex == 2){
+        else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == PortalGun) {
           this.ctx.drawImage(this.spritesheet, 2, 233, 28, 12, 200, 35, 112, 48);
         }
         //TeleportGun
-        else {
+        else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == TeleportGun) {
           this.ctx.drawImage(this.spritesheet, 70, 223, 18, 31, 200, 35, 36, 62);
         }
       }

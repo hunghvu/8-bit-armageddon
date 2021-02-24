@@ -1,5 +1,5 @@
 /**
- * An upgraded weapon, the Grenade Launcher, can be spawned from an item crate.
+ * An upgraded weapon, the Grenade Level 2, can be spawned from an item crate.
  */
 class GrenadeLevel2 extends Projectile{
     /**
@@ -30,10 +30,7 @@ class GrenadeLevel2 extends Projectile{
             // Destroy this bullet if we hit something
             this.active = false;
             this.projectileCanEndTurn = true;
-            //let destructionRect = new Rectangle(this.x, this.y, 20, 20);
-            //destructionRect.center = this.center;
-            //world.map.destroyRectangle(destructionRect);
-            world.map.destroyCircle(this.center.x, this.center.y, 100); //2x radius than regular grenade
+            world.map.destroyCircle(this.center.x, this.center.y, 50);
             // Find any players in the blast range
             for (let i = 0; i < world.players.length; i++) {
                 let playerThisLoop = world.players[i];
