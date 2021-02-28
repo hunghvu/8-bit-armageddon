@@ -41,6 +41,22 @@ class PortalGun extends Projectile {
     if (this.vel.x < 0) this.facing = 1;
     if (this.vel.x > 0) this.facing = 0;
 
+    //Crate collision
+    for(var i = 0; i < world.entities.length; i++) {
+      if (world.entities[i] instanceof Crate &&
+        ((this.x < (world.entities[i].x + world.entities[i].w)) && (this.x > world.entities[i].x)) &&
+        ((this.y > world.entities[i].y) && (this.y < (world.entities[i].y + world.entities[i].h)))) // &&
+        // world.currentPlayer.upgradedOnce == 0)
+        {
+          world.currentPlayer.upgraded++;
+          world.entities[i].active = false;
+          if (world.currentPlayer.upgraded > 3) {
+            world.currentPlayer.upgraded = 1; //reset level
+          }
+          // world.currentPlayer.upgradedOnce = 1;
+        }
+      }
+
     if (world.map.collideWithRectangle(this)) {
       //get rid of bullet
       this.active = false;

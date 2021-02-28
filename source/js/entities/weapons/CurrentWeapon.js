@@ -8,7 +8,7 @@ class CurrentWeapon {
         this.power = power;
         this.angle = angle;
 
-        this.myWeaponBag = [Bullet, Grenade, PortalGun, TeleportGun];
+        this.myWeaponBag = [Bullet, Grenade, PortalGun, TeleportGun]; //modify?
 
         this.currentIndex = 0;
         this.myCurrentWeapon = this.myWeaponBag[this.currentIndex];
@@ -72,14 +72,14 @@ class CurrentWeapon {
 
     weaponUpgradeCheck(upgraded)
     {
-      if (upgraded == 3) {
+      if (upgraded == 1) {
         this.myWeaponBag = [Bullet, Grenade, PortalGun, TeleportGun];
       }
       else if (upgraded == 2) {
         this.myWeaponBag = [Sniper, GrenadeLevel2, PortalGun, TeleportGun];
       }
       else {
-        this.myWeaponBag = [Laser, GrenadeLevel3, PortalGun, TeleportGun]; //change to 3 once implemented
+        this.myWeaponBag = [Laser, GrenadeLevel3, PortalGun, TeleportGun];
       }
     }
 }

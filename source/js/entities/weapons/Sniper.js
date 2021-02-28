@@ -37,14 +37,15 @@ class Sniper extends Projectile {
     for(var i = 0; i < world.entities.length; i++) {
       if (world.entities[i] instanceof Crate &&
         ((this.x < (world.entities[i].x + world.entities[i].w)) && (this.x > world.entities[i].x)) &&
-        ((this.y > world.entities[i].y) && (this.y < (world.entities[i].y + world.entities[i].h))) &&
-        world.currentPlayer.upgradedOnce == 0) {
+        ((this.y > world.entities[i].y) && (this.y < (world.entities[i].y + world.entities[i].h)))) // &&
+        // world.currentPlayer.upgradedOnce == 0)
+        {
           world.currentPlayer.upgraded++;
           world.entities[i].active = false;
           if (world.currentPlayer.upgraded > 3) {
             world.currentPlayer.upgraded = 1; //reset level
           }
-          world.currentPlayer.upgradedOnce = 1;
+          // world.currentPlayer.upgradedOnce = 1;
         }
       }
     // Add y-threshold for the bullet so that i can end turns.
