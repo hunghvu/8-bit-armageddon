@@ -73,6 +73,9 @@ class Turn {
             //  can directly change to ready period.
             this.timer.turnTime = this.timePerTurn - this.timer.maxStep * 2;
             console.log(true);
+        } else if (this.controls.forfeit) {
+            this.game.status = "FORFEIT";
+            this.game.forfeitCode = this.world.currentPlayer.team;
         }
     }
 

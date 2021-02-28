@@ -8,13 +8,15 @@ class Game {
       let destructionMap = new DestructibleMap(newMapImg);
 
       // Apply play mode.
+      this.playerAmount = 0;
       if (this.playMode === "1v1") {
-        this.world = new World(destructionMap, 2);
+        this.playerAmount = 2;
       } else if (this.playMode === "2v2") {
-        this.world = new World(destructionMap, 4);
+        this.playerAmount =  4;
       } else if (this.playMode === "4v4") {
-        this.world = new World(destructionMap, 8);
+        this.playerAmount = 8;
       }
+      this.world = new World(destructionMap, this.playerAmount);
       this.canvas = document.getElementById('display');
 
 
@@ -39,7 +41,9 @@ class Game {
       this.controls = new Controls();
 
       this.status = "PLAYING";
-      this.endCode = null;
+      this.endCode = null; // Indicate match result (0 for draw, 1 means team 1 wins, 2 means team 2 wins )
+      this.forfeitCode = null; // Indicate the current team that is trying to surrender (0 for team 1, 1 for team 2)
+      this.forfeitVoteCounter = 0;
 
       // Add mouse listener
       this.controls.addMouseListener(this.canvas);
@@ -231,9 +235,35 @@ class Game {
       // Will need to implement navigation later to improve user's experience.
       this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
       this.drawEndMenu(this.ctx);
+    } else if (this.status === "FORFEIT") {
+      this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
+      this.drawForfeitMenu(this.ctx);
+      if(this.controls.yes && this.controls.hasPressedKeyY) {
+        this.forfeitVoteCounter ++;
+        this.controls.yes = false; // This key is not reset in the new loop, so manually do that here.
+                                   // Cannot reset in controls because the value is not defined there.
+        if (this.forfeitVoteCounter > this.playerAmount / 4) {
+          this.status = "ENDED";
+          this.forfeitCode === 0 ? this.endCode = 2 : this.endCode = 1;
+        }
+      } else if (this.controls.cancel) {
+        this.status = "PLAYING";
+      }
     }
     this.controls.reset();
     requestAnimationFrame(this.draw.bind(this));
+  }
+
+  drawForfeitMenu(ctx) {
+    ctx.save();
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillStyle = "white";
+    let teamNumer = this.forfeitCode + 1;
+    ctx.fillText("Team " + teamNumer + " want to forfeit.", ctx.canvas.width / 2, ctx.canvas.height / 2);
+    ctx.fillText("Press Y to vote Yes, and Esc to cancel.", ctx.canvas.width / 2, ctx.canvas.height / 3 * 2);
+    ctx.fillText("Current vote: " + this.forfeitVoteCounter + " / " + this.playerAmount / 2, ctx.canvas.width / 2, ctx.canvas.height / 4 * 3);
+    ctx.restore();
   }
 
   drawEndMenu(ctx) {
