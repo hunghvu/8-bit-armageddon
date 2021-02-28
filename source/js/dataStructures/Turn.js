@@ -32,7 +32,7 @@ class Turn {
         this.checkDeathStatus = false; // This flag is similar to isShot, however, it's used to
                                        //  see whether a test to see if a current player is dead has been performed.
                                        //  false mean not yet, true means otherwise.
-        this.turnCounter = 1; // A counter for ingame turn.
+        this.turnCounter = 19; // A counter for ingame turn.
 
         this.game = game;
     }
@@ -130,7 +130,15 @@ class Turn {
                         // console.log(referenceToRecentPlayers)
                         this.privateShuffleTurn(); // Add player to "already-finished-turn" player.
 
-                        if(this.world.entityOnMap.isMatchEnd()[0]) { //Check if the game is ended and update Game object.
+                        // Match conclusion.
+                        if(!(this.game.turnLimit === "" 
+                            || this.game.turnLimit === null 
+                            || this.game.turnLimit === undefined) 
+                            && this.turnCounter > parseInt(this.game.turnLimit)
+                            && this.world.entityOnMap.isMatchEndWithTurnLimit()[0]) { // Check if the game is out of turn and provide respective conclusion.
+                                this.game.status = "ENDED";
+                                this.game.endCode = this.world.entityOnMap.isMatchEndWithTurnLimit()[1];                        
+                        } else if(this.world.entityOnMap.isMatchEnd()[0]) { // Check if the game is ended and update Game object.
                             this.game.status = "ENDED";
                             this.game.endCode = this.world.entityOnMap.isMatchEnd()[1];
                         }

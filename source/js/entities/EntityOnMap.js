@@ -63,6 +63,8 @@ class EntityOnMap {
      * This function check whether a match is ended. This method is called inside Turn.js when a new turn (ready period) starts.
      * Since a new turn starts after there is a shot resolution, calling this method at the beginning of the turn also means
      * update the match status right after damage happens.
+     * 
+     * This function only apply to conclusion rules based on player's death status.
      * @return [isEnded, status code] - For status code, 0 means draw, 1 means team 1 wins, 2 means team 2 wins.
      *                                  Status code only applied when isEnded = true. If false, status code is 0 by default.
      */
@@ -78,6 +80,31 @@ class EntityOnMap {
             result = [true, 1];
         } else {
             result = [false, 0];
+        }
+        return result;
+    }
+
+    /**
+     * This function check whether a match is ended. This method is called inside Turn.js when a new turn (ready period) starts.
+     * Since a new turn starts after there is a shot resolution, calling this method at the beginning of the turn also means
+     * update the match status right after damage happens.
+     * 
+     * This function only apply to conclusion rules based on turn limit.
+     * @return [isEnded, status code] - For status code, 0 means draw, 1 means team 1 wins, 2 means team 2 wins.
+     *                                  Status code only applied when isEnded = true. If false, status code is 0 by default.
+     */
+    isMatchEndWithTurnLimit() {
+        let damageTaken1 = 0;
+        let damageTaken2 = 0;
+        this.playerOnMapList.filter(element => element.team === 0).forEach(element => damageTaken1 += element.damageTaken);
+        this.playerOnMapList.filter(element => element.team === 1).forEach(element => damageTaken2 += element.damageTaken);
+        let result = null;
+        if (damageTaken1 === damageTaken2) {
+            result = [true, 0];
+        } else if (damageTaken1 > damageTaken2) {
+            result = [true, 2];
+        } else if (damageTaken2 > damageTaken1) {
+            result = [true, 1];
         }
         return result;
     }
