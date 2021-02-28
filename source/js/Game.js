@@ -159,45 +159,37 @@ class Game {
       this.spritesheet = MANAGER.getAsset('./assets/HealthBar.png');
 
       this.ctx.fillText('Health: ', 343, 31);
-      if(this.world.currentPlayer.damageTaken >= 0 && this.world.currentPlayer.damageTaken < 0.1) {
-        this.ctx.drawImage(this.spritesheet, 83, 1, 29, 26, 343, 32, 92, 64);
-      }
-      else if(this.world.currentPlayer.damageTaken >= 0.1 && this.world.currentPlayer.damageTaken < 0.2) {
-        this.ctx.drawImage(this.spritesheet, 147, 1, 29, 26, 343, 32, 92, 64);
-      }
-      else if(this.world.currentPlayer.damageTaken >= 0.2 && this.world.currentPlayer.damageTaken < 0.3) {
-        this.ctx.drawImage(this.spritesheet, 211, 1, 29, 26, 343, 32, 92, 64);
-      }
-      else if(this.world.currentPlayer.damageTaken >= 0.3 && this.world.currentPlayer.damageTaken < 0.4) {
-        this.ctx.drawImage(this.spritesheet, 275, 1, 29, 26, 343, 32, 92, 64);
-      }
-      else if(this.world.currentPlayer.damageTaken >= 0.4 && this.world.currentPlayer.damageTaken < 0.5) {
-        this.ctx.drawImage(this.spritesheet, 339, 1, 29, 26, 343, 32, 92, 64);
-      }
-      else if(this.world.currentPlayer.damageTaken >= 0.5 && this.world.currentPlayer.damageTaken < 0.6) {
-        this.ctx.drawImage(this.spritesheet, 403, 1, 29, 26, 343, 32, 92, 64);
-      }
-      else if(this.world.currentPlayer.damageTaken >= 0.6 && this.world.currentPlayer.damageTaken < 0.7) {
-        this.ctx.drawImage(this.spritesheet, 467, 1, 29, 26, 343, 32, 92, 64);
-      }
-      else if(this.world.currentPlayer.damageTaken >= 0.7 && this.world.currentPlayer.damageTaken < 0.8) {
-        this.ctx.drawImage(this.spritesheet, 531, 1, 29, 26, 343, 32, 92, 64);
-      }
-      else if(this.world.currentPlayer.damageTaken >= 0.8 && this.world.currentPlayer.damageTaken < 0.9) {
-        this.ctx.drawImage(this.spritesheet, 595, 1, 29, 26, 343, 32, 92, 64);
-      }
-      else if(this.world.currentPlayer.damageTaken >= 0.9 && this.world.currentPlayer.damageTaken < 1) {
-        this.ctx.drawImage(this.spritesheet, 659, 1, 29, 26, 343, 32, 92, 64);
-      }
-      else { //this.world.currentPlayer.damageTaken == 1
-        this.ctx.drawImage(this.spritesheet, 723, 1, 29, 26, 343, 32, 92, 64);
-      }
+      // Get the tenth of the damage taken from 1.0 to 0.0 to get a value from 0 to 10
+      // This will allow us to find the corresponding sprite to the amount of health
+      let healthTenth = Math.round(this.world.currentPlayer.damageTaken * 10);
+      this.ctx.drawImage(this.spritesheet, 83 + (healthTenth * 64), 1, 29, 26, 343, 32, 92, 64);
       this.ctx.font = "20px Arial";
       this.ctx.fillText((1.0 - this.world.currentPlayer.damageTaken)*100, 375, 66);
 
+
       this.ctx.font = "30px Arial";
+      /*
       // this.ctx.fillText("Wind(X): " + Wind.x + ", Wind(Y): " + Wind.y, 343, 31);
       this.ctx.fillText("Wind(X): " + Wind.x + ", Wind(Y): " + Wind.y, 465, 31);
+      */
+
+      let windSheet = MANAGER.getAsset('./assets/ui-widgets.png');
+
+      this.ctx.save();
+      let windCenter = new Point(134, 32);
+      this.ctx.textAlign = "center";
+      this.ctx.fillText("Wind: ", windCenter.x, windCenter.y);
+
+      this.ctx.translate(windCenter.x, windCenter.y + 32);
+      this.ctx.rotate(Math.atan2(Wind.x, Wind.y));
+      let windSpeed = Math.sqrt(Wind.x * Wind.x + Wind.y * Wind.y) / 128; 
+      this.ctx.drawImage(windSheet, 0, 0, 16, 16, -32 * windSpeed, -32 * windSpeed, 
+                                                   64 * windSpeed, 64 * windSpeed);
+      this.ctx.restore();
+
+      //this.ctx.drawImage(this.spritesheet, 723, 1, 29, 26, 343, 32, 92, 64);
+
+
       
       let turnIteration = [];
       // this.world.players.forEach(element => turnIteration.push(element.playerNo));
