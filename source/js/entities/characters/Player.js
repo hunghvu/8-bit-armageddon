@@ -102,7 +102,7 @@ class Player extends Entity { //Add button to enter portal
    * Call this whenever damage needs to be done to a player.
    * @param {Point} Origin - where the damage came from
    */
-  damage(origin, power) {
+  damage(world, origin, power) {
     // Add knock back
     if (Math.abs(this.x - origin.x) > 1) {
       this.vel.x = 400 / ((this.x - origin.x));
@@ -115,6 +115,8 @@ class Player extends Entity { //Add button to enter portal
     } else {
       this.vel.y = 400;
     }
+
+    world.spawn(new DamageText(this.x, this.y));
 
     this.damageTaken += power / 100;
     if (this.damageTaken > 1) {
