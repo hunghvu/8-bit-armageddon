@@ -17,6 +17,7 @@ class Game {
       }
       this.canvas = document.getElementById('display');
 
+      this.ctx = this.canvas.getContext('2d');
 
       // Set responsive size
       this.canvas.width = window.innerWidth;
@@ -27,11 +28,10 @@ class Game {
       window.addEventListener('resize', event => {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
+        this.ctx.mozImageSmoothingEnabled = false;
       })
 
-      this.ctx = this.canvas.getContext('2d');
-      //console.log(ctx);
-      //world.draw(ctx, canvas.width, canvas.height);
+      this.ctx.mozImageSmoothingEnabled = false;
 
       //Add timer
       this.timer = new Timer();
