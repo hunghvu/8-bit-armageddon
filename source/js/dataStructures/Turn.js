@@ -127,6 +127,8 @@ class Turn {
                         Wind.change(); // Change the wind when a turn starts (begins at ready period).
                         // console.log(referenceToRecentPlayers)
                         this.privateShuffleTurn(); // Add player to "already-finished-turn" player.
+                        console.log(this.world.entityOnMap.isMatchEnd());
+                        console.log(this.world.entityOnMap)
                     }
 
                 } else { // Extend timer.

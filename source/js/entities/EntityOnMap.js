@@ -14,6 +14,7 @@ class EntityOnMap {
         this.pixelArray = this.world.map.mapGenerator.circles;
         console.log(this.pixelArray);
         this.highestGroundY = Number.MAX_SAFE_INTEGER;
+        this.numberOfPlayerPerTeam = null;
     }
 
     /**
@@ -44,6 +45,7 @@ class EntityOnMap {
      * @param {int} playerAmount number of players in this match.
      */
     generatePlayer(playerAmount) {
+        this.numberOfPlayerPerTeam = playerAmount / 2;
         this.pixelArray.forEach(element => {
             if (element[0].y - element[1] * 2 < this.highestGroundY) this.highestGroundY = element[0].y - element[1] * 2;
         }); // element[0].y - element[1] somehow is still not the highest point, so times 2 to element [1], and hopefully it's 
@@ -55,5 +57,26 @@ class EntityOnMap {
             let spawnY = this.highestGroundY;
             this.playerOnMapList.push(new Player(this.spritesheet, spawnX, spawnY, i % 2, i % 2, i + 1));
         }
+    }
+
+    /**
+     * This function check whether a match is ended.
+     * @return [isEnded, status code] - For status code, 0 means draw, 1 means team 1 wins, 2 means team 2 wins.
+     *                                  Status code only applied when isEnded = true. If false, status code is 0 by default.
+     */
+    isMatchEnd() {
+        let team1 = this.playerOnMapList.filter(element => element.team === 0 && element.dead === false);
+        let team2 = this.playerOnMapList.filter(element => element.team === 1 && element.dead === false);
+        let result = null;
+        if (team1.length === 0 && team2.length === 0) {
+            result = [true, 0];
+        } else if (team1.length === 0) {
+            result = [true, 2]
+        } else if (team2.length === 0) {
+            result = [true, 1];
+        } else {
+            result = [false, 0];
+        }
+        return result;
     }
 }
