@@ -60,7 +60,9 @@ class EntityOnMap {
     }
 
     /**
-     * This function check whether a match is ended.
+     * This function check whether a match is ended. This method is called inside Turn.js when a new turn (ready period) starts.
+     * Since a new turn starts after there is a shot resolution, calling this method at the beginning of the turn also means
+     * update the match status right after damage happens.
      * @return [isEnded, status code] - For status code, 0 means draw, 1 means team 1 wins, 2 means team 2 wins.
      *                                  Status code only applied when isEnded = true. If false, status code is 0 by default.
      */

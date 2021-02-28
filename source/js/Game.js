@@ -39,12 +39,13 @@ class Game {
       this.controls = new Controls();
 
       this.status = "PLAYING";
+      this.endCode = null;
 
       // Add mouse listener
       this.controls.addMouseListener(this.canvas);
 
       // Turn mechanism
-      this.turn = new Turn(this.timer, this.world, this.timePerTurnLimit, this.controls);
+      this.turn = new Turn(this.timer, this.world, this.timePerTurnLimit, this.controls, this);
       requestAnimationFrame(this.draw.bind(this));
     }).bind(this);
   }
@@ -215,18 +216,35 @@ class Game {
         // Allow the player to move from the playing state to the paused state
         this.status = "PAUSED";
       }
-    } else {
+    } else if (this.status === "PAUSED") {
       this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
       this.drawPauseMenu(this.ctx);
       if (this.controls.enterDownThisLoop) {
         // Allow the player to move from the paused state to the playing state
         this.status = "PLAYING";
-      }
+      } 
+    } else if (this.status === "ENDED") {
+      // Will need to implement navigation later to improve user's experience.
+      this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
+      this.drawEndMenu(this.ctx);
     }
     this.controls.reset();
     requestAnimationFrame(this.draw.bind(this));
   }
 
+  drawEndMenu(ctx) {
+    ctx.save();
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillStyle = "white";
+    ctx.fillText("MATCH ENDED", ctx.canvas.width / 2, ctx.canvas.height / 2);
+    if (this.endCode === 1 || this.endCode === 2) {
+      ctx.fillText("Team " + this.endCode + " won!", ctx.canvas.width / 2, ctx.canvas.height / 3 * 2);
+    } else if (this.endCode === 0 ) {
+      ctx.fillText("DRAW!", ctx.canvas.width / 2, ctx.canvas.height / 3 * 2);
+    }
+    ctx.restore();
+  }
 
   drawPauseMenu(ctx) {
     ctx.save();

@@ -4,7 +4,7 @@
  * of this game.
  */
 class Turn {
-    constructor(timer, world, timePerTurn, controls) {
+    constructor(timer, world, timePerTurn, controls, game) {
         this.timePerTurn = timePerTurn;
         this.world = world;
         this.playerNumber = this.world.players.length - 2; // The last player in list will get turn at first by default.
@@ -33,6 +33,8 @@ class Turn {
                                        //  see whether a test to see if a current player is dead has been performed.
                                        //  false mean not yet, true means otherwise.
         this.turnCounter = 1; // A counter for ingame turn.
+
+        this.game = game;
     }
 
     /**
@@ -127,8 +129,11 @@ class Turn {
                         Wind.change(); // Change the wind when a turn starts (begins at ready period).
                         // console.log(referenceToRecentPlayers)
                         this.privateShuffleTurn(); // Add player to "already-finished-turn" player.
-                        console.log(this.world.entityOnMap.isMatchEnd());
-                        console.log(this.world.entityOnMap)
+
+                        if(this.world.entityOnMap.isMatchEnd()[0]) { //Check if the game is ended and update Game object.
+                            this.game.status = "ENDED";
+                            this.game.endCode = this.world.entityOnMap.isMatchEnd()[1];
+                        }
                     }
 
                 } else { // Extend timer.
