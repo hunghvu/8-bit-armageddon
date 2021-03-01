@@ -57,7 +57,12 @@ class PortalGun extends Projectile {
         }
       }
 
-    if (world.map.collideWithRectangle(this)) {
+    if (this.y > world.map.height)
+    {
+      // Destroy this bullet if we hit something
+      this.active = false;
+    }
+    else if (world.map.collideWithRectangle(this)) {
       //get rid of bullet
       this.active = false;
       //Keeps track if a portal was found inside world.entities[]

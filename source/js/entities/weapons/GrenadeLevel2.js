@@ -42,7 +42,7 @@ class GrenadeLevel2 extends Projectile{
           }
 
         this.moveUntilCollision(world, this.desiredMovement(deltaT, Wind.x, Wind.y));
-        if (world.map.collideWithRectangle(this)) {
+        if (world.map.collideWithRectangle(this) || this.y > world.map.height) {
             // Destroy this bullet if we hit something
             this.active = false;
             this.projectileCanEndTurn = true;

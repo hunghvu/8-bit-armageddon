@@ -48,7 +48,12 @@ class TeleportGun extends Projectile {
             }
           }
 
-        if (world.map.collideWithRectangle(this)) {
+        if (this.y > world.map.height)
+        {
+          // Destroy this bullet if we hit something
+          this.active = false;
+        }
+        else if (world.map.collideWithRectangle(this)) {
             // Teleports the player where the bullet lands
 
             // Initial: -50 buffer so the player falls to that position.
