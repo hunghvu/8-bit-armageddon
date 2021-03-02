@@ -12,6 +12,8 @@ class World {
     this.entities = [];
     this.entityOnMap = new EntityOnMap(this);
     this.entityOnMap.generatePlayer(playerAmount);
+    this.map.generateMovablePlatform(this.entityOnMap.highestGroundY);
+    
     // parameter sets the players design
     this.players = this.entityOnMap.playerOnMapList;
     this.currentPlayer = this.players[this.players.length - 1];
