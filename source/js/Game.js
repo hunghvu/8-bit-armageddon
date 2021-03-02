@@ -8,14 +8,8 @@ class Game {
       let destructionMap = new DestructibleMap(newMapImg);
 
       // Apply play mode.
-      this.playerAmount = 0;
-      if (this.playMode === "1v1") {
-        this.playerAmount = 2;
-      } else if (this.playMode === "2v2") {
-        this.playerAmount =  4;
-      } else if (this.playMode === "4v4") {
-        this.playerAmount = 8;
-      }
+      let modes = {"1v1": 2, "2v2": 4, "3v3": 6, "4v4": 8};
+      this.playerAmount = modes[this.playMode];
       this.world = new World(destructionMap, this.playerAmount);
       this.canvas = document.getElementById('display');
 
