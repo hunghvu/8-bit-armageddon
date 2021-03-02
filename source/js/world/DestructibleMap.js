@@ -46,9 +46,11 @@ class DestructibleMap {
 
   // Destroy a circle of the map by replacing it with pixels of transparency.
   destroyCircle(x, y, r) {
+    x = Math.round(x);
+    y = Math.round(y);
     for (let i = -r; i <= r; i++) {
       // Use the equation of a circle to determine the area to destroy
-      let thisWidth = Math.sqrt(1 - Math.pow(i / r, 2)) * r;
+      let thisWidth = Math.round(Math.sqrt(1 - Math.pow(i / r, 2)) * r);
       this.ctx.clearRect(x - thisWidth, i + y, 
                          thisWidth * 2, 1);
     }

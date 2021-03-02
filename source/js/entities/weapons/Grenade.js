@@ -42,7 +42,7 @@ class Grenade extends Projectile{
                 let difference = playerThisLoop.center
                 difference.sub(this.center);
                 if (difference.magnitude < 32) {
-                    playerThisLoop.damage(this.center, 4);
+                    playerThisLoop.damage(world, this.center, 4);
                 }
             }
         }
