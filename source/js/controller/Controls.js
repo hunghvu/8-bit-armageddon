@@ -33,11 +33,20 @@ class Controls {
     // P for passing a turn
     this.registerKey('pass', 'KeyP');
 
+    this.registerKey('forfeit', 'KeyF');
+    this.registerKey('yes', 'KeyY');
+    this.registerKey('cancel', 'Escape');
+
     // How much the scroll wheel has been scrolled since last checked
     this.scrollDelta = 0;
 
     // Click flag
     this.hasClicked = false;
+
+    // Press flag, will not reset to false until keyUp happens.
+    // This is to prevent unexpected behavior when a player hold down a key.
+    // This is only used for keys that require only 1 time press (not hold-down keys like keys).
+    this.hasPressedKeyY = false;
 
     // Handle the scroll wheel
     window.addEventListener('wheel', event => {
@@ -99,12 +108,17 @@ class Controls {
     window.addEventListener('keydown', event => {
       if (event.code == code) {
         // Set the value to true so that when you use
-        // thisobject.name you get the state of the key
-        this[name] = true;
-        // Set the value to true so that when you use
         // thisobject.nameDownThisLoop you get the state
         // of the key for this loop
         this[name+'DownThisLoop'] = true;
+        if (name === 'yes' && !this.hasPressedKeyY) { // Not affecting data when holding down keyY
+          this.hasPressedKeyY = true;
+          this['yes'] = true;
+        } else if (name !== 'yes'){
+          // Set the value to true so that when you use
+          // thisobject.name you get the state of the key
+          this[name] = true;
+        }
         // Don't allow the window to perform other actions
         // with this input
         event.preventDefault();
@@ -113,13 +127,18 @@ class Controls {
 
     window.addEventListener('keyup', event => {
       if (event.code == code) {
-        // Set the value to false so that when you use
-        // thisobject.name you get the state of the key
-        this[name] = false;
         // Set the value to true so that when you use
         // thisobject.nameDownThisLoop you get the state
         // of the key for this loop
         this[name+'DownThisLoop'] = false;
+        if (name === 'yes' && this.hasPressedKeyY) {
+          this.hasPressedKeyY = false;
+          this['yes'] = false;
+        } else if (name !== 'yes') {
+          // Set the value to true so that when you use
+          // thisobject.name you get the state of the key
+          this[name] = false;
+        }
         // Don't allow the window to perform other actions
         // with this input
         event.preventDefault();

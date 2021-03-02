@@ -8,13 +8,9 @@ class Game {
       let destructionMap = new DestructibleMap(newMapImg);
 
       // Apply play mode.
-      if (this.playMode === "1v1") {
-        this.world = new World(destructionMap, 2);
-      } else if (this.playMode === "2v2") {
-        this.world = new World(destructionMap, 4);
-      } else if (this.playMode === "4v4") {
-        this.world = new World(destructionMap, 8);
-      }
+      let modes = {"1v1": 2, "2v2": 4, "3v3": 6, "4v4": 8};
+      this.playerAmount = modes[this.playMode];
+      this.world = new World(destructionMap, this.playerAmount);
       this.canvas = document.getElementById('display');
 
 
@@ -39,12 +35,15 @@ class Game {
       this.controls = new Controls();
 
       this.status = "PLAYING";
+      this.endCode = null; // Indicate match result (0 for draw, 1 means team 1 wins, 2 means team 2 wins )
+      this.forfeitCode = null; // Indicate the current team that is trying to surrender (0 for team 1, 1 for team 2)
+      this.forfeitVoteCounter = 0;
 
       // Add mouse listener
       this.controls.addMouseListener(this.canvas);
 
       // Turn mechanism
-      this.turn = new Turn(this.timer, this.world, this.timePerTurnLimit, this.controls);
+      this.turn = new Turn(this.timer, this.world, this.timePerTurnLimit, this.controls, this);
       requestAnimationFrame(this.draw.bind(this));
     }).bind(this);
   }
@@ -206,7 +205,11 @@ class Game {
       }
       this.ctx.fillText("Turn iteration (player No.): " + turnIteration, 465, 70);
 
-      this.ctx.fillText("Turn number: " + this.turn.turnCounter, 950, 31)
+      if (!(this.turnLimit === "" || this.turnLimit === null || this.turnLimit === undefined)) {
+        this.ctx.fillText("Turn number: " + this.turn.turnCounter + " / " + this.turnLimit, 950, 31);
+      } else {
+        this.ctx.fillText("Turn number: " + this.turn.turnCounter, 950, 31);
+      }
 
       // For testing only.
       // this.ctx.font = "30px Arial";
@@ -215,11 +218,29 @@ class Game {
         // Allow the player to move from the playing state to the paused state
         this.status = "PAUSED";
       }
-    } else {
+    } else if (this.status === "PAUSED") {
       this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
       this.drawPauseMenu(this.ctx);
       if (this.controls.enterDownThisLoop) {
         // Allow the player to move from the paused state to the playing state
+        this.status = "PLAYING";
+      } 
+    } else if (this.status === "ENDED") {
+      // Will need to implement navigation later to improve user's experience.
+      this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
+      this.drawEndMenu(this.ctx);
+    } else if (this.status === "FORFEIT") {
+      this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
+      this.drawForfeitMenu(this.ctx);
+      if(this.controls.yes && this.controls.hasPressedKeyY) {
+        this.forfeitVoteCounter ++;
+        this.controls.yes = false; // This key is not reset in the new loop, so manually do that here.
+                                   // Cannot reset in controls because the value is not defined there.
+        if (this.forfeitVoteCounter > this.playerAmount / 4) {
+          this.status = "ENDED";
+          this.forfeitCode === 0 ? this.endCode = 2 : this.endCode = 1;
+        }
+      } else if (this.controls.cancel) {
         this.status = "PLAYING";
       }
     }
@@ -227,6 +248,31 @@ class Game {
     requestAnimationFrame(this.draw.bind(this));
   }
 
+  drawForfeitMenu(ctx) {
+    ctx.save();
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillStyle = "white";
+    let teamNumer = this.forfeitCode + 1;
+    ctx.fillText("Team " + teamNumer + " want to forfeit.", ctx.canvas.width / 2, ctx.canvas.height / 2);
+    ctx.fillText("Press Y to vote Yes, and Esc to cancel.", ctx.canvas.width / 2, ctx.canvas.height / 3 * 2);
+    ctx.fillText("Current vote: " + this.forfeitVoteCounter + " / " + this.playerAmount / 2, ctx.canvas.width / 2, ctx.canvas.height / 4 * 3);
+    ctx.restore();
+  }
+
+  drawEndMenu(ctx) {
+    ctx.save();
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillStyle = "white";
+    ctx.fillText("MATCH ENDED", ctx.canvas.width / 2, ctx.canvas.height / 2);
+    if (this.endCode === 1 || this.endCode === 2) {
+      ctx.fillText("Team " + this.endCode + " won!", ctx.canvas.width / 2, ctx.canvas.height / 3 * 2);
+    } else if (this.endCode === 0 ) {
+      ctx.fillText("DRAW!", ctx.canvas.width / 2, ctx.canvas.height / 3 * 2);
+    }
+    ctx.restore();
+  }
 
   drawPauseMenu(ctx) {
     ctx.save();
