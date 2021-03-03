@@ -30,7 +30,9 @@ class Player extends Entity { //Add button to enter portal
     this.onGround = false;
 
     // The health of this player
+    this.radius = 20;
     this.damageTaken = 0;
+    this.healthBar = new HealthBar(this);
 
     // The shooting angle is always attached to a player, so this should be
     // a better place than 'world'. The entity shooting angle bounds are defined
@@ -89,8 +91,18 @@ class Player extends Entity { //Add button to enter portal
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
     ctx.fillStyle = "white";
-    ctx.fillText(Math.round((1 - this.damageTaken) * 100, 2) + "%", this.x + this.w / 2, this.y + this.h);
+    this.healthBar.draw(ctx);
+
+    // var ratio = 1 - this.damageTaken;
+    // ctx.strokeStyle = "Black";
+    // ctx.fillStyle = ratio < 0.2 ? "Red" : ratio < 0.5 ? "Yellow" : "Green";
+    // ctx.fillRect(this.x - this.radius, this.y + this.radius + 5, this.radius * 2 * ratio, 4);
+    // ctx.strokeRect(this.x - this.radius, this.y + this.radius + 5, this.radius * 2, 4);
+
+    //ctx.fillText(Math.round((1 - this.damageTaken) * 100, 2) + "%", this.x + this.w / 2, this.y + this.h);
     ctx.restore();
+
+    //this.healthBar.draw(ctx);
   }
 
   drawMinimap(ctx, mmX, mmY) {

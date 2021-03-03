@@ -1,7 +1,7 @@
 class World {
   constructor(map, playerAmount) {
     this.map = map;
-    this.minimap = new Minimap(20,600,this.map.width/7, this.map.height/10);
+    this.minimap = new Minimap(20, 600, this.map.width/7, this.map.height/10);
 
     this.spritesheet = MANAGER.getAsset('./assets/character.png');
 
@@ -173,7 +173,7 @@ class World {
 
 
       for (var i = 0; i < world.entities.length; i++) {
-        world.entities[i].drawMinimap(ctx, this.x, this.y);
+        world.entities[i].drawMinimap(world, ctx, this.x, this.y);
         }
     }
 };

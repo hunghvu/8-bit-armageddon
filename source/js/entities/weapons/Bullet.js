@@ -38,7 +38,8 @@ class Bullet extends Projectile {
     // Add y-threshold for the bullet so that i can end turns.
     if (world.map.collideWithRectangle(this) || 
         this.y > world.map.height || 
-        hasCollidedWithAPlayer) {
+        hasCollidedWithAPlayer ||
+        this.x > world.map.width - 20 || this.x < 40) {
       // Destroy this bullet if we hit something
       this.active = false;
       this.projectileCanEndTurn = true;
@@ -85,13 +86,17 @@ class Bullet extends Projectile {
     //fix and add load animation
   }
 
-  drawMinimap(ctx, mmX, mmY) {
+  drawMinimap(world, ctx, mmX, mmY) {
     //let miniBulletRect = new Rectangle(mmX + this.x / 7, mmY+ this.y / 10, 8, 8);
     //destructionRect.center = this.center;
     //world.map.destroyRectangle(destructionRect);
     ctx.fillStyle = "Green";
 
     ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
+
+    if (this.mmX < 20) {
+       ctx.clearRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
+    }
     // if ((mmX+this.x/7) > world.map.width/7 || (mmX+this.x/7) < 0) {
     //     ctx.clearRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
     // }
