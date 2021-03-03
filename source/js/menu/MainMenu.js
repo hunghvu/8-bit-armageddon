@@ -67,10 +67,8 @@ window.onload = function () {
         MANAGER.queueDownload('./assets/background.jpg');
 
         MANAGER.downloadAll(function () {
-
             //destructionMap = new DestructableMap('map/map.png');
             gg = new Game(turnLimit, timePerTurnLimit, playMode);
-
         });
     }
 

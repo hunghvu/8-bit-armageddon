@@ -60,7 +60,7 @@ class Game {
 
 
     this.ctx.fillStyle = "Black";
-    this.ctx.font = "30px Arial";
+    this.ctx.font = "16px 'Press Start 2P'";
     this.ctx.fillText('Timer ', 7, 31);
     this.ctx.fillText(5 - Math.round(this.timer.turnTime % 5), 29, 56);
 
@@ -111,7 +111,7 @@ class Game {
       this.ctx.fillRect(0,0,this.canvas.width,100);
 
       this.ctx.fillStyle = "Black";
-      this.ctx.font = "30px Arial";
+      this.ctx.font = "16px 'Press Start 2P'";
       this.ctx.fillText('Timer ', 7, 31);
       this.timer.turnTime < 0 
       ? this.ctx.fillText(Math.round(this.timer.turnTime * -1), 29, 56) // Different print text fill method for the first ready period.
@@ -165,7 +165,7 @@ class Game {
       this.ctx.fillText((1.0 - this.world.currentPlayer.damageTaken)*100, 375, 66);
 
 
-      this.ctx.font = "30px Arial";
+      this.ctx.font = "16px 'Press Start 2P'";
       let windSheet = MANAGER.getAsset('./assets/ui-widgets.png');
       this.ctx.save();
       let windCenter = new Point(134, 32);
@@ -231,6 +231,7 @@ class Game {
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
     ctx.fillStyle = "white";
+    ctx.font = "16px 'Press Start 2P'";
     let teamNumer = this.forfeitCode + 1;
     ctx.fillText("Team " + teamNumer + " want to forfeit.", ctx.canvas.width / 2, ctx.canvas.height / 2);
     ctx.fillText("Press Y to vote Yes, and Esc to cancel.", ctx.canvas.width / 2, ctx.canvas.height / 3 * 2);
@@ -243,6 +244,7 @@ class Game {
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
     ctx.fillStyle = "white";
+    ctx.font = "16px 'Press Start 2P'";
     ctx.fillText("MATCH ENDED", ctx.canvas.width / 2, ctx.canvas.height / 2);
     if (this.endCode === 1 || this.endCode === 2) {
       ctx.fillText("Team " + this.endCode + " won!", ctx.canvas.width / 2, ctx.canvas.height / 3 * 2);
@@ -257,6 +259,7 @@ class Game {
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
     ctx.fillStyle = "white";
+    ctx.font = "16px 'Press Start 2P'";
     ctx.fillText("PAUSED", ctx.canvas.width / 2, ctx.canvas.height / 2);
     ctx.restore();
   }

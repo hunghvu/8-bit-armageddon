@@ -88,6 +88,7 @@ class Player extends Entity { //Add button to enter portal
     ctx.save();
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
+    ctx.font = "16px 'Press Start 2P'";
     ctx.fillStyle = "white";
     ctx.fillText(Math.round((1 - this.damageTaken) * 100, 2) + "%", this.x + this.w / 2, this.y + this.h);
     if (this.isInTurn) {
