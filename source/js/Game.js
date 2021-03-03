@@ -113,7 +113,9 @@ class Game {
       this.ctx.fillStyle = "Black";
       this.ctx.font = "30px Arial";
       this.ctx.fillText('Timer ', 7, 31);
-      this.ctx.fillText(this.timePerTurnLimit - Math.round(this.timer.turnTime % this.timePerTurnLimit), 29, 56);
+      this.timer.turnTime < 0 
+      ? this.ctx.fillText(Math.round(this.timer.turnTime * -1), 29, 56) // Different print text fill method for the first ready period.
+      : this.ctx.fillText(this.timePerTurnLimit - Math.round(this.timer.turnTime % this.timePerTurnLimit), 29, 56);
 
       this.ctx.fillText('Weapon: ', 175, 31);
       //current build: 2 weapons only, fix once more weapons added
