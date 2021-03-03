@@ -14,6 +14,9 @@ class Turn {
         this.readyTime = 3; // Preparation period after ending each turn.
                             // This can be changed to a set-by-user
                             // value if needed
+        this.timer.turnTime -= this.readyTime; // Start at negative value to for the first ready period.
+        this.inFirstReadyPeriod = true;
+
         this.controls = controls;
 
         this.inReadyPeriod = false; // Indicate if the match is in preparation period.
@@ -32,7 +35,7 @@ class Turn {
         this.checkDeathStatus = false; // This flag is similar to isShot, however, it's used to
                                        //  see whether a test to see if a current player is dead has been performed.
                                        //  false mean not yet, true means otherwise.
-        this.turnCounter = 19; // A counter for ingame turn.
+        this.turnCounter = 1; // A counter for ingame turn.
 
         this.game = game;
     }
@@ -86,6 +89,10 @@ class Turn {
         if (!this.isShot) {
             // Turn.js will control its own tick
             this.timer.turnTick();
+            if(this.timer.turnTime >= 0 && this.inFirstReadyPeriod) { // Give the first player a ready period.
+                this.world.currentPlayer.isInTurn = true;
+                this.inFirstReadyPeriod = false;
+            }
             // Approximately 0 (max timer step).
             // this.timePerTurn is currently 5 secs, so minus maxStep turns it to 4.95;
             // The maxStep is 0.05 is timer will always happens at least one time during *.95 and (*+1).00 range.
