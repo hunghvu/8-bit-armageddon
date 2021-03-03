@@ -58,11 +58,10 @@ class Game {
     this.ctx.fillStyle = "Grey";
     this.ctx.fillRect(0,0,this.canvas.width,100);
 
-    // For testing only.
+
     this.ctx.fillStyle = "Black";
     this.ctx.font = "30px Arial";
     this.ctx.fillText('Timer ', 7, 31);
-    // this.ctx.fillText(5 - Math.round(this.timer.turnTime % 5), 200, 200);
     this.ctx.fillText(5 - Math.round(this.timer.turnTime % 5), 29, 56);
 
     this.ctx.fillText('Weapon: ', 175, 31);
@@ -111,11 +110,9 @@ class Game {
       this.ctx.fillStyle = "Grey";
       this.ctx.fillRect(0,0,this.canvas.width,100);
 
-      // For testing only.
       this.ctx.fillStyle = "Black";
       this.ctx.font = "30px Arial";
       this.ctx.fillText('Timer ', 7, 31);
-      // this.ctx.fillText(5 - Math.round(this.timer.turnTime % 5), 200, 200);
       this.ctx.fillText(this.timePerTurnLimit - Math.round(this.timer.turnTime % this.timePerTurnLimit), 29, 56);
 
       this.ctx.fillText('Weapon: ', 175, 31);
@@ -155,8 +152,8 @@ class Game {
         }
       }
 
-      this.spritesheet = MANAGER.getAsset('./assets/HealthBar.png');
 
+      this.spritesheet = MANAGER.getAsset('./assets/HealthBar.png');
       this.ctx.fillText('Health: ', 343, 31);
       // Get the tenth of the damage taken from 1.0 to 0.0 to get a value from 0 to 10
       // This will allow us to find the corresponding sprite to the amount of health
@@ -167,13 +164,7 @@ class Game {
 
 
       this.ctx.font = "30px Arial";
-      /*
-      // this.ctx.fillText("Wind(X): " + Wind.x + ", Wind(Y): " + Wind.y, 343, 31);
-      this.ctx.fillText("Wind(X): " + Wind.x + ", Wind(Y): " + Wind.y, 465, 31);
-      */
-
       let windSheet = MANAGER.getAsset('./assets/ui-widgets.png');
-
       this.ctx.save();
       let windCenter = new Point(134, 32);
       this.ctx.textAlign = "center";
@@ -185,27 +176,19 @@ class Game {
       this.ctx.drawImage(windSheet, 0, 0, 16, 16, -32 * windSpeed, -32 * windSpeed, 
                                                    64 * windSpeed, 64 * windSpeed);
       this.ctx.restore();
-
-      //this.ctx.drawImage(this.spritesheet, 723, 1, 29, 26, 343, 32, 92, 64);
-
-
       
+
       let turnIteration = [];
-      // this.world.players.forEach(element => turnIteration.push(element.playerNo));
       for (let i = this.world.players.length - 1; i >= 0; i --) { // Traverse backward.
         turnIteration.push(this.world.players[i].playerNo);
       }
       this.ctx.fillText("Turn iteration (player No.): " + turnIteration, 465, 70);
-
       if (!(this.turnLimit === "" || this.turnLimit === null || this.turnLimit === undefined)) {
         this.ctx.fillText("Turn number: " + this.turn.turnCounter + " / " + this.turnLimit, 950, 31);
       } else {
         this.ctx.fillText("Turn number: " + this.turn.turnCounter, 950, 31);
       }
 
-      // For testing only.
-      // this.ctx.font = "30px Arial";
-      // this.ctx.fillText(this.timePerTurnLimit - Math.round(this.timer.turnTime % this.timePerTurnLimit), 200, 200);
       if (this.controls.enterDownThisLoop) {
         // Allow the player to move from the playing state to the paused state
         this.status = "PAUSED";
