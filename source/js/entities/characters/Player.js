@@ -90,6 +90,13 @@ class Player extends Entity { //Add button to enter portal
     ctx.textBaseline = "top";
     ctx.fillStyle = "white";
     ctx.fillText(Math.round((1 - this.damageTaken) * 100, 2) + "%", this.x + this.w / 2, this.y + this.h);
+    if (this.isInTurn) {
+      ctx.fillStyle = "Red";
+      ctx.fillText("P" + this.playerNo, this.x + this.w / 2 + 60, this.y + this.h);
+    } else {
+      ctx.fillText("P" + this.playerNo, this.x + this.w / 2 + 60, this.y + this.h);
+    }
+
     ctx.restore();
   }
 

@@ -183,10 +183,11 @@ class Game {
         turnIteration.push(this.world.players[i].playerNo);
       }
       this.ctx.fillText("Turn iteration (player No.): " + turnIteration, 465, 70);
+      this.ctx.fillText("Current player: P" + this.world.currentPlayer.playerNo, 1100, 70);
       if (!(this.turnLimit === "" || this.turnLimit === null || this.turnLimit === undefined)) {
-        this.ctx.fillText("Turn number: " + this.turn.turnCounter + " / " + this.turnLimit, 950, 31);
+        this.ctx.fillText("Turn number: " + this.turn.turnCounter + " / " + this.turnLimit, 465, 31);
       } else {
-        this.ctx.fillText("Turn number: " + this.turn.turnCounter, 950, 31);
+        this.ctx.fillText("Turn number: " + this.turn.turnCounter, 465, 31);
       }
 
       if (this.controls.enterDownThisLoop) {
