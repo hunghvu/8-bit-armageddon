@@ -82,10 +82,9 @@ class Game {
       else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == GrenadeLevel2) {
         this.ctx.drawImage(this.spritesheet, 2, 35, 28, 28, 200, 35, 44, 56);
       }
-      // Grenade Level 3
+      // Rocket
       else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == GrenadeLevel3) {
-        this.ctx.fillText('GrenadeLevel3 IMG', 200, 35);
-        // this.ctx.drawImage(this.spritesheet, 2, 35, 28, 28, 200, 35, 44, 56);
+        this.ctx.drawImage(this.spritesheet, 130, 261, 27, 20, 200, 35, 54, 40);
       }
       //PortalGun
       else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == PortalGun) {
@@ -94,6 +93,10 @@ class Game {
       //TeleportGun
       else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == TeleportGun) {
         this.ctx.drawImage(this.spritesheet, 70, 223, 18, 31, 200, 35, 36, 62);
+      }
+      //....
+      else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == OPWeapon) {
+        this.ctx.drawImage(this.spritesheet, 10, 290, 11, 29, 200, 35, 36, 62);
       }
     }
 
@@ -136,10 +139,9 @@ class Game {
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == GrenadeLevel2) {
           this.ctx.drawImage(this.spritesheet, 2, 35, 28, 28, 200, 35, 44, 56);
         }
-        // Lvl 3
+        // Rocket
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == GrenadeLevel3) {
-          this.ctx.fillText('GrenadeLevel3 IMG', 200, 35);
-          // this.ctx.drawImage(this.spritesheet, 2, 35, 28, 28, 200, 35, 44, 56);
+          this.ctx.drawImage(this.spritesheet, 130, 261, 27, 20, 200, 35, 54, 40);
         }
         //PortalGun
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == PortalGun) {
@@ -148,6 +150,10 @@ class Game {
         //TeleportGun
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == TeleportGun) {
           this.ctx.drawImage(this.spritesheet, 70, 223, 18, 31, 200, 35, 36, 62);
+        }
+        //....
+        else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == OPWeapon) {
+          this.ctx.drawImage(this.spritesheet, 10, 290, 11, 29, 200, 35, 36, 62);
         }
       }
 
@@ -188,7 +194,7 @@ class Game {
         this.ctx.drawImage(this.spritesheet, 723, 1, 29, 26, 343, 32, 92, 64);
       }
       this.ctx.font = "20px Arial";
-      this.ctx.fillText((1.0 - this.world.currentPlayer.damageTaken)*100, 375, 66);
+      // this.ctx.fillText((1.0 - this.world.currentPlayer.damageTaken)*100, 375, 66);
       this.ctx.fillText(Math.ceil((1.0 - this.world.currentPlayer.damageTaken)*100) + "%", 375, 66);
 
       this.ctx.font = "30px Arial";

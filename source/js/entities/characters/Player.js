@@ -52,6 +52,7 @@ class Player extends Entity { //Add button to enter portal
     this.upgradedOnce = 0;
     this.upgraded = 1; //1 = Lvl 1, 2 = Lvl 2, 3 = Lvl 3
     this.currentWeapon = new CurrentWeapon(this.x, this.y, this.shootingAngle.radians, 600);
+    this.opWeaponUnlock = 0; //Unlock OP Weapon after collecting 4 upgrade crates (Only 4 will be spawn per game)
 
     var d = new Date();
     d.setMilliseconds(200);
@@ -283,7 +284,7 @@ class Player extends Entity { //Add button to enter portal
     else this.state = 0;
 
     //updates weapons
-    this.currentWeapon.weaponUpgradeCheck(this.upgraded);
+    this.currentWeapon.weaponUpgradeCheck(this.upgraded, this.opWeaponUnlock);
 
     this.privateHandleHorizontalMovement(movement.x, world.map);
     this.privateHandleVerticalMovement(movement.y, world.map);

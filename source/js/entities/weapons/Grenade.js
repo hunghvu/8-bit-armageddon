@@ -29,15 +29,12 @@ class Grenade extends Projectile{
         for(var i = 0; i < world.entities.length; i++) {
           if (world.entities[i] instanceof Crate &&
             ((this.x < (world.entities[i].x + world.entities[i].w)) && (this.x > world.entities[i].x)) &&
-            ((this.y > world.entities[i].y) && (this.y < (world.entities[i].y + world.entities[i].h)))) // &&
-            // world.currentPlayer.upgradedOnce == 0)
-            {
+            ((this.y > world.entities[i].y) && (this.y < (world.entities[i].y + world.entities[i].h)))) {
               world.currentPlayer.upgraded++;
               world.entities[i].active = false;
               if (world.currentPlayer.upgraded > 3) {
                 world.currentPlayer.upgraded = 1; //reset level
               }
-              // world.currentPlayer.upgradedOnce = 1;
             }
           }
 
@@ -69,8 +66,8 @@ class Grenade extends Projectile{
     draw(ctx){
       this.animations[this.facing].drawFrame(.17, ctx, this.x, this.y, 1.2);
 
-      ctx.fillStyle = "white";
-      ctx.strokeRect(this.x, this.y, 16, 16);
+      // ctx.fillStyle = "white";
+      // ctx.strokeRect(this.x, this.y, 16, 16);
     }
 
     loadAnimations() {
@@ -84,13 +81,5 @@ class Grenade extends Projectile{
 
       //facing left = 1,
       this.animations[1] = new Animator(this.spritesheet, 137, 7, 12, 14, 4, 0.5, 17, true, true);
-
-      // // Dynomite (upgrade lvl 2) = no set number
-      // //buffer padding current build =
-      // //facing right = 0,
-      // this.animations[0] = new Animator(this.spritesheet, 2, 35, 28, 28, 4, 0.5, 14, false, true);
-      //
-      // //facing left = 1,
-      // this.animations[1] = new Animator(this.spritesheet, 2, 35, 28, 28, 4, 0.5, 14, true, true);
     }
 }
