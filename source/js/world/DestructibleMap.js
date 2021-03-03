@@ -12,11 +12,26 @@ class DestructibleMap {
     // Draw the image onto the map for further use
     this.ctx.drawImage(img, 0, 0);
 
-    this.platform = new MovingPlatform(400, this.height * (4/7), (this.width * 1/8), (this.width * 7/8));
+    this.platform = null;
 
     // Generate and draw a random map.
     this.mapGenerator = new MapGenerator(img.width, img.height);
     this.mapGenerator.drawMap(this.ctx);
+  }
+
+  /**
+   * This function spawn movable platform at a random location in a way 
+   * that it will not collide with the player.
+   * @param {Number} highestGroundY The highest point on a map.
+   */
+  generateMovablePlatform(highestGroundY) {
+    let startX = Math.random() * this.mapCanvas.width;
+    let startY = Math.random() * (150) + (highestGroundY - 200);
+    // 150 = max - min = (highest - 50) - (highest - 200). In other words, spawn the plarform 
+    //   in the range of 50 to 200 pixels above the highest point.
+    //   As the platform thickness is 10, and players spawn at highest point. This prevent the players and platforms
+    //   spawn at the same location and make them stuck to each other.
+    this.platform = new MovingPlatform(startX, startY, (this.mapCanvas.width * 1/8), (this.mapCanvas.width * 7/8), this.mapCanvas.width);
   }
 
   update(game, deltaT) {

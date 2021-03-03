@@ -47,9 +47,11 @@ class EntityOnMap {
     generatePlayer(playerAmount) {
         this.numberOfPlayerPerTeam = playerAmount / 2;
         this.pixelArray.forEach(element => {
-            if (element[0].y - element[1] * 2 < this.highestGroundY) this.highestGroundY = element[0].y - element[1] * 2;
-        }); // element[0].y - element[1] somehow is still not the highest point, so times 2 to element [1], and hopefully it's 
-            //  the highest point. Besides, that make players spawn a bit on air, which is preferred.
+            if (element[0].y - element[1] * 2 < this.highestGroundY) this.highestGroundY = element[0].y - element[1] * 2 - 100;
+        }); // element[0].y - element[1] somehow is still not the highest point, so times 2 to element [1]
+            // Minus another 100 because 100 is greater than player's frame height, which is 61.
+            // Besides, that make players spawn a bit on air, which is preferred.
+
         
         console.log(this.highestGroundY)
         for (let i = 0; i < playerAmount; i++) {
