@@ -191,7 +191,7 @@ class Game {
       this.ctx.font = "16px 'Press Start 2P'";
       let windSheet = MANAGER.getAsset('./assets/ui-widgets.png');
       this.ctx.save();
-      let windCenter = new Point(1100, 32);
+      let windCenter = new Point(1250, 32);
       this.ctx.textAlign = "center";
       this.ctx.fillText("Wind: ", windCenter.x, windCenter.y);
 

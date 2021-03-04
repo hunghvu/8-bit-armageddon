@@ -96,7 +96,7 @@ class Player extends Entity { //Add button to enter portal
           this.playerHitLeftAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
         }
       }
-      else if (this.design == 1)
+      else if (this.design == 2)
       {
         if (this.facing == 0)
         {
@@ -109,7 +109,7 @@ class Player extends Entity { //Add button to enter portal
           this.playerHitLeftAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
         }
       }
-      else if (this.design == 2)
+      else if (this.design == 1)
       {
         if (this.facing == 0)
         {
@@ -465,7 +465,7 @@ class Player extends Entity { //Add button to enter portal
       this.animations[2][1] = new Animator(this.spritesheet, 395, 129, 23, 61, 5, 0.5, 25, true, false);
 
     }
-    else if (this.design == 1)
+    else if (this.design == 2)
     {
       //Human 2 = 1;
 
@@ -490,7 +490,7 @@ class Player extends Entity { //Add button to enter portal
       // facing left = 1
       this.animations[2][1] = new Animator(this.spritesheet, 59, 321, 23, 61, 5, 0.5, 25, true, false);
     }
-    else if (this.design == 2)
+    else if (this.design == 1)
     {
       //Boba = 2;
 
