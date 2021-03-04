@@ -90,16 +90,17 @@ class Player extends Entity { //Add button to enter portal
     ctx.save();
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
+    ctx.font = "16px 'Press Start 2P'";
     ctx.fillStyle = "white";
+    
     this.healthBar.draw(ctx);
+    if (this.isInTurn) {
+      ctx.fillStyle = "Red";
+      ctx.fillText("P" + this.playerNo, this.x + this.w / 2 + 60, this.y + this.h);
+    } else {
+      ctx.fillText("P" + this.playerNo, this.x + this.w / 2 + 60, this.y + this.h);
+    }
 
-    // var ratio = 1 - this.damageTaken;
-    // ctx.strokeStyle = "Black";
-    // ctx.fillStyle = ratio < 0.2 ? "Red" : ratio < 0.5 ? "Yellow" : "Green";
-    // ctx.fillRect(this.x - this.radius, this.y + this.radius + 5, this.radius * 2 * ratio, 4);
-    // ctx.strokeRect(this.x - this.radius, this.y + this.radius + 5, this.radius * 2, 4);
-
-    //ctx.fillText(Math.round((1 - this.damageTaken) * 100, 2) + "%", this.x + this.w / 2, this.y + this.h);
     ctx.restore();
 
     //this.healthBar.draw(ctx);
@@ -114,7 +115,7 @@ class Player extends Entity { //Add button to enter portal
    * Call this whenever damage needs to be done to a player.
    * @param {Point} Origin - where the damage came from
    */
-  damage(origin, power) {
+  damage(world, origin, power) {
     // Add knock back
     if (Math.abs(this.x - origin.x) > 1) {
       this.vel.x = 400 / ((this.x - origin.x));
@@ -127,6 +128,8 @@ class Player extends Entity { //Add button to enter portal
     } else {
       this.vel.y = 400;
     }
+
+    world.spawn(new DamageText(this.x, this.y));
 
     this.damageTaken += power / 100;
     if (this.damageTaken > 1) {
