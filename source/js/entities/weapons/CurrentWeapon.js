@@ -8,7 +8,7 @@ class CurrentWeapon {
         this.power = power;
         this.angle = angle;
 
-        this.myWeaponBag = [OPWeapon];
+        this.myWeaponBag = [Bullet];
 
         this.currentIndex = 0;
         this.myCurrentWeapon = this.myWeaponBag[this.currentIndex];
@@ -73,7 +73,7 @@ class CurrentWeapon {
     weaponUpgradeCheck(upgraded, isOP)
     {
       if (upgraded == 1) {
-        this.myWeaponBag = [Bullet, Grenade, Sniper, GrenadeLevel2, Laser, GrenadeLevel3,PortalGun, TeleportGun];
+        this.myWeaponBag = [Bullet, Grenade, Sniper, GrenadeLevel2, Laser, GrenadeLevel3, PortalGun, TeleportGun, OPWeapon];
         if (isOP == 4) {
           this.myWeaponBag.push(OPWeapon);
         }

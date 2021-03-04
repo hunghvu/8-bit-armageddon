@@ -22,52 +22,72 @@ class OPWeapon extends Projectile{
      * @params {World} - The world object that should be referenced
      * @params {deltaT} - The number of ms since the last update
      */
-    update(world, deltaT){
-        // update direction/facing
-        if (this.vel.x < 0) this.facing = 1;
-        if (this.vel.x > 0) this.facing = 0;
+     update(world, deltaT){
+       this.moveUntilCollision(world, this.desiredMovement(deltaT, Wind.x, Wind.y), true);
 
-        world.currentPlayer.opWeaponUnlock = 0;
+       // update direction/facing
+       if (this.vel.x < 0) this.facing = 1;
+       if (this.vel.x > 0) this.facing = 0;
 
-        this.moveUntilCollision(world, this.desiredMovement(deltaT, Wind.x, Wind.y));
-        // if (world.map.collideWithRectangle(this)) {
-        //     // Destroy this bullet if we hit something
-        //     this.active = false;
-        //     // Remove opWeapon from myWeaponBag
-        //     for (let j = 0; j < world.currentPlayer.currentWeapon.myWeaponBag.length; j++)
-        //     {
-        //       if (world.currentPlayer.currentWeapon.myWeaponBag[j] === OPWeapon)
-        //       {
-        //         world.currentPlayer.currentWeapon.myWeaponBag.splice(j,1);
-        //         break;
-        //       }
-        //     }
-        //
-        //     if (!(this.y > world.map.height))
-        //     {
-        //       world.spawn(new Nuke(this.x, this.y, 0, 0));
-        //       this.projectileCanEndTurn = true;
-        //     }
-        // }
 
-        if (world.map.collideWithRectangle(this)) {
-          // Destroy this bullet if we hit something
-          this.active = false;
+       //Crate collision
+       for(var i = 0; i < world.entities.length; i++) {
+         if (world.entities[i] instanceof Crate &&
+           ((this.x < (world.entities[i].x + world.entities[i].w)) && (this.x > world.entities[i].x)) &&
+           ((this.y > world.entities[i].y) && (this.y < (world.entities[i].y + world.entities[i].h)))) {
+             world.currentPlayer.upgraded++;
+             world.currentPlayer.opWeaponUnlock++;
+             world.entities[i].active = false;
+             if (world.currentPlayer.upgraded > 3) {
+               world.currentPlayer.upgraded = 1; //reset level
+             }
+           }
+         }
 
-          world.map.destroyCircle(this.center.x, this.center.y, 500);
-          // Find any players in the blast range
-          for (let i = 0; i < world.players.length; i++) {
-            let playerThisLoop = world.players[i];
-            // If we are close enough then damage a player
-            let difference = playerThisLoop.center
-            difference.sub(this.center);
-            if (difference.magnitude < 32) {
-                playerThisLoop.damage(this.center, 75);
-            }
-          }
-          this.projectileCanEndTurn = true;
-        }
-    }
+       // Check if the bullet collides with any of the players
+       let hasCollidedWithAPlayer = this.collidesWithRects(world.players);
+
+       // Add y-threshold for the bullet so that i can end turns.
+       if (world.map.collideWithRectangle(this) ||
+           this.y > world.map.height ||
+           hasCollidedWithAPlayer) {
+         // Destroy this bullet if we hit something
+         this.active = false;
+         this.projectileCanEndTurn = true;
+         // Destroy the map
+         world.map.destroyCircle(this.center.x, this.center.y, 500);
+         // Find any players in the blast range
+         for (let i = 0; i < world.players.length; i++) {
+           let playerThisLoop = world.players[i];
+
+           // If we are close enough then damage the player
+           let difference = playerThisLoop.center
+           difference.sub(this.center);
+           if (difference.magnitude < 300) {
+             playerThisLoop.damage(world, this.center, 75);
+           }
+         }
+       }
+       //       // if (world.map.collideWithRectangle(this)) {
+       //       //     // Destroy this bullet if we hit something
+       //       //     this.active = false;
+       //       //     // Remove opWeapon from myWeaponBag
+       //       //     for (let j = 0; j < world.currentPlayer.currentWeapon.myWeaponBag.length; j++)
+       //       //     {
+       //       //       if (world.currentPlayer.currentWeapon.myWeaponBag[j] === OPWeapon)
+       //       //       {
+       //       //         world.currentPlayer.currentWeapon.myWeaponBag.splice(j,1);
+       //       //         break;
+       //       //       }
+       //       //     }
+       //       //
+       //       //     if (!(this.y > world.map.height))
+       //       //     {
+       //       //       world.spawn(new Nuke(this.x, this.y, 0, 0));
+       //       //       this.projectileCanEndTurn = true;
+       //       //     }
+       //       // }
+     }
 
     /**
      * Draw the NUKE

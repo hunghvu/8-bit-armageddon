@@ -18,10 +18,10 @@ class Portal extends Entity{
     // Team 0 (humans) set of portals
     // this.animationsOrangePortalstart = new Animator(this.spritesheet, 6, 96, 26, 31, 4, 0.5, 7, false, false);
     // this.animationsBluePortalstart = new Animator(this.spritesheet, 6, 127, 26, 31, 4, 0.5, 7, false, false);
-    // this.animationsOrangePortal = new Animator(this.spritesheet, 131, 96, 26, 31, 3, 0.5, 7, false, true);
+    this.animationsOrangePortal = new Animator(this.spritesheet, 131, 96, 26, 31, 3, 0.5, 7, false, true);
     this.animationsBluePortal = new Animator(this.spritesheet, 131, 127, 26, 31, 3, 0.5, 7, false, true);
     //Team 1 (food) set of portals
-    this.animationsPurplePortal = new Animator(this.spritesheet, 131, 160, 26, 31, 3, 0.5, 7, false, true);
+    // this.animationsPurplePortal = new Animator(this.spritesheet, 131, 160, 26, 31, 3, 0.5, 7, false, true);
     // this.animationsYellowPortal = new Animator(this.spritesheet, 131, 192, 26, 31, 3, 0.5, 7, false, true);
 
     // Since portals are in the entity list and always moving,
