@@ -1,6 +1,7 @@
 class MovingPlatform extends Entity {
-  constructor(x, y, startX, endX) {
-    super(x, y, 80, 10);
+  constructor(x, y, startX, endX, screenWidth) {
+    // Randomize the length of platform from 1/5 of screen width to 1/20 of screen width.
+    super(x, y, Math.random(screenWidth * 4 / 20 - screenWidth * 1 / 20) + screenWidth * 1 / 20, 10);
     this.vel.x = -20;
     this.acc.y = 0;
 
@@ -82,4 +83,12 @@ class MovingPlatform extends Entity {
   draw(ctx) {
     ctx.fillRect(this.x, this.y, this.w, this.h);
   }
+  drawMinimap(ctx, mmX, mmY) {
+    ctx.fillStyle = "Black";
+    ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 5, 2);
+  }
+
+  // drawMinimap(ctx, mmX, mmY) {
+  //   ctx.drawImage(this.mapCanvas, 20, 600, this.mapCanvas.width/7, this.mapCanvas.height/10);
+  // }
 }

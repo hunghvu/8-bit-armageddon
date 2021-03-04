@@ -63,14 +63,13 @@ window.onload = function () {
         MANAGER.queueDownload('./assets/HealthBar.png');
         MANAGER.queueDownload('./assets/DisplayBar.png');
         MANAGER.queueDownload('./assets/shoot.wav');
+        MANAGER.queueDownload('./assets/ui-widgets.png');
         MANAGER.queueDownload('./assets/background-cloud.jpg');
         MANAGER.queueDownload('./assets/background.jpg');
 
         MANAGER.downloadAll(function () {
-
             //destructionMap = new DestructableMap('map/map.png');
             gg = new Game(turnLimit, timePerTurnLimit, playMode);
-
         });
     }
 
