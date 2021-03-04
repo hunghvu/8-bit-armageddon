@@ -163,34 +163,48 @@ class Player extends Entity { //Add button to enter portal
       ctx.lineTo(
       this.shootingAngle.originX + this.shootingAngle.radius * Math.cos(radian),
       this.shootingAngle.originY + this.shootingAngle.radius * Math.sin(radian));
-      ctx.stroke();
+    ctx.stroke();
 
-      ctx.save();
-      ctx.textAlign = "center";
-      ctx.textBaseline = "top";
-      ctx.fillStyle = "white";
-      ctx.fillText(Math.round((1 - this.damageTaken) * 100, 2) + "%", this.x + this.w / 2, this.y + this.h);
-      ctx.restore();
+    ctx.save();
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.font = "16px 'Press Start 2P'";
+    ctx.fillStyle = "white";
+    ctx.fillText(Math.round((1 - this.damageTaken) * 100, 2) + "%", this.x + this.w / 2, this.y + this.h);
+    if (this.isInTurn) {
+      ctx.fillStyle = "Red";
+      ctx.fillText("P" + this.playerNo, this.x + this.w / 2 + 60, this.y + this.h);
+    } else {
+      ctx.fillText("P" + this.playerNo, this.x + this.w / 2 + 60, this.y + this.h);
     }
+
+    ctx.restore();
+  }
+
+  drawMinimap(ctx, mmX, mmY) {
+    ctx.fillStyle = "Red";
+    ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 10, 10);
   }
 
   /**
    * Call this whenever damage needs to be done to a player.
    * @param {Point} Origin - where the damage came from
    */
-  damage(origin, power) {
+  damage(world, origin, power) {
     // Add knock back
     if (Math.abs(this.x - origin.x) > 1) {
-      this.vel.x = 1000 / ((this.x - origin.x));
+      this.vel.x = 400 / ((this.x - origin.x));
     } else {
-      this.vel.x = 1000;
+      this.vel.x = 400;
     }
 
     if (Math.abs(this.y - origin.y) > 1) {
-      this.vel.y = 1000 / ((this.y - origin.y));
+      this.vel.y = 400 / ((this.y - origin.y));
     } else {
-      this.vel.y = 1000;
+      this.vel.y = 400;
     }
+
+    world.spawn(new DamageText(this.x, this.y));
 
     this.damageTaken += power / 100;
     this.playerHit = true;
@@ -623,4 +637,5 @@ class Player extends Entity { //Add button to enter portal
       }
     }
   }
+
 }

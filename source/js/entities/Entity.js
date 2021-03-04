@@ -51,6 +51,11 @@ class Entity extends Rectangle {
     ctx.strokeRect(this.x, this.y, this.w, this.h);
   }
 
+  drawMinimap(ctx, mmX, mmY) {
+   // ctx.fillStyle = "Blue";
+   // ctx.fillRect(mmX + this.x/7, mmY + this.y/10, 50, 10);
+  }
+
   /**
    * Set the acceleration to a specific set of values.
    * @param {Point} newAcc - The new acceleration

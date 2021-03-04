@@ -26,7 +26,7 @@ class Bullet extends Projectile {
    * @params {deltaT} - The number of ms since the last update
    */
   update(world, deltaT){
-    this.moveUntilCollision(world, this.desiredMovement(deltaT, Wind.x, Wind.y));
+    this.moveUntilCollision(world, this.desiredMovement(deltaT, Wind.x, Wind.y), true);
 
     // update direction/facing
     if (this.vel.x < 0) this.facing = 1;
@@ -45,27 +45,31 @@ class Bullet extends Projectile {
           }
         }
       }
+    // Check if the bullet collides with any of the players
+    let hasCollidedWithAPlayer = this.collidesWithRects(world.players);
+
     // Add y-threshold for the bullet so that i can end turns.
-    if (world.map.collideWithRectangle(this) || this.y > world.map.height) {
+    if (world.map.collideWithRectangle(this) || 
+        this.y > world.map.height || 
+        hasCollidedWithAPlayer) {
       // Destroy this bullet if we hit something
       this.active = false;
       this.projectileCanEndTurn = true;
-      //let destructionRect = new Rectangle(this.x, this.y, 20, 20);
-      //destructionRect.center = this.center;
-      //world.map.destroyRectangle(destructionRect);
+      // Destroy the map
       world.map.destroyCircle(this.center.x, this.center.y, 10);
       // Find any players in the blast range
       for (let i = 0; i < world.players.length; i++) {
         let playerThisLoop = world.players[i];
-        // console.log(playerThisLoop);
-        // If we are close enough then damage a player
+
+        // If we are close enough then damage the player
         let difference = playerThisLoop.center
         difference.sub(this.center);
         if (difference.magnitude < 32) {
-          playerThisLoop.damage(this.center, 5);
+          playerThisLoop.damage(world, this.center, 5);
         }
       }
     }
+
   }
 
   /**
@@ -89,5 +93,17 @@ class Bullet extends Projectile {
 
     //facing left = 1,
     this.animations[1] = new Animator(this.spritesheet, 102, 73, 20, 11, 1, 0.5, null, false, true);
+  }
+
+  drawMinimap(ctx, mmX, mmY) {
+    //let miniBulletRect = new Rectangle(mmX + this.x / 7, mmY+ this.y / 10, 8, 8);
+    //destructionRect.center = this.center;
+    //world.map.destroyRectangle(destructionRect);
+    ctx.fillStyle = "Green";
+
+    ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
+    // if ((mmX+this.x/7) > world.map.width/7 || (mmX+this.x/7) < 0) {
+    //     ctx.clearRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
+    // }
   }
 }
