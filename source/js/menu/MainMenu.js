@@ -13,7 +13,7 @@ window.onload = function () {
 
     /**
      * Make a HTML object becomes size responsive.
-     * @param {html object} element 
+     * @param {html object} element
      */
     function setResponsiveSize(element) {
         $("#" + element.id).width(window.innerWidth);
@@ -44,7 +44,7 @@ window.onload = function () {
         playModeChoices.forEach(element => {
             if (element.checked) {
                 playMode = element.value;
-            } 
+            }
         })
 
         if(playMode === null) {
@@ -61,6 +61,7 @@ window.onload = function () {
         MANAGER.queueDownload('./assets/character.png');
         MANAGER.queueDownload('./assets/weapons.png');
         MANAGER.queueDownload('./assets/HealthBar.png');
+        MANAGER.queueDownload('./assets/DisplayBar.png');
         MANAGER.queueDownload('./assets/shoot.wav');
         MANAGER.queueDownload('./assets/background-cloud.jpg');
         MANAGER.queueDownload('./assets/background.jpg');
@@ -75,9 +76,9 @@ window.onload = function () {
 
     /**
      * This function check whether an input is empty.
-     * This is used instead of "required" attribute to 
+     * This is used instead of "required" attribute to
      *  centralize all the properties to this script.
-     * @param {string} inputValue 
+     * @param {string} inputValue
      */
     function isEmpty(inputValue) {
         return inputValue === "" || inputValue === null || inputValue === undefined;

@@ -96,7 +96,7 @@ class Game {
       }
       //....
       else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == OPWeapon) {
-        this.ctx.drawImage(this.spritesheet, 10, 290, 11, 29, 200, 35, 36, 62);
+        this.ctx.drawImage(this.spritesheet, 160, 287, 30, 32, 200, 35, 30, 32);
       }
     }
 
@@ -106,59 +106,73 @@ class Game {
       this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
 
       //Top display bar
-      this.ctx.fillStyle = "Grey";
-      this.ctx.fillRect(0,0,this.canvas.width,100);
+      // this.ctx.fillStyle = "Grey";
+      // console.log(this.canvas.width);
+      // this.ctx.fillRect(0,0,this.canvas.width,100);
+      this.spritesheet = MANAGER.getAsset('./assets/DisplayBar.png');
+      this.ctx.drawImage(this.spritesheet, 0, 0, 1536, 100, 0, 0, 1536, 100);
+
 
       // For testing only.
       this.ctx.fillStyle = "Black";
       this.ctx.font = "30px Arial";
-      this.ctx.fillText('Timer ', 7, 31);
+      this.ctx.fillText('Timer ', 75, 31);
       // this.ctx.fillText(5 - Math.round(this.timer.turnTime % 5), 200, 200);
-      this.ctx.fillText(this.timePerTurnLimit - Math.round(this.timer.turnTime % this.timePerTurnLimit), 29, 56);
+      this.ctx.fillText(this.timePerTurnLimit - Math.round(this.timer.turnTime % this.timePerTurnLimit), 104, 56);
 
       this.ctx.fillText('Weapon: ', 175, 31);
+      this.ctx.font = "12px Arial";
       for (var i = 0; i <= this.world.currentPlayer.currentWeapon.myWeaponBag.length; i++) {
         this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
         //Bullet
         if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Bullet) {
-          this.ctx.drawImage(this.spritesheet, 6, 70, 23, 16, 200, 35, 92, 64);
+          this.ctx.drawImage(this.spritesheet, 6, 70, 23, 16, 200, 35, 65, 45);
+          this.ctx.fillText('HandGun DMG: 5', 200, 93);
         }
         //Sniper
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Sniper) {
-          this.ctx.drawImage(this.spritesheet, 191, 37, 33, 15, 200, 35, 99, 38);
+          this.ctx.drawImage(this.spritesheet, 191, 37, 33, 15, 200, 35, 99, 45);
+          this.ctx.fillText('Sniper DMG: 30', 200, 93);
         }
         // Laser
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Laser) {
-          this.ctx.drawImage(this.spritesheet, 224, 37, 32, 19, 200, 35, 92, 64);
+          this.ctx.drawImage(this.spritesheet, 224, 37, 32, 19, 200, 35, 76, 45);
+          this.ctx.fillText('Laser DMG: 20', 200, 93);
         }
         // Grenade
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Grenade) {
-          this.ctx.drawImage(this.spritesheet, 10, 7, 11, 14, 200, 35, 44, 56);
+          this.ctx.drawImage(this.spritesheet, 10, 7, 11, 14, 200, 35, 35, 45);
+          this.ctx.fillText('Grenade DMG: 15', 200, 93);
         }
         // Dynomite
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == GrenadeLevel2) {
-          this.ctx.drawImage(this.spritesheet, 2, 35, 28, 28, 200, 35, 44, 56);
+          this.ctx.drawImage(this.spritesheet, 2, 35, 28, 28, 200, 35, 33, 45);
+          this.ctx.fillText('Dynomite DMG: 30', 200, 93);
         }
         // Rocket
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == GrenadeLevel3) {
-          this.ctx.drawImage(this.spritesheet, 130, 261, 27, 20, 200, 35, 54, 40);
+          this.ctx.drawImage(this.spritesheet, 130, 261, 27, 20, 200, 35, 61, 45);
+          this.ctx.fillText('Rocket DMG: 50', 200, 93);
         }
         //PortalGun
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == PortalGun) {
-          this.ctx.drawImage(this.spritesheet, 2, 233, 28, 12, 200, 35, 112, 48);
+          this.ctx.drawImage(this.spritesheet, 2, 233, 28, 12, 200, 35, 105, 45);
+          this.ctx.fillText('PortalGun DMG: -', 200, 93);
         }
         //TeleportGun
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == TeleportGun) {
-          this.ctx.drawImage(this.spritesheet, 70, 223, 18, 31, 200, 35, 36, 62);
+          this.ctx.drawImage(this.spritesheet, 70, 223, 18, 31, 200, 35, 26, 45);
+          this.ctx.fillText('TeleportGun DMG: -', 200, 93);
         }
         //....
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == OPWeapon) {
-          this.ctx.drawImage(this.spritesheet, 10, 290, 11, 29, 200, 35, 36, 62);
+          this.ctx.drawImage(this.spritesheet, 160, 287, 30, 32, 200, 35, 42, 45);
+          this.ctx.fillText('...Peace was never an option...', 200, 93);
         }
       }
 
       this.spritesheet = MANAGER.getAsset('./assets/HealthBar.png');
-
+      this.ctx.font = "30px Arial";
       this.ctx.fillText('Health: ', 343, 31);
       if(this.world.currentPlayer.damageTaken >= 0 && this.world.currentPlayer.damageTaken < 0.1) {
         this.ctx.drawImage(this.spritesheet, 83, 1, 29, 26, 343, 32, 92, 64);

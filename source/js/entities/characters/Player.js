@@ -499,16 +499,16 @@ class Player extends Entity { //Add button to enter portal
 
       //Idle = 0;
       //facing right
-      this.animations[0][0] = new Animator(this.spritesheet, 481, 384, 41, 54, 1, 0.5, null, false, true);
+      this.animations[0][0] = new Animator(this.spritesheet, 481, 386, 41, 54, 1, 0.5, null, false, true);
       //facing left = 1;
       this.animations[0][1] = new Animator(this.spritesheet, 437, 386, 41, 54, 1, 0.5, null, false, true);
 
       //walk = 1;
-      this.animations[1][0] = new Animator(this.spritesheet, 481, 384, 41, 54, 1, 0.5, null, false, true);
+      this.animations[1][0] = new Animator(this.spritesheet, 481, 386, 41, 54, 1, 0.5, null, false, true);
       this.animations[1][1] = new Animator(this.spritesheet, 437, 386, 41, 54, 1, 0.5, null, false, true);
 
       //Jump = 2;
-      this.animations[2][0] = new Animator(this.spritesheet, 481, 384, 41, 54, 1, 0.5, null, false, true);
+      this.animations[2][0] = new Animator(this.spritesheet, 481, 386, 41, 54, 1, 0.5, null, false, true);
       this.animations[2][1] = new Animator(this.spritesheet, 437, 386, 41, 54, 1, 0.5, null, false, true);
     }
     else {

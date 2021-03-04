@@ -88,8 +88,8 @@ class World {
   resetCrates() {
     // Get rid of all the crates
     this.entities = this.entities.filter((entity) => !(entity instanceof Crate));
-    // Just spawn 3 crates all over
-    for (let i = 0; i < 3; i++) {
+    // Just spawn 4 crates all over
+    for (let i = 0; i < 4; i++) {
       this.spawn(new Crate(Math.random() * this.map.width, Math.random() * this.map.height));
     }
   }

@@ -31,6 +31,7 @@ class Grenade extends Projectile{
             ((this.x < (world.entities[i].x + world.entities[i].w)) && (this.x > world.entities[i].x)) &&
             ((this.y > world.entities[i].y) && (this.y < (world.entities[i].y + world.entities[i].h)))) {
               world.currentPlayer.upgraded++;
+              world.currentPlayer.opWeaponUnlock++;
               world.entities[i].active = false;
               if (world.currentPlayer.upgraded > 3) {
                 world.currentPlayer.upgraded = 1; //reset level
@@ -52,7 +53,7 @@ class Grenade extends Projectile{
                 let difference = playerThisLoop.center
                 difference.sub(this.center);
                 if (difference.magnitude < 32) {
-                    playerThisLoop.damage(this.center, 4);
+                    playerThisLoop.damage(this.center, 15);
                 }
             }
         }
@@ -77,9 +78,9 @@ class Grenade extends Projectile{
       // Grenade = no set number
       //buffer padding current build = 17
       //facing right = 0,
-      this.animations[0] = new Animator(this.spritesheet, 9, 7, 12, 14, 4, 0.5, 17, false, true);
+      this.animations[0] = new Animator(this.spritesheet, 41, 7, 12, 16, 1, 0.5, null, false, true);
 
       //facing left = 1,
-      this.animations[1] = new Animator(this.spritesheet, 137, 7, 12, 14, 4, 0.5, 17, true, true);
+      this.animations[1] = new Animator(this.spritesheet, 167, 7, 12, 14, 1, 0.5, null, true, true);
     }
 }
