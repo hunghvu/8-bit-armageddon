@@ -39,7 +39,7 @@ class Bullet extends Projectile {
     if (world.map.collideWithRectangle(this) || 
         this.y > world.map.height || 
         hasCollidedWithAPlayer ||
-        this.x > world.map.width - 20 || this.x < 40) {
+        this.x > world.map.width + 40 || this.x < -40) {
       // Destroy this bullet if we hit something
       this.active = false;
       this.projectileCanEndTurn = true;
