@@ -10,7 +10,7 @@ class ShootingPower {
     static max = 1000; // The max and min winds are just arbitrary number now. 
     static min = 0; //  They should be fixed values determined by game creators.
     static power = 0;
-    static direction = true; // True means increasing, false otherwise. Start decreasing when value reaches 1000.
+    static increase = true; // True means increasing, false otherwise. Start decreasing when value reaches 1000.
     static backToZero = false; // When the power is reduced back to 0 from 1000, flag is true, otherwise false.
 
     /**
@@ -19,7 +19,7 @@ class ShootingPower {
      */
     static change() {
         if (this.power >= this.max) this.direction = false;
-        this.direction ? this.power += 2 : this.power -= 2;
+        this.increase ? this.power += 2 : this.power -= 2;
         if(this.power === 0) this.backToZero = true;
     }
 
@@ -28,7 +28,7 @@ class ShootingPower {
      */
     static reset() {
         this.power = 0;
-        this.direction = false;
+        this.increase = true;
         this.backToZer0 = false;
     }
 }

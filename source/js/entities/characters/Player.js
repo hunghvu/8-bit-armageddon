@@ -332,8 +332,11 @@ class Player extends Entity { //Add button to enter portal
       this.shootingAngle.left ? this.shootingAngle.increaseAngle() : this.shootingAngle.decreaseAngle();
     }
 
-    if(controls.shootingDownThisLoop){
+    if(!controls.shootingDownThisLoop && controls.shootingForceCompleted){ // Shoot the bullet when a player release a key.
       world.spawn(this.currentWeapon.spawnCurrentWeapon(this.x, this.y, this.shootingAngle));
+      controls.shootingForceCompleted = false;
+      this.isInTurn = false;
+      ShootingPower.reset();
     }
 
 

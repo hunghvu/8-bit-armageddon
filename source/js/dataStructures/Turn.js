@@ -4,6 +4,7 @@
  * of this game.
  */
 class Turn {
+    static inReadyPeriod = false; // Indicate if the match is in preparation period.
     constructor(timer, world, timePerTurn, controls, game) {
         this.timePerTurn = timePerTurn;
         this.world = world;
@@ -19,7 +20,7 @@ class Turn {
 
         this.controls = controls;
 
-        this.inReadyPeriod = false; // Indicate if the match is in preparation period.
+        
         this.isShot = false; // Indicate if a player has shot.
 
         // console.log(new Date())
@@ -55,13 +56,16 @@ class Turn {
      */
     privateExtendAndEndTurn() {
         if (this.controls.shooting && !this.inReadyPeriod) {
-            // console.log(this.inReadyPeriod);
             this.isShot = true;
             this.world.currentPlayer.vel.x = 0;
             this.world.currentPlayer.acc.x = 0;
-            this.world.currentPlayer.isInTurn = false;
-            ShootingPower.change();
-            // console.log(ShootingPower.power);
+            if (this.world.currentPlayer.isInTurn) ShootingPower.change();
+            if(ShootingPower.backToZero) { // End the turn when shooting force reduce back to zero.
+                this.world.currentPlayer.isInTurn = false;
+                this.controls.shooting = false;
+                controls.shootingForceCompleted = false;
+                ShootingPower.reset();
+            }
         }
         // console.log(this.world.entityOnMap.isAllEntityStop());
 
@@ -89,7 +93,11 @@ class Turn {
     privateUpdateTurn() {
         if (!this.isShot) {
             // Turn.js will control its own tick
-            if(!this.controls.shooting || ShootingPower.backToZero) this.timer.turnTick(); // Only increase timer when not holding shooting button (adjust shooting force);
+            // When the player is in Turn, and hold down the shooting button, pause the timer.
+            if(!this.controls.shooting || !this.world.currentPlayer.isInTurn) {
+                this.timer.turnTick(); // Only increase timer when not holding shooting button (adjust shooting force);
+            }
+
             if(this.timer.turnTime >= 0 && this.inFirstReadyPeriod) { // Give the first player a ready period.
                 this.world.currentPlayer.isInTurn = true;
                 this.inFirstReadyPeriod = false;
@@ -100,7 +108,6 @@ class Turn {
             // Because we can have multiple step between *.95 and (*+1).00, e.g: *.975 => need to round up.
             if ((this.timer.turnTime % this.timePerTurn) >= (this.timePerTurn - this.timer.maxStep)) {
                 this.timer.turnTime = Math.round(this.timer.turnTime % this.timePerTurn);
-                ShootingPower.reset();
                 if(this.world.currentPlayer.onGround || this.world.currentPlayer.dead) {
                     if (this.playerNumber === -1) {
                         this.privateShuffleTurn();
