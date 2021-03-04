@@ -180,6 +180,7 @@ class Player extends Entity { //Add button to enter portal
 
     ctx.restore();
   }
+}
 
   drawMinimap(ctx, mmX, mmY) {
     ctx.fillStyle = "Red";
