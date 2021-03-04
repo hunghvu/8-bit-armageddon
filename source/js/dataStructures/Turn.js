@@ -33,7 +33,7 @@ class Turn {
                                                                          // Therefore, the very first player must be put in manually.
         this.playerEndOfTurnOne = []
         this.checkDeathStatus = false; // This flag is similar to isShot, however, it's used to
-                                       //  see whether a test to see if a current player is dead has been performed.
+                                       //  see whether a test, which is to see if a current player is dead, has been performed.
                                        //  false mean not yet, true means otherwise.
         this.turnCounter = 1; // A counter for ingame turn.
 
@@ -60,6 +60,8 @@ class Turn {
             this.world.currentPlayer.vel.x = 0;
             this.world.currentPlayer.acc.x = 0;
             this.world.currentPlayer.isInTurn = false;
+            ShootingPower.change();
+            // console.log(ShootingPower.power);
         }
         // console.log(this.world.entityOnMap.isAllEntityStop());
 
@@ -67,7 +69,7 @@ class Turn {
         //  1. We have a shot resolution.
         //  2. The player is dead.
         //  3. Key P is pressed (pass/skip a turn) during inTurn period.
-        if ((this.world.entityOnMap.isAllEntityStop() && this.isShot) 
+        if ((this.world.entityOnMap.isAllEntityStop() && this.isShot && !this.controls.shooting) 
             || (this.world.currentPlayer.dead && !this.checkDeathStatus)
             || (this.controls.pass && !this.inReadyPeriod)) {
             this.isShot = false;
@@ -75,7 +77,6 @@ class Turn {
             // There is another turnTick() inside private updateTurn, so minus maxStep*2
             //  can directly change to ready period.
             this.timer.turnTime = this.timePerTurn - this.timer.maxStep * 2;
-            console.log(true);
         } else if (this.controls.forfeit) {
             this.game.status = "FORFEIT";
             this.game.forfeitCode = this.world.currentPlayer.team;
@@ -88,7 +89,7 @@ class Turn {
     privateUpdateTurn() {
         if (!this.isShot) {
             // Turn.js will control its own tick
-            this.timer.turnTick();
+            if(!this.controls.shooting || ShootingPower.backToZero) this.timer.turnTick(); // Only increase timer when not holding shooting button (adjust shooting force);
             if(this.timer.turnTime >= 0 && this.inFirstReadyPeriod) { // Give the first player a ready period.
                 this.world.currentPlayer.isInTurn = true;
                 this.inFirstReadyPeriod = false;
@@ -99,6 +100,7 @@ class Turn {
             // Because we can have multiple step between *.95 and (*+1).00, e.g: *.975 => need to round up.
             if ((this.timer.turnTime % this.timePerTurn) >= (this.timePerTurn - this.timer.maxStep)) {
                 this.timer.turnTime = Math.round(this.timer.turnTime % this.timePerTurn);
+                ShootingPower.reset();
                 if(this.world.currentPlayer.onGround || this.world.currentPlayer.dead) {
                     if (this.playerNumber === -1) {
                         this.privateShuffleTurn();
