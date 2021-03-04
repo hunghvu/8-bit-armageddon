@@ -63,7 +63,7 @@ class Turn {
             if(ShootingPower.backToZero) { // End the turn when shooting force reduce back to zero.
                 this.world.currentPlayer.isInTurn = false;
                 this.controls.shooting = false;
-                controls.shootingForceCompleted = false;
+                this.controls.shootingForceCompleted = false;
                 ShootingPower.reset();
             }
         }

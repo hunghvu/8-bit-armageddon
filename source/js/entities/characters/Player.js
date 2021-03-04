@@ -46,7 +46,7 @@ class Player extends Entity { //Add button to enter portal
     // Lock user's input if false (when the turns end)
     this.isInTurn = false;
     this.loadAnimations();
-    this.currentWeapon = new CurrentWeapon(this.x, this.y, this.shootingAngle.radians, 600);
+    this.currentWeapon = new CurrentWeapon(this.x, this.y, this.shootingAngle.radians);
 
     var d = new Date();
     d.setMilliseconds(200);

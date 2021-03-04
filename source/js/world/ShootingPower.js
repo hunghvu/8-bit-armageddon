@@ -18,7 +18,7 @@ class ShootingPower {
      * Increase power until it reach 1000 then gradually reduce back to 0.
      */
     static change() {
-        if (this.power >= this.max) this.direction = false;
+        if (this.power >= this.max) this.increase = false;
         this.increase ? this.power += 2 : this.power -= 2;
         if(this.power === 0) this.backToZero = true;
     }
@@ -29,6 +29,6 @@ class ShootingPower {
     static reset() {
         this.power = 0;
         this.increase = true;
-        this.backToZer0 = false;
+        this.backToZero = false;
     }
 }
