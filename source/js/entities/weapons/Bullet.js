@@ -102,12 +102,8 @@ class Bullet extends Projectile {
   }
 
   drawMinimap(world, ctx, mmX, mmY) {
-    //let miniBulletRect = new Rectangle(mmX + this.x / 7, mmY+ this.y / 10, 8, 8);
-    //destructionRect.center = this.center;
-    //world.map.destroyRectangle(destructionRect);
-    this.outsideMinimap = false;
-    ctx.fillStyle = "Orange";
 
+    ctx.fillStyle = "Orange";
     if (20 <= (mmX + this.x / 7) && (mmX + this.x /7) <= 20 + world.map.width/7) {
       ctx.beginPath();
       ctx.arc(mmX + this.x / 7, mmY + this.y / 10, 5, 2 * Math.PI, false);

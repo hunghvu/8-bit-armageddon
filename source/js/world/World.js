@@ -2,11 +2,11 @@ class World {
   constructor(map, playerAmount) {
     this.map = map;
     this.minimap = new Minimap(20, 600, this.map.width/7, this.map.height/10);
-
-    this.spritesheet = MANAGER.getAsset('./assets/character.png');
-
-
-    this.entities = [];
+    //
+    // this.spritesheet = MANAGER.getAsset('./assets/character.png');
+    //
+    //
+    // this.entities = [];
     this.spritesheet = MANAGER.getAsset('./assets/character.png');
 
     this.entities = [];
@@ -16,6 +16,9 @@ class World {
 
     // parameter sets the players design
     this.players = this.entityOnMap.playerOnMapList;
+
+ //   this.crates = this.entityOnMap.entityOnMapList;
+
     this.currentPlayer = this.players[this.players.length - 1];
     this.currentPlayer.isInTurn = false;
 
@@ -124,6 +127,13 @@ class World {
       entity.drawMinimap(ctx, mmX,mmY)
     });
   }
+
+
+  // drawCratesMinimap(ctx, mmX, mmY) {
+  //   this.crates.forEach(entity =>{
+  //     entity.drawMinimap(ctx, mmX,mmY)
+  //   });
+  // }
 
   drawEntities(ctx) {
     this.entities.forEach(entity => {
