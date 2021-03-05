@@ -14,6 +14,7 @@ class EntityOnMap {
         this.pixelArray = this.world.map.mapGenerator.circles;
         console.log(this.pixelArray);
         this.highestGroundY = Number.MAX_SAFE_INTEGER;
+        this.numberOfPlayerPerTeam = null;
     }
 
     /**
@@ -44,10 +45,13 @@ class EntityOnMap {
      * @param {int} playerAmount number of players in this match.
      */
     generatePlayer(playerAmount) {
+        this.numberOfPlayerPerTeam = playerAmount / 2;
         this.pixelArray.forEach(element => {
-            if (element[0].y - element[1] * 2 < this.highestGroundY) this.highestGroundY = element[0].y - element[1] * 2;
-        }); // element[0].y - element[1] somehow is still not the highest point, so times 2 to element [1], and hopefully it's 
-            //  the highest point. Besides, that make players spawn a bit on air, which is preferred.
+            if (element[0].y - element[1] * 2 < this.highestGroundY) this.highestGroundY = element[0].y - element[1] * 2 - 100;
+        }); // element[0].y - element[1] somehow is still not the highest point, so times 2 to element [1]
+            // Minus another 100 because 100 is greater than player's frame height, which is 61.
+            // Besides, that make players spawn a bit on air, which is preferred.
+
         
         console.log(this.highestGroundY)
         for (let i = 0; i < playerAmount; i++) {
@@ -55,5 +59,55 @@ class EntityOnMap {
             let spawnY = this.highestGroundY;
             this.playerOnMapList.push(new Player(this.spritesheet, spawnX, spawnY, i % 2, i % 2, i + 1));
         }
+    }
+
+    /**
+     * This function check whether a match is ended. This method is called inside Turn.js when a new turn (ready period) starts.
+     * Since a new turn starts after there is a shot resolution, calling this method at the beginning of the turn also means
+     * update the match status right after damage happens.
+     * 
+     * This function only apply to conclusion rules based on player's death status.
+     * @return [isEnded, status code] - For status code, 0 means draw, 1 means team 1 wins, 2 means team 2 wins.
+     *                                  Status code only applied when isEnded = true. If false, status code is 0 by default.
+     */
+    isMatchEnd() {
+        let team1 = this.playerOnMapList.filter(element => element.team === 0 && element.dead === false);
+        let team2 = this.playerOnMapList.filter(element => element.team === 1 && element.dead === false);
+        let result = null;
+        if (team1.length === 0 && team2.length === 0) {
+            result = [true, 0];
+        } else if (team1.length === 0) {
+            result = [true, 2]
+        } else if (team2.length === 0) {
+            result = [true, 1];
+        } else {
+            result = [false, 0];
+        }
+        return result;
+    }
+
+    /**
+     * This function check whether a match is ended. This method is called inside Turn.js when a new turn (ready period) starts.
+     * Since a new turn starts after there is a shot resolution, calling this method at the beginning of the turn also means
+     * update the match status right after damage happens.
+     * 
+     * This function only apply to conclusion rules based on turn limit.
+     * @return [isEnded, status code] - For status code, 0 means draw, 1 means team 1 wins, 2 means team 2 wins.
+     *                                  Status code only applied when isEnded = true. If false, status code is 0 by default.
+     */
+    isMatchEndWithTurnLimit() {
+        let damageTaken1 = 0;
+        let damageTaken2 = 0;
+        this.playerOnMapList.filter(element => element.team === 0).forEach(element => damageTaken1 += element.damageTaken);
+        this.playerOnMapList.filter(element => element.team === 1).forEach(element => damageTaken2 += element.damageTaken);
+        let result = null;
+        if (damageTaken1 === damageTaken2) {
+            result = [true, 0];
+        } else if (damageTaken1 > damageTaken2) {
+            result = [true, 2];
+        } else if (damageTaken2 > damageTaken1) {
+            result = [true, 1];
+        }
+        return result;
     }
 }

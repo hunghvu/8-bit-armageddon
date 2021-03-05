@@ -4,7 +4,7 @@
  * of this game.
  */
 class Turn {
-    constructor(timer, world, timePerTurn, controls) {
+    constructor(timer, world, timePerTurn, controls, game) {
         this.timePerTurn = timePerTurn;
         this.world = world;
         this.playerNumber = this.world.players.length - 2; // The last player in list will get turn at first by default.
@@ -14,6 +14,9 @@ class Turn {
         this.readyTime = 3; // Preparation period after ending each turn.
                             // This can be changed to a set-by-user
                             // value if needed
+        this.timer.turnTime -= this.readyTime; // Start at negative value to for the first ready period.
+        this.inFirstReadyPeriod = true;
+
         this.controls = controls;
 
         this.inReadyPeriod = false; // Indicate if the match is in preparation period.
@@ -33,6 +36,8 @@ class Turn {
                                        //  see whether a test to see if a current player is dead has been performed.
                                        //  false mean not yet, true means otherwise.
         this.turnCounter = 1; // A counter for ingame turn.
+
+        this.game = game;
     }
 
     /**
@@ -71,6 +76,9 @@ class Turn {
             //  can directly change to ready period.
             this.timer.turnTime = this.timePerTurn - this.timer.maxStep * 2;
             console.log(true);
+        } else if (this.controls.forfeit) {
+            this.game.status = "FORFEIT";
+            this.game.forfeitCode = this.world.currentPlayer.team;
         }
     }
 
@@ -81,6 +89,10 @@ class Turn {
         if (!this.isShot) {
             // Turn.js will control its own tick
             this.timer.turnTick();
+            if(this.timer.turnTime >= 0 && this.inFirstReadyPeriod) { // Give the first player a ready period.
+                this.world.currentPlayer.isInTurn = true;
+                this.inFirstReadyPeriod = false;
+            }
             // Approximately 0 (max timer step).
             // this.timePerTurn is currently 5 secs, so minus maxStep turns it to 4.95;
             // The maxStep is 0.05 is timer will always happens at least one time during *.95 and (*+1).00 range.
@@ -127,6 +139,19 @@ class Turn {
                         Wind.change(); // Change the wind when a turn starts (begins at ready period).
                         // console.log(referenceToRecentPlayers)
                         this.privateShuffleTurn(); // Add player to "already-finished-turn" player.
+
+                        // Match conclusion.
+                        if(!(this.game.turnLimit === "" 
+                            || this.game.turnLimit === null 
+                            || this.game.turnLimit === undefined) 
+                            && this.turnCounter > parseInt(this.game.turnLimit)
+                            && this.world.entityOnMap.isMatchEndWithTurnLimit()[0]) { // Check if the game is out of turn and provide respective conclusion.
+                                this.game.status = "ENDED";
+                                this.game.endCode = this.world.entityOnMap.isMatchEndWithTurnLimit()[1];                        
+                        } else if(this.world.entityOnMap.isMatchEnd()[0]) { // Check if the game is ended and update Game object.
+                            this.game.status = "ENDED";
+                            this.game.endCode = this.world.entityOnMap.isMatchEnd()[1];
+                        }
                     }
 
                 } else { // Extend timer.
