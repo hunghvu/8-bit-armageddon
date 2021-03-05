@@ -1,12 +1,12 @@
 /**
- * An upgraded weapon, the Grenade Launcher, can be spawned from an item crate.
+ * An upgraded weapon, the Grenade Lvl 3 (Rocket), can be spawned from an item crate.
  */
-class Grenade extends Projectile{
+class GrenadeLevel3 extends Projectile{
     /**
-     * Constructor for the grenade laucher that extends the entity class.
+     * Constructor for the Rocket that extends the projectile class.
      */
     constructor(x, y, angle, power) {
-      super(x, y, angle, power);
+      super(x, y, angle, power*1.5);
       this.projectileCanEndTurn = false; // It is not used as of now.
       this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
 
@@ -15,13 +15,13 @@ class Grenade extends Projectile{
     }
 
     /**
-     * Update the bullet flying through the air.
+     * Update the rocket flying through the air.
      *
      * @params {World} - The world object that should be referenced
      * @params {deltaT} - The number of ms since the last update
      */
      update(world, deltaT){
-       this.moveUntilCollision(world, this.desiredMovement(deltaT, Wind.x, Wind.y), false);
+       this.moveUntilCollision(world, this.desiredMovement(deltaT, Wind.x, Wind.y), true);
 
        // update direction/facing
        if (this.vel.x < 0) this.facing = 1;
@@ -42,14 +42,19 @@ class Grenade extends Projectile{
            }
          }
 
+       // Check if the bullet collides with any of the players
+       let hasCollidedWithAPlayer = this.collidesWithRects(world.players);
+
+
        // Add y-threshold for the bullet so that i can end turns.
        if (world.map.collideWithRectangle(this) ||
-           this.y > world.map.height) {
+           this.y > world.map.height ||
+           hasCollidedWithAPlayer) {
          // Destroy this bullet if we hit something
          this.active = false;
          this.projectileCanEndTurn = true;
          // Destroy the map
-         world.map.destroyCircle(this.center.x, this.center.y, 25);
+         world.map.destroyCircle(this.center.x, this.center.y, 75);
          // Find any players in the blast range
          for (let i = 0; i < world.players.length; i++) {
            let playerThisLoop = world.players[i];
@@ -57,47 +62,32 @@ class Grenade extends Projectile{
            // If we are close enough then damage the player
            let difference = playerThisLoop.center
            difference.sub(this.center);
-           if (difference.magnitude < 32) {
-             playerThisLoop.damage(world, this.center, 15);
+           if (difference.magnitude < 50) {
+             playerThisLoop.damage(world, this.center, 45);
            }
          }
        }
+
      }
 
     /**
-     * Draw the grenade launcher
+     * Draw the Rocket
      *
      * @param {CanvasRenderingContext2D} ctx - The context to draw to
      */
     draw(ctx){
       this.animations[this.facing].drawFrame(.17, ctx, this.x, this.y, 1.2);
-
-      // ctx.fillStyle = "white";
-      // ctx.strokeRect(this.x, this.y, 16, 16);
-    }
-
-    drawMinimap(ctx, mmX, mmY) {
-        //let miniBulletRect = new Rectangle(mmX + this.x / 7, mmY+ this.y / 10, 8, 8);
-        //destructionRect.center = this.center;
-        //world.map.destroyRectangle(destructionRect);
-        ctx.fillStyle = "Green";
-
-        ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
-        // if ((mmX+this.x/7) > world.map.width/7 || (mmX+this.x/7) < 0) {
-        //     ctx.clearRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
-        // }
     }
 
     loadAnimations() {
       for (var j = 0; j < 2; j++) { //facing
         this.animations.push([]);
       }
-      // Grenade = no set number
-      //buffer padding current build = 17
+      // Rocket (upgrade lvl 3) = no set number
       //facing right = 0,
-      this.animations[0] = new Animator(this.spritesheet, 41, 7, 12, 16, 1, 0.5, null, false, true);
+      this.animations[0] = new Animator(this.spritesheet, 130, 261, 27, 20, 1, 0.5, null, false, true);
 
       //facing left = 1,
-      this.animations[1] = new Animator(this.spritesheet, 167, 7, 12, 14, 1, 0.5, null, true, true);
+      this.animations[1] = new Animator(this.spritesheet, 162, 262, 27, 20, 1, 0.5, null, true, true);
     }
 }
