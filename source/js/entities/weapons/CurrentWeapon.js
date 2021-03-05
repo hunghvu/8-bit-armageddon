@@ -73,7 +73,7 @@ class CurrentWeapon {
     weaponUpgradeCheck(upgraded, isOP)
     {
       if (upgraded == 1) {
-        this.myWeaponBag = [Bullet, Grenade, Sniper, GrenadeLevel2, Laser, GrenadeLevel3, PortalGun, TeleportGun, OPWeapon];
+        this.myWeaponBag = [Bullet, Grenade, PortalGun, TeleportGun];
         if (isOP == 4) {
           this.myWeaponBag.push(OPWeapon);
         }

@@ -9,7 +9,7 @@ class Player extends Entity { //Add button to enter portal
    * @param {number} y - The y position where the player is spawned
    */
 
-  constructor(spriteSheet, x, y, design, team, playerNo) {
+  constructor(spriteSheet, x, y, design, team, playerNo, characterSwitch) {
 
     //Used as hitbox
     super(x - 3, y, 6, 48);
@@ -21,8 +21,13 @@ class Player extends Entity { //Add button to enter portal
 
     this.spritesheet = spriteSheet;
 
+    if (characterSwitch > 4) {
+      this.characterSwitch = (characterSwitch - 4);
+    } else {
+      this.characterSwitch = characterSwitch;
+    }
     this.team = team;
-    this.design = design; //different designs of characters
+    this.design = design;
     this.facing = 0; // 0 = right, 1 = left
     this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling? 3 = shooting
     this.dead = false; //false = living, true = dead
@@ -83,7 +88,7 @@ class Player extends Entity { //Add button to enter portal
     else if (this.playerHit == true && this.damageTaken != 1)
     {
       this.playerHit = false;
-      if (this.design == 0)
+      if (this.characterSwitch == 1)
       {
         if (this.facing == 0)
         {
@@ -96,7 +101,7 @@ class Player extends Entity { //Add button to enter portal
           this.playerHitLeftAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
         }
       }
-      else if (this.design == 1)
+      else if (this.characterSwitch == 3)
       {
         if (this.facing == 0)
         {
@@ -109,7 +114,7 @@ class Player extends Entity { //Add button to enter portal
           this.playerHitLeftAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
         }
       }
-      else if (this.design == 2)
+      else if (this.characterSwitch == 2)
       {
         if (this.facing == 0)
         {
@@ -122,7 +127,7 @@ class Player extends Entity { //Add button to enter portal
           this.playerHitLeftAnimation.drawFrame(.00001, ctx, this.x - 24 / 2, this.y, 0.8);
         }
       }
-      else if (this.design == 3)
+      else if (this.characterSwitch == 0)
       {
         if (this.facing == 0)
         {
@@ -185,8 +190,14 @@ class Player extends Entity { //Add button to enter portal
   }
 
   drawMinimap(ctx, mmX, mmY) {
-    ctx.fillStyle = "Red";
-    ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 10, 10);
+    if (this.team == 0)
+    {
+      ctx.fillStyle = "Red";
+      ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 10, 10);
+    } else {
+      ctx.fillStyle = "Blue";
+      ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 10, 10);
+    }
   }
 
   /**
@@ -441,7 +452,7 @@ class Player extends Entity { //Add button to enter portal
       }
     }
 
-    if (this.design == 0)
+    if (this.characterSwitch == 1)
     {
       //Human 1 = 0;
 
@@ -467,7 +478,7 @@ class Player extends Entity { //Add button to enter portal
       this.animations[2][1] = new Animator(this.spritesheet, 395, 129, 23, 61, 5, 0.5, 25, true, false);
 
     }
-    else if (this.design == 1)
+    else if (this.characterSwitch == 3)
     {
       //Human 2 = 1;
 
@@ -492,7 +503,7 @@ class Player extends Entity { //Add button to enter portal
       // facing left = 1
       this.animations[2][1] = new Animator(this.spritesheet, 59, 321, 23, 61, 5, 0.5, 25, true, false);
     }
-    else if (this.design == 2)
+    else if (this.characterSwitch == 2)
     {
       //Boba = 2;
 
@@ -510,7 +521,7 @@ class Player extends Entity { //Add button to enter portal
       this.animations[2][0] = new Animator(this.spritesheet, 150, 384, 36, 59, 1, 0.5, null, false, true);
       this.animations[2][1] = new Animator(this.spritesheet, 102, 384, 36, 59, 1, 0.5, null, false, true);
     }
-    else if (this.design == 3)
+    else if (this.characterSwitch == 0)
     {
       // Cup of Noodle = 3
 
@@ -528,7 +539,7 @@ class Player extends Entity { //Add button to enter portal
       this.animations[2][0] = new Animator(this.spritesheet, 481, 386, 41, 54, 1, 0.5, null, false, true);
       this.animations[2][1] = new Animator(this.spritesheet, 437, 386, 41, 54, 1, 0.5, null, false, true);
     }
-    else {
+    else if (this.characterSwitch == 4){
       // Zan Zan = 4
       //Idle = 0;
       //facing right

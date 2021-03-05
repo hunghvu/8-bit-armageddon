@@ -13,7 +13,7 @@ class World {
     this.entityOnMap = new EntityOnMap(this);
     this.entityOnMap.generatePlayer(playerAmount);
     this.map.generateMovablePlatform(this.entityOnMap.highestGroundY);
-    
+
     // parameter sets the players design
     this.players = this.entityOnMap.playerOnMapList;
     this.currentPlayer = this.players[this.players.length - 1];
@@ -102,15 +102,13 @@ class World {
   resetCrates() {
     // Get rid of all the crates
     this.entities = this.entities.filter((entity) => !(entity instanceof Crate));
-
     // Just spawn 3 crates all over
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
       // Highest point is calculated in entityOnMap, but even though it works, the flow of our code is a bit bizzare right now
       //  because of pretty unorganized global accessibility.
       // This will spawn crates in the range of 0-300 pixels above the calculated highest point.
       // The restriction is there so the crates are not too far from the surface.
       this.spawn(new Crate(Math.random() * this.map.width, Math.random() * (300) + (this.entityOnMap.highestGroundY - 300)));
-
     }
   }
 
@@ -181,4 +179,3 @@ class World {
         }
     }
 };
-
