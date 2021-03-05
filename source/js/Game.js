@@ -130,14 +130,14 @@ class Game {
 
       this.ctx.font = "16px 'Press Start 2P'";
       this.spritesheet = MANAGER.getAsset('./assets/HealthBar.png');
-      this.ctx.fillText('Health: ', 343, 31);
+      this.ctx.fillText('Health: ', 300, 31);
       this.ctx.font = "20px Arial";
       // Get the tenth of the damage taken from 1.0 to 0.0 to get a value from 0 to 10
       // This will allow us to find the corresponding sprite to the amount of health
       let healthTenth = Math.round(this.world.currentPlayer.damageTaken * 10);
-      this.ctx.drawImage(this.spritesheet, 83 + (healthTenth * 64), 1, 29, 26, 343, 32, 92, 64);
+      this.ctx.drawImage(this.spritesheet, 83 + (healthTenth * 64), 1, 29, 26, 300, 32, 92, 64);
       // this.ctx.fillText((1.0 - this.world.currentPlayer.damageTaken)*100, 375, 66);
-      this.ctx.fillText(Math.ceil((1.0 - this.world.currentPlayer.damageTaken)*100) + "%", 375, 66);
+      this.ctx.fillText(Math.ceil((1.0 - this.world.currentPlayer.damageTaken)*100) + "%", 325, 66);
 
 
       this.ctx.font = "16px 'Press Start 2P'";
@@ -161,14 +161,14 @@ class Game {
       }
       // Currently the whole array is printed, I think printing in different ways like
       //  P1 -> P2 will introduce unnecessary processing, and taking spaces.
-      this.ctx.fillText("Turn order: " + turnIteration, 465, 62);
-      this.ctx.fillText("Current player: P" + this.world.currentPlayer.playerNo, 465, 93);
+      this.ctx.fillText("Turn order: " + turnIteration, 420, 62);
+      this.ctx.fillText("Current player: P" + this.world.currentPlayer.playerNo, 420, 93);
       if (!(this.turnLimit === "" || this.turnLimit === null || this.turnLimit === undefined)) {
-        this.ctx.fillText("Turn number: " + this.turn.turnCounter + " / " + this.turnLimit, 465, 31);
+        this.ctx.fillText("Turn number: " + this.turn.turnCounter + " / " + this.turnLimit, 420, 31);
       } else {
-        this.ctx.fillText("Turn number: " + this.turn.turnCounter, 465, 31);
+        this.ctx.fillText("Turn number: " + this.turn.turnCounter, 420, 31);
       }
-      this.ctx.fillText("Shooting force: " + ShootingPower.power + " / " + ShootingPower.max, 735, 31);
+      this.ctx.fillText("Shooting force: " + ShootingPower.power + " / " + ShootingPower.max, 755, 93);
 
       if (this.controls.enterDownThisLoop) {
         // Allow the player to move from the playing state to the paused state
