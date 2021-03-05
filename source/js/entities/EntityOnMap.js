@@ -8,8 +8,7 @@ class EntityOnMap {
         this.spritesheet = MANAGER.getAsset('./assets/character.png');
         this.entityOnMapList = [];
 
-        // Hard coded team indicator for each player for now, might change later on.
-        this.playerOnMapList = []; // The list hard-coded for testing purpose.
+        this.playerOnMapList = [];
 
         this.pixelArray = this.world.map.mapGenerator.circles;
         console.log(this.pixelArray);
@@ -52,12 +51,12 @@ class EntityOnMap {
             // Minus another 100 because 100 is greater than player's frame height, which is 61.
             // Besides, that make players spawn a bit on air, which is preferred.
 
-        
+
         console.log(this.highestGroundY)
         for (let i = 0; i < playerAmount; i++) {
             let spawnX = Math.random() * this.world.map.width;
             let spawnY = this.highestGroundY;
-            this.playerOnMapList.push(new Player(this.spritesheet, spawnX, spawnY, i % 2, i % 2, i + 1));
+            this.playerOnMapList.push(new Player(this.spritesheet, spawnX, spawnY, i % 2, i % 2, i + 1, i));
         }
     }
 
@@ -65,7 +64,7 @@ class EntityOnMap {
      * This function check whether a match is ended. This method is called inside Turn.js when a new turn (ready period) starts.
      * Since a new turn starts after there is a shot resolution, calling this method at the beginning of the turn also means
      * update the match status right after damage happens.
-     * 
+     *
      * This function only apply to conclusion rules based on player's death status.
      * @return [isEnded, status code] - For status code, 0 means draw, 1 means team 1 wins, 2 means team 2 wins.
      *                                  Status code only applied when isEnded = true. If false, status code is 0 by default.
@@ -90,7 +89,7 @@ class EntityOnMap {
      * This function check whether a match is ended. This method is called inside Turn.js when a new turn (ready period) starts.
      * Since a new turn starts after there is a shot resolution, calling this method at the beginning of the turn also means
      * update the match status right after damage happens.
-     * 
+     *
      * This function only apply to conclusion rules based on turn limit.
      * @return [isEnded, status code] - For status code, 0 means draw, 1 means team 1 wins, 2 means team 2 wins.
      *                                  Status code only applied when isEnded = true. If false, status code is 0 by default.

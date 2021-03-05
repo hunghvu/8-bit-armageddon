@@ -34,19 +34,36 @@ class Bullet extends Projectile {
     if (this.vel.x < 0) this.facing = 1;
     if (this.vel.x > 0) this.facing = 0;
 
+
+    //Crate collision
+    for(var i = 0; i < world.entities.length; i++) {
+      if (world.entities[i] instanceof Crate &&
+        ((this.x < (world.entities[i].x + world.entities[i].w)) && (this.x > world.entities[i].x)) &&
+        ((this.y > world.entities[i].y) && (this.y < (world.entities[i].y + world.entities[i].h)))) {
+          world.currentPlayer.upgraded++;
+          world.currentPlayer.opWeaponUnlock++;
+          world.entities[i].active = false;
+          if (world.currentPlayer.upgraded > 3) {
+            world.currentPlayer.upgraded = 1; //reset level
+          }
+        }
+      }
+
     // Check if the bullet collides with any of the players
     let hasCollidedWithAPlayer = this.collidesWithRects(world.players);
 
+
     // Add y-threshold for the bullet so that i can end turns.
-    if (world.map.collideWithRectangle(this) || 
-        this.y > world.map.height || 
-        hasCollidedWithAPlayer)  { // ||
-        //this.x > world.map.width + 40 || this.x < -40) {
+
+    if (world.map.collideWithRectangle(this) ||
+        this.y > world.map.height ||
+        hasCollidedWithAPlayer) {
+     
       // Destroy this bullet if we hit something
       this.active = false;
       this.projectileCanEndTurn = true;
       // Destroy the map
-      world.map.destroyCircle(this.center.x, this.center.y, 10);
+      world.map.destroyCircle(this.center.x, this.center.y, 5);
       // Find any players in the blast range
       for (let i = 0; i < world.players.length; i++) {
         let playerThisLoop = world.players[i];
@@ -55,11 +72,10 @@ class Bullet extends Projectile {
         let difference = playerThisLoop.center
         difference.sub(this.center);
         if (difference.magnitude < 32) {
-          playerThisLoop.damage(world, this.center, 4);
+          playerThisLoop.damage(world, this.center, 5);
         }
       }
     }
-
   }
 
   /**
@@ -70,22 +86,19 @@ class Bullet extends Projectile {
   draw(ctx){
     this.animations[this.facing].drawFrame(.17, ctx, this.x, this.y, 0.9);
 
-    ctx.fillStyle = "white";
-    ctx.strokeRect(this.x, this.y, 16, 16);
-
+    // ctx.fillStyle = "white";
+    // ctx.strokeRect(this.x, this.y, 16, 16);
   }
 
   loadAnimations() {
     for (var j = 0; j < 2; j++) { //facing
       this.animations.push([]);
     }
-    //buffer padding current build =
     //facing right = 0,
-    this.animations[0] = new Animator(this.spritesheet, 70, 74, 20, 9, 1, 0.5, null, false, true);
+    this.animations[0] = new Animator(this.spritesheet, 70, 73, 20, 11, 1, 0.5, null, false, true);
 
     //facing left = 1,
-    this.animations[1] = new Animator(this.spritesheet, 102, 74, 12, 14, 1, 0.5, null, false, true);
-    //fix and add load animation
+    this.animations[1] = new Animator(this.spritesheet, 102, 73, 20, 11, 1, 0.5, null, false, true);
   }
 
   drawMinimap(world, ctx, mmX, mmY) {

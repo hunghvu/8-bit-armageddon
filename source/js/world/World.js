@@ -13,7 +13,7 @@ class World {
     this.entityOnMap = new EntityOnMap(this);
     this.entityOnMap.generatePlayer(playerAmount);
     this.map.generateMovablePlatform(this.entityOnMap.highestGroundY);
-    
+
     // parameter sets the players design
     this.players = this.entityOnMap.playerOnMapList;
     this.currentPlayer = this.players[this.players.length - 1];
@@ -25,7 +25,7 @@ class World {
 
     // Background images.
     this.imgFar = MANAGER.getAsset('./assets/background.jpg');
-    this.imgNear = MANAGER.getAsset('./assets/background-cloud.jpg') 
+    this.imgNear = MANAGER.getAsset('./assets/background-cloud.jpg')
 
     // The sX in drawImage will be updated as the player moves in a way it create an opposite movement effect.
     this.resetCrates();
@@ -103,7 +103,7 @@ class World {
     // Get rid of all the crates
     this.entities = this.entities.filter((entity) => !(entity instanceof Crate));
     // Just spawn 3 crates all over
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
       // Highest point is calculated in entityOnMap, but even though it works, the flow of our code is a bit bizzare right now
       //  because of pretty unorganized global accessibility.
       // This will spawn crates in the range of 0-300 pixels above the calculated highest point.
@@ -179,4 +179,3 @@ class World {
         }
     }
 };
-

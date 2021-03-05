@@ -1,7 +1,7 @@
 /**
- * An upgraded weapon, the Grenade Launcher, can be spawned from an item crate.
+ * An upgraded weapon, the Grenade Level 2, can be spawned from an item crate.
  */
-class Grenade extends Projectile{
+class GrenadeLevel2 extends Projectile{
     /**
      * Constructor for the grenade laucher that extends the entity class.
      */
@@ -49,7 +49,7 @@ class Grenade extends Projectile{
          this.active = false;
          this.projectileCanEndTurn = true;
          // Destroy the map
-         world.map.destroyCircle(this.center.x, this.center.y, 25);
+         world.map.destroyCircle(this.center.x, this.center.y, 50);
          // Find any players in the blast range
          for (let i = 0; i < world.players.length; i++) {
            let playerThisLoop = world.players[i];
@@ -58,10 +58,11 @@ class Grenade extends Projectile{
            let difference = playerThisLoop.center
            difference.sub(this.center);
            if (difference.magnitude < 32) {
-             playerThisLoop.damage(world, this.center, 15);
+             playerThisLoop.damage(world, this.center, 30);
            }
          }
        }
+
      }
 
     /**
@@ -71,33 +72,17 @@ class Grenade extends Projectile{
      */
     draw(ctx){
       this.animations[this.facing].drawFrame(.17, ctx, this.x, this.y, 1.2);
-
-      // ctx.fillStyle = "white";
-      // ctx.strokeRect(this.x, this.y, 16, 16);
-    }
-
-    drawMinimap(ctx, mmX, mmY) {
-        //let miniBulletRect = new Rectangle(mmX + this.x / 7, mmY+ this.y / 10, 8, 8);
-        //destructionRect.center = this.center;
-        //world.map.destroyRectangle(destructionRect);
-        ctx.fillStyle = "Green";
-
-        ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
-        // if ((mmX+this.x/7) > world.map.width/7 || (mmX+this.x/7) < 0) {
-        //     ctx.clearRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
-        // }
     }
 
     loadAnimations() {
       for (var j = 0; j < 2; j++) { //facing
         this.animations.push([]);
       }
-      // Grenade = no set number
-      //buffer padding current build = 17
+      // Dynomite (upgrade lvl 2) = no set number
       //facing right = 0,
-      this.animations[0] = new Animator(this.spritesheet, 41, 7, 12, 16, 1, 0.5, null, false, true);
+      this.animations[0] = new Animator(this.spritesheet, 99, 41, 28, 13, 1, 0.5, null, true, true);
 
       //facing left = 1,
-      this.animations[1] = new Animator(this.spritesheet, 167, 7, 12, 14, 1, 0.5, null, true, true);
+      this.animations[1] = new Animator(this.spritesheet, 35, 41, 28, 13, 1, 0.5, null, true, true);
     }
 }
