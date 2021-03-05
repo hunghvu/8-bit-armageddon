@@ -12,8 +12,9 @@ class Crate extends Entity {
     this.crateSprite = new Animator(this.spritesheet, 196, 288, 22, 29, 1, 0.5, null, false, true);
   }
 
-  drawMinimap(ctx, mmX, mmY) {
+  drawMinimap(world, ctx, mmX, mmY) {
     ctx.drawImage(this.spritesheet, 196, 298, 22, 19, mmX + this.x / 7, mmY + this.y / 10, 9, 8);
+
   }
 
   /**
@@ -38,5 +39,4 @@ class Crate extends Entity {
     // ctx.fillStyle = "blue";
     // ctx.fillRect(this.x + this.w, this.y + this.h, 2, 2);
   }
-
 }

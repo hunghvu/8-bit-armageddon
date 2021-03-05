@@ -17,6 +17,8 @@ class Bullet extends Projectile {
     this.animations = [];
     this.projectileCanEndTurn = false;
     this.loadAnimations();
+    //this.minimap = new Minimap(20, 600, this.map.width/7, this.map.height/10);
+
   }
 
   /**
@@ -52,9 +54,11 @@ class Bullet extends Projectile {
 
 
     // Add y-threshold for the bullet so that i can end turns.
+
     if (world.map.collideWithRectangle(this) ||
         this.y > world.map.height ||
         hasCollidedWithAPlayer) {
+     
       // Destroy this bullet if we hit something
       this.active = false;
       this.projectileCanEndTurn = true;
@@ -97,15 +101,15 @@ class Bullet extends Projectile {
     this.animations[1] = new Animator(this.spritesheet, 102, 73, 20, 11, 1, 0.5, null, false, true);
   }
 
-  drawMinimap(ctx, mmX, mmY) {
-    //let miniBulletRect = new Rectangle(mmX + this.x / 7, mmY+ this.y / 10, 8, 8);
-    //destructionRect.center = this.center;
-    //world.map.destroyRectangle(destructionRect);
-    ctx.fillStyle = "Green";
+  drawMinimap(world, ctx, mmX, mmY) {
 
-    ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
-    // if ((mmX+this.x/7) > world.map.width/7 || (mmX+this.x/7) < 0) {
-    //     ctx.clearRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
-    // }
+    ctx.fillStyle = "Orange";
+    if (20 <= (mmX + this.x / 7) && (mmX + this.x /7) <= 20 + world.map.width/7) {
+      ctx.beginPath();
+      ctx.arc(mmX + this.x / 7, mmY + this.y / 10, 5, 2 * Math.PI, false);
+      ctx.lineWidth = 2;
+      ctx.closePath();
+      ctx.fill();
+    }
   }
 }
