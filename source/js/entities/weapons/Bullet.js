@@ -93,7 +93,7 @@ class Bullet extends Projectile {
     //destructionRect.center = this.center;
     //world.map.destroyRectangle(destructionRect);
     this.outsideMinimap = false;
-    ctx.fillStyle = "Green";
+    ctx.fillStyle = "Orange";
 
     if (20 <= (mmX + this.x / 7) && (mmX + this.x /7) <= 20 + world.map.width/7) {
       ctx.beginPath();
