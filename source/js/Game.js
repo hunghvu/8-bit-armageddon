@@ -54,58 +54,6 @@ class Game {
     // this.turn.countdownTurn();
     this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
 
-    //Top display bar
-    this.ctx.fillStyle = "Grey";
-    this.ctx.fillRect(0,0,this.canvas.width,100);
-
-
-    this.ctx.fillStyle = "Black";
-    this.ctx.font = "16px 'Press Start 2P'";
-    this.ctx.fillText('Timer ', 7, 31);
-    this.ctx.fillText(5 - Math.round(this.timer.turnTime % 5), 29, 56);
-
-    // Draws weapons in top UI
-    this.ctx.fillText('Weapon: ', 175, 31);
-    for (var i = 0; i <= this.world.currentPlayer.currentWeapon.myWeaponBag.length; i++) {
-      this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
-      //Bullet
-      if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Bullet) {
-        this.ctx.drawImage(this.spritesheet, 6, 70, 23, 16, 200, 35, 92, 64);
-      }
-      //Sniper
-      else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Sniper) {
-        this.ctx.drawImage(this.spritesheet, 191, 37, 33, 15, 200, 35, 99, 38);
-      }
-      // Laser
-      else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Laser) {
-        this.ctx.drawImage(this.spritesheet, 224, 37, 32, 19, 200, 35, 92, 64);
-      }
-      // Grenade
-      else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Grenade) {
-        this.ctx.drawImage(this.spritesheet, 10, 7, 11, 14, 200, 35, 44, 56);
-      }
-      // Dynomite
-      else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == GrenadeLevel2) {
-        this.ctx.drawImage(this.spritesheet, 2, 35, 28, 28, 200, 35, 44, 56);
-      }
-      // Rocket
-      else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == GrenadeLevel3) {
-        this.ctx.drawImage(this.spritesheet, 130, 261, 27, 20, 200, 35, 54, 40);
-      }
-      //PortalGun
-      else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == PortalGun) {
-        this.ctx.drawImage(this.spritesheet, 2, 233, 28, 12, 200, 35, 112, 48);
-      }
-      //TeleportGun
-      else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == TeleportGun) {
-        this.ctx.drawImage(this.spritesheet, 70, 223, 18, 31, 200, 35, 36, 62);
-      }
-      //....
-      else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == OPWeapon) {
-        this.ctx.drawImage(this.spritesheet, 160, 287, 30, 32, 200, 35, 30, 32);
-      }
-    }
-
     if (this.status == "PLAYING") {
       this.world.update(this.timer.tick(), this.controls);
       this.turn.countdownTurn();
@@ -182,15 +130,14 @@ class Game {
 
       this.ctx.font = "16px 'Press Start 2P'";
       this.spritesheet = MANAGER.getAsset('./assets/HealthBar.png');
-      this.ctx.fillText('Health: ', 343, 31);
+      this.ctx.fillText('Health: ', 300, 31);
       this.ctx.font = "20px Arial";
       // Get the tenth of the damage taken from 1.0 to 0.0 to get a value from 0 to 10
       // This will allow us to find the corresponding sprite to the amount of health
       let healthTenth = Math.round(this.world.currentPlayer.damageTaken * 10);
-      this.ctx.drawImage(this.spritesheet, 83 + (healthTenth * 64), 1, 29, 26, 343, 32, 92, 64);
+      this.ctx.drawImage(this.spritesheet, 83 + (healthTenth * 64), 1, 29, 26, 300, 32, 92, 64);
       // this.ctx.fillText((1.0 - this.world.currentPlayer.damageTaken)*100, 375, 66);
-      this.ctx.fillText(Math.ceil((1.0 - this.world.currentPlayer.damageTaken)*100) + "%", 375, 66);
-
+      this.ctx.fillText(Math.ceil((1.0 - this.world.currentPlayer.damageTaken)*100) + "%", 325, 66);
 
 
       this.ctx.font = "16px 'Press Start 2P'";
@@ -198,7 +145,7 @@ class Game {
       this.ctx.save();
       let windCenter = new Point(1250, 32);
       this.ctx.textAlign = "center";
-      this.ctx.fillText("Wind: ", windCenter.x, windCenter.y);
+      this.ctx.fillText("Wind: ", windCenter.x + 10, windCenter.y);
 
       this.ctx.translate(windCenter.x, windCenter.y + 32);
       this.ctx.rotate(Math.atan2(Wind.x, Wind.y));
@@ -212,13 +159,16 @@ class Game {
       for (let i = this.world.players.length - 1; i >= 0; i --) { // Traverse backward.
         turnIteration.push(this.world.players[i].playerNo);
       }
-      this.ctx.fillText("Turn iteration (player No.): " + turnIteration, 465, 62);
-      this.ctx.fillText("Current player: P" + this.world.currentPlayer.playerNo, 465, 93);
+      // Currently the whole array is printed, I think printing in different ways like
+      //  P1 -> P2 will introduce unnecessary processing, and taking spaces.
+      this.ctx.fillText("Turn order: " + turnIteration, 420, 62);
+      this.ctx.fillText("Current player: P" + this.world.currentPlayer.playerNo, 420, 93);
       if (!(this.turnLimit === "" || this.turnLimit === null || this.turnLimit === undefined)) {
-        this.ctx.fillText("Turn number: " + this.turn.turnCounter + " / " + this.turnLimit, 465, 31);
+        this.ctx.fillText("Turn number: " + this.turn.turnCounter + " / " + this.turnLimit, 420, 31);
       } else {
-        this.ctx.fillText("Turn number: " + this.turn.turnCounter, 465, 31);
+        this.ctx.fillText("Turn number: " + this.turn.turnCounter, 420, 31);
       }
+      this.ctx.fillText("Shooting force: " + ShootingPower.power + " / " + ShootingPower.max, 755, 93);
 
       if (this.controls.enterDownThisLoop) {
         // Allow the player to move from the playing state to the paused state
@@ -259,7 +209,6 @@ class Game {
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
     ctx.fillStyle = "white";
-    ctx.font = "16px 'Press Start 2P'";
     let teamNumer = this.forfeitCode + 1;
     ctx.fillText("Team " + teamNumer + " want to forfeit.", ctx.canvas.width / 2, ctx.canvas.height / 2);
     ctx.fillText("Press Y to vote Yes, and Esc to cancel.", ctx.canvas.width / 2, ctx.canvas.height / 3 * 2);
@@ -272,7 +221,6 @@ class Game {
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
     ctx.fillStyle = "white";
-    ctx.font = "16px 'Press Start 2P'";
     ctx.fillText("MATCH ENDED", ctx.canvas.width / 2, ctx.canvas.height / 2);
     if (this.endCode === 1 || this.endCode === 2) {
       ctx.fillText("Team " + this.endCode + " won!", ctx.canvas.width / 2, ctx.canvas.height / 3 * 2);
@@ -287,7 +235,6 @@ class Game {
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
     ctx.fillStyle = "white";
-    ctx.font = "16px 'Press Start 2P'";
     ctx.fillText("PAUSED", ctx.canvas.width / 2, ctx.canvas.height / 2);
     ctx.restore();
   }

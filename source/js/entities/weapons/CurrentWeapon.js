@@ -2,10 +2,9 @@
  * This class spawns the bullet as the default weapon, but can change to previous/next weapon.
  */
 class CurrentWeapon {
-    constructor(x, y, angle, power) {
+    constructor(x, y, angle) {
         this.x = x;
         this.y = y;
-        this.power = power;
         this.angle = angle;
 
         this.myWeaponBag = [Bullet];
@@ -27,11 +26,6 @@ class CurrentWeapon {
         this.myCurrentWeapon = this.myWeaponBag[this.currentIndex];
         console.log(this.myCurrentWeapon);
 
-        if (this.currentIndex === 0) {
-            this.power = 600;
-        } else {
-            this.power = 800;
-        }
     }
 
 
@@ -46,12 +40,6 @@ class CurrentWeapon {
         }
 
         this.myCurrentWeapon = this.myWeaponBag[this.currentIndex];
-
-        if (this.currentIndex === 0) {
-            this.power = 600;
-        } else {
-            this.power = 800;
-        }
     }
 
     /**
@@ -67,7 +55,8 @@ class CurrentWeapon {
         MANAGER.getAsset("./assets/shoot.wav").pause();
         MANAGER.getAsset("./assets/shoot.wav").currentTime = 0;
         MANAGER.getAsset("./assets/shoot.wav").play();
-        return new this.myCurrentWeapon(x, y, angle.radians, this.power)
+        console.log(this.power);
+        return new this.myCurrentWeapon(x, y, angle.radians, ShootingPower.power);
     }
 
     weaponUpgradeCheck(upgraded, isOP)

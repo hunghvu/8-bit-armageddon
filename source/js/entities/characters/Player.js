@@ -59,7 +59,7 @@ class Player extends Entity { //Add button to enter portal
 
     this.upgradedOnce = 0;
     this.upgraded = 1; //1 = Lvl 1, 2 = Lvl 2, 3 = Lvl 3
-    this.currentWeapon = new CurrentWeapon(this.x, this.y, this.shootingAngle.radians, 600);
+    this.currentWeapon = new CurrentWeapon(this.x, this.y, this.shootingAngle.radians);
     this.opWeaponUnlock = 0; //Unlock OP Weapon after collecting 4 upgrade crates (Only 4 will be spawn per game)
 
     var d = new Date();
@@ -181,12 +181,18 @@ class Player extends Entity { //Add button to enter portal
       ctx.fillStyle = "white";
       ctx.fillText(Math.round((1 - this.damageTaken) * 100, 2) + "%", this.x + this.w / 2, this.y + this.h + 10);
       this.healthBar.draw(ctx);
-
+      
+      let teamNumber = this.team + 1;
       if (this.isInTurn) {
         ctx.fillStyle = "Red";
-        ctx.fillText("P" + this.playerNo, this.x + this.w / 2 + 60, this.y + this.h);
+        ctx.font = "10px 'Press Start 2P'";
+        ctx.fillText("P" + this.playerNo, this.x + this.w / 2 + 50, this.y + this.h - 2);
+        ctx.fillText("T" + teamNumber, this.x + this.w / 2 + 50, this.y + this.h + 15);
       } else {
-        ctx.fillText("P" + this.playerNo, this.x + this.w / 2 + 60, this.y + this.h);
+        ctx.fillStyle = "white";
+        ctx.font = "10px 'Press Start 2P'";
+        ctx.fillText("P" + this.playerNo, this.x + this.w / 2 + 50, this.y + this.h - 2);
+        ctx.fillText("T" + teamNumber, this.x + this.w / 2 + 50, this.y + this.h + 15);
       }
 
       ctx.restore();
@@ -426,8 +432,11 @@ class Player extends Entity { //Add button to enter portal
       this.shootingAngle.left ? this.shootingAngle.increaseAngle() : this.shootingAngle.decreaseAngle();
     }
 
-    if(controls.shootingDownThisLoop){
+    if(!controls.shootingDownThisLoop && controls.shootingForceCompleted){ // Shoot the bullet when a player release a key.
       world.spawn(this.currentWeapon.spawnCurrentWeapon(this.x, this.y, this.shootingAngle));
+      controls.shootingForceCompleted = false;
+      this.isInTurn = false;
+      ShootingPower.reset();
     }
 
 

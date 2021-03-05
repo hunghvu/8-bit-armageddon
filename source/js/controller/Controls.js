@@ -88,6 +88,8 @@ class Controls {
     this.scrollDelta = 0;
     // Reset if the user has clicked this loop
     this.hasClicked = false;
+    // Reset flag which indicates a player  has finished adjusting shooting force.
+    if(this.shootingForceCompleted === true) this.shootingForceCompleted = false;
     // For ever parameter that keeps track of
     // a key has been pressed this loop, reset it.
     Object.keys(this).forEach((element) => {
@@ -138,6 +140,8 @@ class Controls {
           // Set the value to true so that when you use
           // thisobject.name you get the state of the key
           this[name] = false;
+          // A flag to indicate player has finished adjusting shooting force.
+          if (name === 'shooting') this['shootingForceCompleted'] = true;
         }
         // Don't allow the window to perform other actions
         // with this input
