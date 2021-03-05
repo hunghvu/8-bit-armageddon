@@ -19,9 +19,9 @@ class Portal extends Entity{
     // this.animationsOrangePortalstart = new Animator(this.spritesheet, 6, 96, 26, 31, 4, 0.5, 7, false, false);
     // this.animationsBluePortalstart = new Animator(this.spritesheet, 6, 127, 26, 31, 4, 0.5, 7, false, false);
     this.animationsOrangePortal = new Animator(this.spritesheet, 131, 96, 26, 31, 3, 0.5, 7, false, true);
-    // this.animationsBluePortal = new Animator(this.spritesheet, 131, 127, 26, 31, 3, 0.5, 7, false, true);
+    this.animationsBluePortal = new Animator(this.spritesheet, 131, 127, 26, 31, 3, 0.5, 7, false, true);
     //Team 1 (food) set of portals
-    this.animationsPurplePortal = new Animator(this.spritesheet, 131, 160, 26, 31, 3, 0.5, 7, false, true);
+    // this.animationsPurplePortal = new Animator(this.spritesheet, 131, 160, 26, 31, 3, 0.5, 7, false, true);
     // this.animationsYellowPortal = new Animator(this.spritesheet, 131, 192, 26, 31, 3, 0.5, 7, false, true);
 
     // Since portals are in the entity list and always moving,
@@ -29,7 +29,6 @@ class Portal extends Entity{
     this.projectileCanEndTurn = true;
   }
 
-  // ToDo: after a certain amount of turns/time, the portals should disappear
   // /**
   //  * Update the bullet flying through the air.
   //  *
@@ -47,6 +46,15 @@ class Portal extends Entity{
       }
   }
 
+  drawMinimap(ctx, mmX, mmY) {
+    if (this.design == 0) {
+      ctx.drawImage(this.spritesheet, 131, 96, 26, 31, mmX + this.x / 7, mmY + this.y / 10, 8.5, 10);
+
+    } else if (this.design == 1) {
+      ctx.drawImage(this.spritesheet, 131, 127, 26, 31, mmX + this.x / 7, mmY + this.y / 10, 8.5, 10);
+    }
+  }
+
   draw(ctx)
   {
     //human team portals
@@ -57,7 +65,7 @@ class Portal extends Entity{
       }
       // else
       // {
-      //   this.animationsBluePortal.drawFrame(.1, ctx, this.x, this.y, 1.5);
+      // this.animationsPurplePortal.drawFrame(.1, ctx, this.x, this.y, 1.5);
       // }
     }
     //food team portals
@@ -68,20 +76,8 @@ class Portal extends Entity{
       //   this.animationsYellowPortal.drawFrame(.1, ctx, this.x, this.y - 30, 1.5);
       // }
       // else {
-        this.animationsPurplePortal.drawFrame(.1, ctx, this.x, this.y, 1.5);
+        this.animationsBluePortal.drawFrame(.1, ctx, this.x, this.y, 1.5);
       // }
     }
-  }
-
-  drawMinimap(ctx, mmX, mmY) {
-    //let miniBulletRect = new Rectangle(mmX + this.x / 7, mmY+ this.y / 10, 8, 8);
-    //destructionRect.center = this.center;
-    //world.map.destroyRectangle(destructionRect);
-    ctx.fillStyle = "Green";
-
-    ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
-    // if ((mmX+this.x/7) > world.map.width/7 || (mmX+this.x/7) < 0) {
-    //     ctx.clearRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
-    // }
   }
 }
