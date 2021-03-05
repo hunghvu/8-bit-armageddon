@@ -67,7 +67,7 @@ class Turn {
         //  1. We have a shot resolution.
         //  2. The player is dead.
         //  3. Key P is pressed (pass/skip a turn) during inTurn period.
-        if ((this.world.entityOnMap.isAllEntityStop() && this.isShot) 
+        if ((this.world.entityOnMap.isAllEntityStop() && this.isShot)
             || (this.world.currentPlayer.dead && !this.checkDeathStatus)
             || (this.controls.pass && !this.inReadyPeriod)) {
             this.isShot = false;
@@ -122,6 +122,7 @@ class Turn {
                     //  Now the timer will run in this interleaving order: 5 secs action => 3 secs waiting => 5 secs action => ...
                     if (this.inReadyPeriod) {
                         this.world.currentPlayer.isInTurn = true;
+                        this.world.currentPlayer.upgradedOnce = 0;
                         this.inReadyPeriod = false;
                         this.playerNumber--;
                         for(var i = 0; i < this.world.entities.length; i++)
@@ -166,7 +167,7 @@ class Turn {
 
     /**
      * This function helps randomize team-interleaved turns.
-     * In 1 iteration, no team can have adjacent turns. 
+     * In 1 iteration, no team can have adjacent turns.
      * However, the next iteration is completely random.
      * For example: Iteration 1 - 1, 1, 2, 2 is not allowed.
      * But, Iteration 1 - 1, 2, 1, 2 / Iteration 2: 2, 1, 2, 1 is allowed (Team 2 has consecutive turns when changing iteration);
@@ -188,8 +189,8 @@ class Turn {
             }
             this.world.players.splice(0, this.playerAmount);
         } else {
-            this.world.currentPlayer.team === 0 
-            ? this.playerEndOfTurnOne.push(this.world.currentPlayer) 
+            this.world.currentPlayer.team === 0
+            ? this.playerEndOfTurnOne.push(this.world.currentPlayer)
             : this.playerEndOfTurnTwo.push(this.world.currentPlayer);
             console.log(this.world.currentPlayer.team, "playerNo,", this.world.currentPlayer.playerNo);
         }
@@ -198,7 +199,7 @@ class Turn {
     /**
      * This function will populate new turn order by adding players to a this.world.players array
      * based on a given algorithm.
-     * @param {function} callbackRule 
+     * @param {function} callbackRule
      */
     privateInterleavePlayers(callbackRule) {
         let maxLength = Math.max(this.playerEndOfTurnOne.length, this.playerEndOfTurnTwo.length);
@@ -206,5 +207,4 @@ class Turn {
             callbackRule();
         }
     }
-}   
-
+}

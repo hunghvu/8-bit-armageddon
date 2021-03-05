@@ -15,8 +15,7 @@ class TeleportGun extends Projectile {
 
         this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
 
-        // this.animations = [];
-        // this.loadAnimations();
+        this.teleportSprite = new Animator(this.spritesheet, 226, 236, 20, 27, 1, 0.5, null, false, true);
     }
 
     /**
@@ -28,11 +27,30 @@ class TeleportGun extends Projectile {
     update(world, deltaT){
         this.moveUntilCollision(world, this.desiredMovement(deltaT, Wind.x, Wind.y));
 
-        // update direction/facing
-        if (this.vel.x < 0) this.facing = 1;
-        if (this.vel.x > 0) this.facing = 0;
+        // // update direction/facing
+        // if (this.vel.x < 0) this.facing = 1;
+        // if (this.vel.x > 0) this.facing = 0;
 
-        if (world.map.collideWithRectangle(this)) {
+        //Crate collision
+        for(var i = 0; i < world.entities.length; i++) {
+          if (world.entities[i] instanceof Crate &&
+            ((this.x < (world.entities[i].x + world.entities[i].w)) && (this.x > world.entities[i].x)) &&
+            ((this.y > world.entities[i].y) && (this.y < (world.entities[i].y + world.entities[i].h)))) {
+              world.currentPlayer.upgraded++;
+              world.currentPlayer.opWeaponUnlock++;
+              world.entities[i].active = false;
+              if (world.currentPlayer.upgraded > 3) {
+                world.currentPlayer.upgraded = 1; //reset level
+              }
+            }
+          }
+
+        if (this.y > world.map.height)
+        {
+          // Destroy this bullet if we hit something
+          this.active = false;
+        }
+        else if (world.map.collideWithRectangle(this)) {
             // Teleports the player where the bullet lands
 
             // Initial: -50 buffer so the player falls to that position.
@@ -63,10 +81,7 @@ class TeleportGun extends Projectile {
      * @param {CanvasRenderingContext2D} ctx - The context to draw to
      */
     draw(ctx){
-        // this.animations[this.facing].drawFrame(.17, ctx, this.x, this.y, 0.9);
-
-        ctx.fillStyle = "white";
-        ctx.strokeRect(this.x, this.y, 16, 16);
+        this.teleportSprite.drawFrame(.17, ctx, this.x, this.y, 0.9);
     }
 
     // loadAnimations() {
@@ -93,4 +108,5 @@ class TeleportGun extends Projectile {
         //     ctx.clearRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
         // }
     }
+
 }

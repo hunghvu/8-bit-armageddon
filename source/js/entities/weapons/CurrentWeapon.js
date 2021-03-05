@@ -7,7 +7,9 @@ class CurrentWeapon {
         this.y = y;
         this.power = power;
         this.angle = angle;
-        this.myWeaponBag = [Bullet, Grenade, PortalGun, TeleportGun];
+
+        this.myWeaponBag = [Bullet];
+
         this.currentIndex = 0;
         this.myCurrentWeapon = this.myWeaponBag[this.currentIndex];
     }
@@ -23,6 +25,7 @@ class CurrentWeapon {
         }
 
         this.myCurrentWeapon = this.myWeaponBag[this.currentIndex];
+        console.log(this.myCurrentWeapon);
 
         if (this.currentIndex === 0) {
             this.power = 600;
@@ -65,5 +68,27 @@ class CurrentWeapon {
         MANAGER.getAsset("./assets/shoot.wav").currentTime = 0;
         MANAGER.getAsset("./assets/shoot.wav").play();
         return new this.myCurrentWeapon(x, y, angle.radians, this.power)
+    }
+
+    weaponUpgradeCheck(upgraded, isOP)
+    {
+      if (upgraded == 1) {
+        this.myWeaponBag = [Bullet, Grenade, PortalGun, TeleportGun];
+        if (isOP == 4) {
+          this.myWeaponBag.push(OPWeapon);
+        }
+      }
+      else if (upgraded == 2) {
+        this.myWeaponBag = [Sniper, GrenadeLevel2, PortalGun, TeleportGun];
+        if (isOP == 4) {
+              this.myWeaponBag.push(OPWeapon);
+        }
+      }
+      else {
+        this.myWeaponBag = [Laser, GrenadeLevel3, PortalGun, TeleportGun];
+        if (isOP == 4) {
+              this.myWeaponBag.push(OPWeapon);
+        }
+      }
     }
 }
