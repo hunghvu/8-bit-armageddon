@@ -65,7 +65,6 @@ class Portal extends Entity{
     //food team portals
     else
     {
-
         this.animationsBluePortal.drawFrame(.1, ctx, this.x, this.y, 1.5);
     }
   }
