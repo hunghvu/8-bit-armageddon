@@ -100,9 +100,12 @@ class Laser extends Projectile {
      */
     draw(ctx){
         this.animations[this.facing].drawFrame(.17, ctx, this.x, this.y, 1);
+    }
 
-        // ctx.fillStyle = "white";
-        // ctx.rect(this.x, this.y, 16, 16);
+    drawMinimap(world, ctx, mmX, mmY) {
+        if (20 <= (mmX + this.x / 7) && (mmX + this.x /7) <= 20 + world.map.width/7) {
+            this.animations[this.facing].drawFrame(.17, ctx, mmX+ this.x / 7, mmY + this.y / 10, 0.3);
+        }
     }
 
     loadAnimations() {

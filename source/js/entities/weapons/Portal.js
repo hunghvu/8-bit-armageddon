@@ -46,7 +46,7 @@ class Portal extends Entity{
       }
   }
 
-  drawMinimap(ctx, mmX, mmY) {
+  drawMinimap(world, ctx, mmX, mmY) {
     if (this.design == 0) {
       ctx.drawImage(this.spritesheet, 131, 96, 26, 31, mmX + this.x / 7, mmY + this.y / 10, 8.5, 10);
 
@@ -57,27 +57,16 @@ class Portal extends Entity{
 
   draw(ctx)
   {
-    //human team portals
     if (this.design == 0){
-      // if (this.position == 0)
       {
         this.animationsOrangePortal.drawFrame(.1, ctx, this.x, this.y, 1.5);
       }
-      // else
-      // {
-      // this.animationsPurplePortal.drawFrame(.1, ctx, this.x, this.y, 1.5);
-      // }
     }
     //food team portals
     else
     {
-      // if (this.position == 0)
-      // {
-      //   this.animationsYellowPortal.drawFrame(.1, ctx, this.x, this.y - 30, 1.5);
-      // }
-      // else {
+
         this.animationsBluePortal.drawFrame(.1, ctx, this.x, this.y, 1.5);
-      // }
     }
   }
 }
