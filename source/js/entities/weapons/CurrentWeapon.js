@@ -55,14 +55,13 @@ class CurrentWeapon {
         MANAGER.getAsset("./assets/shoot.wav").pause();
         MANAGER.getAsset("./assets/shoot.wav").currentTime = 0;
         MANAGER.getAsset("./assets/shoot.wav").play();
-        console.log(this.power);
         return new this.myCurrentWeapon(x, y, angle.radians, ShootingPower.power);
     }
 
     weaponUpgradeCheck(upgraded, isOP)
     {
       if (upgraded == 1) {
-        this.myWeaponBag = [Bullet, Grenade, Laser, GrenadeLevel3, Sniper, GrenadeLevel2, PortalGun, TeleportGun, OPWeapon];
+        this.myWeaponBag = [Bullet, Grenade, PortalGun, TeleportGun];
         if (isOP == 4) {
           this.myWeaponBag.push(OPWeapon);
         }
