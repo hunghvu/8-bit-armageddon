@@ -68,25 +68,6 @@ class OPWeapon extends Projectile{
            }
          }
        }
-       //       // if (world.map.collideWithRectangle(this)) {
-       //       //     // Destroy this bullet if we hit something
-       //       //     this.active = false;
-       //       //     // Remove opWeapon from myWeaponBag
-       //       //     for (let j = 0; j < world.currentPlayer.currentWeapon.myWeaponBag.length; j++)
-       //       //     {
-       //       //       if (world.currentPlayer.currentWeapon.myWeaponBag[j] === OPWeapon)
-       //       //       {
-       //       //         world.currentPlayer.currentWeapon.myWeaponBag.splice(j,1);
-       //       //         break;
-       //       //       }
-       //       //     }
-       //       //
-       //       //     if (!(this.y > world.map.height))
-       //       //     {
-       //       //       world.spawn(new Nuke(this.x, this.y, 0, 0));
-       //       //       this.projectileCanEndTurn = true;
-       //       //     }
-       //       // }
      }
 
     /**
@@ -95,22 +76,14 @@ class OPWeapon extends Projectile{
      * @param {CanvasRenderingContext2D} ctx - The context to draw to
      */
     draw(ctx){
-      // this.animations[this.facing].drawFrame(.17, ctx, this.x, this.y, 1.2);
       this.nukeSprite.drawFrame(.17, ctx, this.x, this.y, 1.2);
-
-
-      // ctx.fillStyle = "white";
-      // ctx.strokeRect(this.x, this.y, 16, 16);
     }
 
-    // loadAnimations() {
-    //   for (var j = 0; j < 2; j++) { //facing
-    //     this.animations.push([]);
-    //   }
-    //   //facing right = 0,
-    //   this.animations[0] = new Animator(this.spritesheet, 1, 298, 30, 11, 1, 0.5, null, false, true);
-    //
-    //   //facing left = 1,
-    //   this.animations[1] = new Animator(this.spritesheet, 32, 298, 30, 11, 1, 0.5, null, true, true);
-    // }
+    drawMinimap(world, ctx, mmX, mmY) {
+        if (20 <= (mmX + this.x / 7) && (mmX + this.x /7) <= 20 + world.map.width/7) {
+            this.nukeSprite.drawFrame(.17, ctx, mmX + this.x / 7, mmY + this.y / 10, 0.5);
+        }
+    }
+
+
 }

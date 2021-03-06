@@ -79,6 +79,13 @@ class GrenadeLevel3 extends Projectile{
       this.animations[this.facing].drawFrame(.17, ctx, this.x, this.y, 1.2);
     }
 
+    drawMinimap(world, ctx, mmX, mmY) {
+
+        if (20 <= (mmX + this.x / 7) && (mmX + this.x /7) <= 20 + world.map.width/7) {
+            this.animations[this.facing].drawFrame(.17, ctx, mmX + this.x / 7, mmY + this.y / 10, 0.5);
+        }
+    }
+
     loadAnimations() {
       for (var j = 0; j < 2; j++) { //facing
         this.animations.push([]);

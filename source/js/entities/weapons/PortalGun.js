@@ -112,18 +112,7 @@ class PortalGun extends Projectile {
    * @param {CanvasRenderingContext2D} ctx - The context to draw to
    */
   draw(ctx){
-    // if (this.team) {
-      // ctx.fillStyle = "purple";
-      // ctx.beginPath();
-      // ctx.fillRect(this.x, this.y, 10, 10);
       this.animations[this.team][this.facing].drawFrame(.17, ctx, this.x, this.y, 0.9);
-    // }
-    // else {
-      // ctx.fillStyle = "orange";
-      // ctx.beginPath();
-      // ctx.fillRect(this.x, this.y, 10, 10);
-      // this.animations[this.facing].drawFrame(.17, ctx, this.x, this.y, 0.9);
-    // }
   }
 
   loadAnimations() {
@@ -146,15 +135,11 @@ class PortalGun extends Projectile {
     this.animations[1][1] = new Animator(this.spritesheet, 133, 232, 26, 13, 1, 0.5, null, false, true);
   }
 
-  drawMinimap(ctx, mmX, mmY) {
-    //let miniBulletRect = new Rectangle(mmX + this.x / 7, mmY+ this.y / 10, 8, 8);
-    //destructionRect.center = this.center;
-    //world.map.destroyRectangle(destructionRect);
-    ctx.fillStyle = "Green";
 
-    ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
-    // if ((mmX+this.x/7) > world.map.width/7 || (mmX+this.x/7) < 0) {
-    //     ctx.clearRect(mmX + this.x / 7, mmY + this.y / 10, 8, 8);
-    // }
+
+  drawMinimap(world, ctx, mmX, mmY) {
+    if (20 <= (mmX + this.x / 7) && (mmX + this.x /7) <= 20 + world.map.width/7) {
+      this.animations[this.team][this.facing].drawFrame(.17, ctx, mmX + this.x / 7, mmY + this.y / 10, 0.5);
+    }
   }
 }
