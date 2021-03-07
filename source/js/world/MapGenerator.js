@@ -16,6 +16,9 @@ class MapGenerator {
     drawMap(ctx) {
         // Clear the entire canvas that we were given
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height)
+        ctx.stroke(); // Create a hidden barrier so the players will not fall out of map when reaching left/right edges. 
+                      // This barrier can be disable though, let this be an easter edge I think.
         // Make an array of adjacent circles and their radii so that we
         // can draw them and their center color seperately
         let currentCircle = new Point(0, ctx.canvas.height * (4/5));

@@ -19,7 +19,8 @@ class Camera extends Point {
     this.targetZoom = zoom;
     this.speed = 1;
     this.MAX_ZOOM = 4; // Four times zoom in
-    this.MIN_ZOOM = 0.25; // Four times zoom out
+    this.MIN_ZOOM = 1; // One time zoom out
+    // this.counter = 0; // Log interval to debug
   }
 
   /**
@@ -103,8 +104,27 @@ class Camera extends Point {
 
     ctx.save();
     ctx.scale(this.zoom, this.zoom);
-    ctx.translate((-this.x / distance) + drawingWidth / (2 * this.zoom), 
-                  (-this.y / distance) + drawingHeight / (2 * this.zoom));
+    let translateX = (-this.x / distance) + drawingWidth / (2 * this.zoom);
+    let translateY = (-this.y / distance) + drawingHeight / (2 * this.zoom);
+
+    // For debugging
+    // this.counter++;
+    // if(this.counter === 60) {
+    //   console.log(ctx.canvas.width/this.zoom); this.counter = 0;
+    // }
+
+    // If the translateY in addition with view height reaches out of map, then restrict it so the bottom is not visible.
+    //  We will need to subtract 111 pixels in order to perfectly match bottom of the view to bottom of the map. 
+    //  However, the player will be out of focus. Therefore, we will not perform a subtraction here.
+    if(translateY - ctx.canvas.height / this.zoom < - ctx.canvas.height) translateY = -ctx.canvas.height + ctx.canvas.height / this.zoom;
+    // Same approach for translateX
+    if (translateX >= 0) { // Limit the left edge
+      ctx.translate(0, translateY);
+    } else if (translateX - ctx.canvas.width / this.zoom < -ctx.canvas.width) { // Limit the right edge
+      ctx.translate(-ctx.canvas.width + ctx.canvas.width / this.zoom, translateY);
+    } else { // Normal case
+      ctx.translate(translateX, translateY);
+    }
   }
 
   /** 
