@@ -104,6 +104,13 @@ class Camera extends Point {
 
     ctx.save();
     ctx.scale(this.zoom, this.zoom);
+
+    // -this.x / distance is so that the amount we translate is proportional to the distance from the camera so backgrounds move slower. 
+    // A distance of 1 is the plane of focus (the terrain). 
+    // The + drawingWidth / 2 * this.zoom is the amount needed to make the center of the camera this.x and this.y 
+    //  (without this the camera will have the upper left corner at this.x and this.y). 
+    // This is affected by zoom because as we zoom out to say, double (0.5 zoom), the number of pixels from the upper-left corner to the center doubles.
+
     let translateX = (-this.x / distance) + drawingWidth / (2 * this.zoom);
     let translateY = (-this.y / distance) + drawingHeight / (2 * this.zoom);
 
