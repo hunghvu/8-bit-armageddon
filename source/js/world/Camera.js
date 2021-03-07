@@ -115,8 +115,9 @@ class Camera extends Point {
 
     // If the translateY in addition with view height reaches out of map, then restrict it so the bottom is not visible.
     //  We will need to subtract 111 pixels in order to perfectly match bottom of the view to bottom of the map. 
-    //  However, the player will be out of focus. Therefore, we will not perform a subtraction here.
-    if(translateY - ctx.canvas.height / this.zoom < - ctx.canvas.height) translateY = -ctx.canvas.height + ctx.canvas.height / this.zoom;
+    //  However, the player will be out of focus when map is too high. Therefore, we will not perform a subtraction here.
+    //  Subtract 61 so the player (player's frame height) is "less" out of focus when the map is to low in x1 zoom.
+    if(translateY - ctx.canvas.height / this.zoom < - ctx.canvas.height) translateY = -ctx.canvas.height + ctx.canvas.height / this.zoom - 61;
     // Same approach for translateX
     if (translateX >= 0) { // Limit the left edge
       ctx.translate(0, translateY);
