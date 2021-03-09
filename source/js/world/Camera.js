@@ -19,7 +19,8 @@ class Camera extends Point {
     this.targetZoom = zoom;
     this.speed = 1;
     this.MAX_ZOOM = 4; // Four times zoom in
-    this.MIN_ZOOM = 0.25; // Four times zoom out
+    this.MIN_ZOOM = 1; // One time zoom out
+    // this.counter = 0; // Log interval to debug
   }
 
   /**
@@ -103,8 +104,26 @@ class Camera extends Point {
 
     ctx.save();
     ctx.scale(this.zoom, this.zoom);
-    ctx.translate((-this.x / distance) + drawingWidth / (2 * this.zoom), 
-                  (-this.y / distance) + drawingHeight / (2 * this.zoom));
+
+    let newX = Math.max(drawingWidth / (2 * this.zoom), this.x)
+    newX = Math.min(1920 - drawingWidth / (2 * this.zoom), newX)
+    let newY = Math.max(drawingHeight / (2 * this.zoom), this.y);
+    newY = Math.min(1080 - drawingHeight / (2 * this.zoom), newY);
+    // -this.x / distance is so that the amount we translate is proportional to the distance from the camera so backgrounds move slower. 
+    // A distance of 1 is the plane of focus (the terrain). 
+    // The + drawingWidth / 2 * this.zoom is the amount needed to make the center of the camera this.x and this.y 
+    //  (without this the camera will have the upper left corner at this.x and this.y). 
+    // This is affected by zoom because as we zoom out to say, double (0.5 zoom), the number of pixels from the upper-left corner to the center doubles.
+    let translateX = (-newX / distance) + drawingWidth / (2 * this.zoom);
+    let translateY = (-newY / distance) + drawingHeight / (2 * this.zoom);
+    ctx.translate(translateX, translateY);
+
+    // For debugging
+    // this.counter++;
+    // if(this.counter === 60) {
+    //   console.log(ctx.canvas.width/this.zoom); this.counter = 0;
+    // }
+
   }
 
   /** 

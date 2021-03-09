@@ -87,10 +87,11 @@ class World {
     this.updateEntities(deltaT);
 
     // Set the cameras target to be the players position
-    this.camera.target.x = this.currentPlayer.center.x;
-    this.camera.target.y = this.currentPlayer.center.y;
-
-    this.camera.glideToTarget(8, deltaT);
+    if (!this.currentPlayer.dead) { // Not glide camera to dead player (e.g: fall out of map).
+      this.camera.target.x = this.currentPlayer.center.x;
+      this.camera.target.y = this.currentPlayer.center.y;
+      this.camera.glideToTarget(8, deltaT);
+    }
   }
 
   drawPlayersMinimap(ctx, mmX, mmY) {
