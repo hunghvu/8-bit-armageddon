@@ -7,7 +7,7 @@ class CurrentWeapon {
         this.y = y;
         this.angle = angle;
 
-        this.myWeaponBag = [Bullet];
+        this.myWeaponBag = [Grenade];
 
         this.currentIndex = 0;
         this.myCurrentWeapon = this.myWeaponBag[this.currentIndex];
