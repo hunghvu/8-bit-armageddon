@@ -4,6 +4,8 @@ class DestructibleMap {
     // Create a canvas that will hold the new map with all the destruction.
     this.mapCanvas = document.createElement('canvas');
     this.ctx = this.mapCanvas.getContext('2d');
+    // There is not so much visual effect even with maximal zoom in.
+    this.ctx.imageSmoothingEnabled = false;
     
     // Make the map the same size as the image
     this.mapCanvas.width = img.width;
