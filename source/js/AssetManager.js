@@ -28,7 +28,7 @@ class AssetManager {
             var path = this.downloadQueue[i];
             console.log(path);
             let content;
-            if (path.endsWith("wav")) {
+            if (path.endsWith("wav") || path.endsWith("mp3")) {
                 content = new Audio();
                 // If the audio is fully loaded
                 content.addEventListener("canplaythrough", function () {
