@@ -35,6 +35,14 @@ class Game {
       this.controls = new Controls();
 
       this.status = "PLAYING";
+      this.musicLoaded = false;
+      // if (!this.musicLoaded) {
+      //   MANAGER.pauseBackgroundMusic();
+      //   MANAGER.playAsset("./assets/sound-playing.wav");
+      //   MANAGER.autoRepeat("./assets/sound-playing.wav");
+      //   MANAGER.adjustVolume(0.3);
+      //   // Not change flag here.
+      // }
       this.endCode = null; // Indicate match result (0 for draw, 1 means team 1 wins, 2 means team 2 wins )
       this.forfeitCode = null; // Indicate the current team that is trying to surrender (0 for team 1, 1 for team 2)
       this.forfeitVoteCounter = 0;
@@ -55,6 +63,13 @@ class Game {
     this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
 
     if (this.status == "PLAYING") {
+      if (!this.musicLoaded) {
+        MANAGER.pauseBackgroundMusic();
+        MANAGER.playAsset("./assets/sound-playing.wav");
+        MANAGER.autoRepeat("./assets/sound-playing.wav");
+        MANAGER.adjustVolume(0.3);
+        this.musicLoaded = true;
+      }
       this.world.update(this.timer.tick(), this.controls);
       this.turn.countdownTurn();
       this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
@@ -173,6 +188,7 @@ class Game {
       if (this.controls.enterDownThisLoop) {
         // Allow the player to move from the playing state to the paused state
         this.status = "PAUSED";
+        MANAGER.getAsset("./assets/sound-playing.wav").pause();
       }
     } else if (this.status === "PAUSED") {
       this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
@@ -180,14 +196,22 @@ class Game {
       if (this.controls.enterDownThisLoop) {
         // Allow the player to move from the paused state to the playing state
         this.status = "PLAYING";
+        MANAGER.getAsset("./assets/sound-playing.wav").play();
       }
     } else if (this.status === "ENDED") {
       // Will need to implement navigation later to improve user's experience.
       this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
       this.drawEndMenu(this.ctx);
+      if (!this.musicLoaded) {
+        MANAGER.pauseBackgroundMusic();
+        MANAGER.playAsset("./assets/sound-ended.wav");
+        this.musicLoaded = true;
+      }
+
     } else if (this.status === "FORFEIT") {
       this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
       this.drawForfeitMenu(this.ctx);
+      MANAGER.getAsset("./assets/sound-playing.wav").pause();
       if(this.controls.yes && this.controls.hasPressedKeyY) {
         this.forfeitVoteCounter ++;
         this.controls.yes = false; // This key is not reset in the new loop, so manually do that here.
@@ -195,9 +219,11 @@ class Game {
         if (this.forfeitVoteCounter > this.playerAmount / 4) {
           this.status = "ENDED";
           this.forfeitCode === 0 ? this.endCode = 2 : this.endCode = 1;
+          this.musicLoaded = false;
         }
       } else if (this.controls.cancel) {
         this.status = "PLAYING";
+        MANAGER.getAsset("./assets/sound-playing.wav").play();
       }
     }
     this.controls.reset();

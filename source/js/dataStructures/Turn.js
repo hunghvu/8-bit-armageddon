@@ -157,13 +157,16 @@ class Turn {
                             && this.turnCounter > parseInt(this.game.turnLimit)
                             && this.world.entityOnMap.isMatchEndWithTurnLimit()[0]) { // Check if the game is out of turn and provide respective conclusion.
                                 this.game.status = "ENDED";
-                                this.game.endCode = this.world.entityOnMap.isMatchEndWithTurnLimit()[1];                        
+                                this.game.endCode = this.world.entityOnMap.isMatchEndWithTurnLimit()[1];   
+                                MANAGER.getAsset("./assets/sound-playing.wav").pause();
+                                this.game.musicLoaded = false;                     
                         } else if(this.world.entityOnMap.isMatchEnd()[0]) { // Check if the game is ended and update Game object.
                             this.game.status = "ENDED";
                             this.game.endCode = this.world.entityOnMap.isMatchEnd()[1];
+                            MANAGER.getAsset("./assets/sound-playing.wav").pause();
+                            this.game.musicLoaded = false;   
                         }
                     }
-
                 } else { // Extend timer.
                     this.world.currentPlayer.isInTurn = false;
                     this.timer.turnTime -= this.timer.maxStep;
