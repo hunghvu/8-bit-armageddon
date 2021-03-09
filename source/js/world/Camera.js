@@ -105,14 +105,18 @@ class Camera extends Point {
     ctx.save();
     ctx.scale(this.zoom, this.zoom);
 
+    let newX = Math.max(drawingWidth / (2 * this.zoom), this.x)
+    newX = Math.min(1920 - drawingWidth / (2 * this.zoom), newX)
+    let newY = Math.max(drawingHeight / (2 * this.zoom), this.y);
+    newY = Math.min(1080 - drawingHeight / (2 * this.zoom), newY);
     // -this.x / distance is so that the amount we translate is proportional to the distance from the camera so backgrounds move slower. 
     // A distance of 1 is the plane of focus (the terrain). 
     // The + drawingWidth / 2 * this.zoom is the amount needed to make the center of the camera this.x and this.y 
     //  (without this the camera will have the upper left corner at this.x and this.y). 
     // This is affected by zoom because as we zoom out to say, double (0.5 zoom), the number of pixels from the upper-left corner to the center doubles.
-
-    let translateX = (-this.x / distance) + drawingWidth / (2 * this.zoom);
-    let translateY = (-this.y / distance) + drawingHeight / (2 * this.zoom);
+    let translateX = (-newX / distance) + drawingWidth / (2 * this.zoom);
+    let translateY = (-newY / distance) + drawingHeight / (2 * this.zoom);
+    ctx.translate(translateX, translateY);
 
     // For debugging
     // this.counter++;
@@ -120,19 +124,6 @@ class Camera extends Point {
     //   console.log(ctx.canvas.width/this.zoom); this.counter = 0;
     // }
 
-    // If the translateY in addition with view height reaches out of map, then restrict it so the bottom is not visible.
-    //  We will need to subtract 111 pixels in order to perfectly match bottom of the view to bottom of the map. 
-    //  However, the player will be out of focus when map is too high. Therefore, we will not perform a subtraction here.
-    //  Subtract 61 so the player (player's frame height) is "less" out of focus when the map is to low in x1 zoom.
-    if(translateY - ctx.canvas.height / this.zoom < - ctx.canvas.height) translateY = -ctx.canvas.height + ctx.canvas.height / this.zoom - 61;
-    // Same approach for translateX
-    if (translateX >= 0) { // Limit the left edge
-      ctx.translate(0, translateY);
-    } else if (translateX - ctx.canvas.width / this.zoom < -ctx.canvas.width) { // Limit the right edge
-      ctx.translate(-ctx.canvas.width + ctx.canvas.width / this.zoom, translateY);
-    } else { // Normal case
-      ctx.translate(translateX, translateY);
-    }
   }
 
   /** 
