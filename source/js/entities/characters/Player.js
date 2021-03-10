@@ -57,7 +57,7 @@ class Player extends Entity { //Add button to enter portal
     this.isInTurn = false;
     this.loadAnimations();
 
-    this.upgradedOnce = 0;
+    // this.upgradedOnce = 0;
     this.upgraded = 1; //1 = Lvl 1, 2 = Lvl 2, 3 = Lvl 3
     this.currentWeapon = new CurrentWeapon(this.x, this.y, this.shootingAngle.radians);
     this.opWeaponUnlock = 0; //Unlock OP Weapon after collecting 4 upgrade crates (Only 4 will be spawn per game)
@@ -79,10 +79,10 @@ class Player extends Entity { //Add button to enter portal
    * @param {CanvasRenderingContext2D} ctx - The context to draw to.
    */
   draw(ctx) {
-    // Used as hitbox
-    ctx.linewidth = "1";
+    // // Used as hitbox
+    // ctx.linewidth = "1";
     ctx.strokeStyle = "white";
-    ctx.strokeRect(this.x, this.y, this.w, this.h);
+    // ctx.strokeRect(this.x, this.y, this.w, this.h);
 
     if (this.dead == true)
     {
@@ -181,7 +181,7 @@ class Player extends Entity { //Add button to enter portal
       ctx.fillStyle = "white";
       ctx.fillText(Math.round((1 - this.damageTaken) * 100, 2) + "%", this.x + this.w / 2, this.y + this.h + 10);
       this.healthBar.draw(ctx);
-      
+
       let teamNumber = this.team + 1;
       if (this.isInTurn) {
         ctx.fillStyle = "Red";
@@ -433,7 +433,7 @@ class Player extends Entity { //Add button to enter portal
     }
 
     if(!controls.shootingDownThisLoop && controls.shootingForceCompleted){ // Shoot the bullet when a player release a key.
-      world.spawn(this.currentWeapon.spawnCurrentWeapon(this.x, this.y, this.shootingAngle));
+      world.spawn(this.currentWeapon.spawnCurrentWeapon(this.x - 10, this.y - 10, this.shootingAngle));
       controls.shootingForceCompleted = false;
       this.isInTurn = false;
       ShootingPower.reset();
@@ -485,10 +485,10 @@ class Player extends Entity { //Add button to enter portal
 
       //Jumping/Falling = 2
       //facing right = 0
-      this.animations[2][0] = new Animator(this.spritesheet, 60, 129, 23, 61, 5, 0.5, 25, false, false);
+      this.animations[2][0] = new Animator(this.spritesheet, 59, 129, 23, 61, 5, 0.5, 25, false, true);
 
       // facing left = 1
-      this.animations[2][1] = new Animator(this.spritesheet, 395, 129, 23, 61, 5, 0.5, 25, true, false);
+      this.animations[2][1] = new Animator(this.spritesheet, 395, 129, 23, 61, 5, 0.5, 25, true, true);
 
     }
     else if (this.characterSwitch == 3)
