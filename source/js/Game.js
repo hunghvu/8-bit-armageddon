@@ -35,7 +35,8 @@ class Game {
       this.controls = new Controls();
 
       this.status = "PLAYING";
-      this.musicLoaded = false;
+      this.bgmLoaded = false;
+      this.readySoundLoaded = false;
       this.endCode = null; // Indicate match result (0 for draw, 1 means team 1 wins, 2 means team 2 wins )
       this.forfeitCode = null; // Indicate the current team that is trying to surrender (0 for team 1, 1 for team 2)
       this.forfeitVoteCounter = 0;
@@ -85,14 +86,27 @@ class Game {
       this.timer.turnTime < 0
       ? this.ctx.fillText(Math.round(this.timer.turnTime * -1), 1430, 75) // Different print text fill method for the first ready period.
       : this.ctx.fillText(this.timePerTurnLimit - Math.round(this.timer.turnTime % this.timePerTurnLimit), 1420, 75);
-      // let alpha = 1;
-      if (!this.turn.inFirstReadyPeriod && !this.turn.inReadyPeriod) this.alpha = 1;
+      
+      // Reset some flags when not in ready period.
+      if (!this.turn.inFirstReadyPeriod && !this.turn.inReadyPeriod) {
+        this.alpha = 1;
+        this.readySoundLoaded = false;
+      }
       if (this.turn.inFirstReadyPeriod) {
+        if(!this.readySoundLoaded) {
+          MANAGER.playAsset("./assets/sound-ready.wav");
+          this.readySoundLoaded = true;
+        }
         this.ctx.fillStyle = "rgba(255, 0, 0, " + this.alpha + ")";
         this.ctx.fillText("READY " + Math.round(this.timer.turnTime * -1), this.canvas.width / 10 * 4.5, this.canvas.height / 2)
         this.alpha -= 0.005;
+
       }
       if (this.turn.inReadyPeriod) {
+        if(!this.readySoundLoaded) {
+          MANAGER.playAsset("./assets/sound-ready.wav");
+          this.readySoundLoaded = true;
+        }
         this.ctx.fillStyle = "rgba(255, 0, 0, " + this.alpha + ")";
         this.ctx.fillText("READY " + (this.timePerTurnLimit - Math.round(this.timer.turnTime % this.timePerTurnLimit)), this.canvas.width / 10 * 4.5, this.canvas.height / 2);
         this.alpha -= 0.005;
