@@ -11,9 +11,6 @@ class OPWeapon extends Projectile{
       this.spritesheet = MANAGER.getAsset('./assets/weapons.png');
 
       this.nukeSprite = new Animator(this.spritesheet, 160, 287, 30, 32, 1, 0.5, null, false, true);
-
-      // this.animations = [];
-      // this.loadAnimations();
     }
 
     /**
@@ -29,30 +26,39 @@ class OPWeapon extends Projectile{
        if (this.vel.x < 0) this.facing = 1;
        if (this.vel.x > 0) this.facing = 0;
 
-
-       //Crate collision
-       for(var i = 0; i < world.entities.length; i++) {
-         if (world.entities[i] instanceof Crate &&
-           ((this.x < (world.entities[i].x + world.entities[i].w)) && (this.x > world.entities[i].x)) &&
-           ((this.y > world.entities[i].y) && (this.y < (world.entities[i].y + world.entities[i].h)))) {
-             world.currentPlayer.upgraded++;
-             world.currentPlayer.opWeaponUnlock++;
-             world.entities[i].active = false;
-             if (world.currentPlayer.upgraded > 3) {
-               world.currentPlayer.upgraded = 1; //reset level
-             }
-           }
-         }
-
        // Check if the bullet collides with any of the players
        let hasCollidedWithAPlayer = this.collidesWithRects(world.players);
 
        // Add y-threshold for the bullet so that i can end turns.
-       if (world.map.collideWithRectangle(this) ||
-           this.y > world.map.height ||
+       if (this.y > world.map.height) {
+         // Destroy this bullet if we hit something
+         this.active = false;
+         // Remove opWeapon from myWeaponBag
+         for (let j = 0; j < world.currentPlayer.currentWeapon.myWeaponBag.length; j++)
+         {
+           if (world.currentPlayer.currentWeapon.myWeaponBag[j] === OPWeapon)
+           {
+             world.currentPlayer.opWeaponUnlock = 0;
+             world.currentPlayer.currentWeapon.myWeaponBag.splice(j,1);
+             break;
+           }
+         }
+         this.projectileCanEndTurn = true;
+       }
+      else if (world.map.collideWithRectangle(this) ||
            hasCollidedWithAPlayer) {
          // Destroy this bullet if we hit something
          this.active = false;
+         // Remove opWeapon from myWeaponBag
+         for (let j = 0; j < world.currentPlayer.currentWeapon.myWeaponBag.length; j++)
+         {
+           if (world.currentPlayer.currentWeapon.myWeaponBag[j] === OPWeapon)
+           {
+             world.currentPlayer.opWeaponUnlock = 0;
+             world.currentPlayer.currentWeapon.myWeaponBag.splice(j,1);
+             break;
+           }
+         }
          this.projectileCanEndTurn = true;
          // Destroy the map
          world.map.destroyCircle(this.center.x, this.center.y, 500);

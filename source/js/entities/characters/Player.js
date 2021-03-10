@@ -323,6 +323,9 @@ class Player extends Entity { //Add button to enter portal
 
     //updates weapons
     this.currentWeapon.weaponUpgradeCheck(this.upgraded, this.opWeaponUnlock);
+    //Fixes the update bug problem
+    this.currentWeapon.nextWeapon();
+    this.currentWeapon.previousWeapon();
 
     this.privateHandleHorizontalMovement(movement.x, world.map);
     this.privateHandleVerticalMovement(movement.y, world.map);
