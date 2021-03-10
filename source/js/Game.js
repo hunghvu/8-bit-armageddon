@@ -39,6 +39,8 @@ class Game {
       this.forfeitCode = null; // Indicate the current team that is trying to surrender (0 for team 1, 1 for team 2)
       this.forfeitVoteCounter = 0;
 
+      this.alpha = 1; // For fade in/out effect
+
       // Add mouse listener
       this.controls.addMouseListener(this.canvas);
 
@@ -75,7 +77,19 @@ class Game {
       this.timer.turnTime < 0
       ? this.ctx.fillText(Math.round(this.timer.turnTime * -1), 1430, 75) // Different print text fill method for the first ready period.
       : this.ctx.fillText(this.timePerTurnLimit - Math.round(this.timer.turnTime % this.timePerTurnLimit), 1420, 75);
-
+      // let alpha = 1;
+      if (!this.turn.inFirstReadyPeriod && !this.turn.inReadyPeriod) this.alpha = 1;
+      if (this.turn.inFirstReadyPeriod) {
+        this.ctx.fillStyle = "rgba(255, 0, 0, " + this.alpha + ")";
+        this.ctx.fillText("READY " + Math.round(this.timer.turnTime * -1), this.canvas.width / 10 * 4.5, this.canvas.height / 2)
+        this.alpha -= 0.005;
+      }
+      if (this.turn.inReadyPeriod) {
+        this.ctx.fillStyle = "rgba(255, 0, 0, " + this.alpha + ")";
+        this.ctx.fillText("READY " + (this.timePerTurnLimit - Math.round(this.timer.turnTime % this.timePerTurnLimit)), this.canvas.width / 10 * 4.5, this.canvas.height / 2);
+        this.alpha -= 0.005;
+      }
+      this.ctx.fillStyle = "Black";
       this.ctx.font = "16px 'Press Start 2P'";
       this.ctx.fillText('Weapon: ', 175, 31);
       this.ctx.font = "12px Arial";
