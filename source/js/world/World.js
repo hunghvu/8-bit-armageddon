@@ -60,8 +60,8 @@ class World {
 
     this.map.drawMinimap(ctx, 0, 0);
     this.drawPlayersMinimap(ctx,this.minimap.x,this.minimap.y);
-    this.drawEntitiesMinimap(ctx,this.minimap.x,this.minimap.y);
     this.minimap.draw(ctx, this);
+    this.map.platform.drawMinimap(ctx, this.minimap.x, this.minimap.y);
 
   }
 
@@ -127,19 +127,6 @@ class World {
     });
 
   }
-
-  drawEntitiesMinimap(ctx, mmX, mmY) {
-    this.players.forEach(entity =>{
-      entity.drawMinimap(ctx, mmX,mmY)
-    });
-  }
-
-
-  // drawCratesMinimap(ctx, mmX, mmY) {
-  //   this.crates.forEach(entity =>{
-  //     entity.drawMinimap(ctx, mmX,mmY)
-  //   });
-  // }
 
   drawEntities(ctx) {
     this.entities.forEach(entity => {
