@@ -1,35 +1,23 @@
 class World {
-  constructor(map, playerAmount) {
+  constructor(map, playerAmount, CPUEnabled) {
     this.map = map;
-    this.minimap = new Minimap(20, 600, this.map.width/7, this.map.height/10);
-    //
-    // this.spritesheet = MANAGER.getAsset('./assets/character.png');
-    //
-    //
-    // this.entities = [];
+    console.log(this.map.width);
+    // Responsive to inner width.
+    // Map size is 1920 x 1080 so partially hard coded as values are affected by resize actions.
+    this.minimap = new Minimap(window.innerWidth - 1920 / 7 - 5, 105, 1920 / 7, this.map.height/10);
     this.spritesheet = MANAGER.getAsset('./assets/character.png');
-
-    this.entities = [];
     this.entityOnMap = new EntityOnMap(this);
-    this.entityOnMap.generatePlayer(playerAmount);
+    this.entityOnMap.generatePlayer(playerAmount, CPUEnabled);
     this.map.generateMovablePlatform(this.entityOnMap.highestGroundY);
-
     // parameter sets the players design
     this.players = this.entityOnMap.playerOnMapList;
-
- //   this.crates = this.entityOnMap.entityOnMapList;
-
     this.currentPlayer = this.players[this.players.length - 1];
     this.currentPlayer.isInTurn = false;
-
     this.entities = this.entityOnMap.entityOnMapList;
-
     this.camera = new Camera(500, 500, 1);
-
     // Background images.
     this.imgFar = MANAGER.getAsset('./assets/background.jpg');
     this.imgNear = MANAGER.getAsset('./assets/background-cloud.jpg')
-
     // The sX in drawImage will be updated as the player moves in a way it create an opposite movement effect.
     this.resetCrates();
 
@@ -56,13 +44,13 @@ class World {
 
     // After restoring, add a minimap, ratio for width is 1/7 of normal size, and ratio for height is 1/10 of normal size.
 
-    ctx.drawImage(this.imgFar, 0, 0, this.map.width, this.map.height, 20, 600, this.map.width/7, this.map.height/10);
-    ctx.drawImage(this.imgNear, 0, 0, this.map.width, this.map.height, 20, 600, this.map.width/7, this.map.height/10);
+    ctx.drawImage(this.imgFar, 0, 0, this.map.width, this.map.height, this.minimap.x, this.minimap.y, this.map.width/7, this.map.height/10);
+    ctx.drawImage(this.imgNear, 0, 0, this.map.width, this.map.height, this.minimap.x, this.minimap.y, this.map.width/7, this.map.height/10);
 
     this.map.drawMinimap(ctx, 0, 0);
     this.drawPlayersMinimap(ctx,this.minimap.x,this.minimap.y);
-    this.drawEntitiesMinimap(ctx,this.minimap.x,this.minimap.y);
     this.minimap.draw(ctx, this);
+    this.map.platform.drawMinimap(ctx, this.minimap.x, this.minimap.y);
 
   }
 
@@ -86,8 +74,14 @@ class World {
     this.currentPlayer.updateActive(this, controls, deltaT);
     this.updateEntities(deltaT);
 
-    // Set the cameras target to be the players position
-    if (!this.currentPlayer.dead) { // Not glide camera to dead player (e.g: fall out of map).
+    let projectiles = this.entities.filter((entity) => (entity.isProjectile));
+    if (projectiles.length != 0) {
+      // Focus on any fired projectiles
+      this.camera.target.x = projectiles[0].center.x;
+      this.camera.target.y = projectiles[0].center.y;
+      this.camera.snapToTarget();
+    } else if (!this.currentPlayer.dead) { // Not glide camera to dead player (e.g: fall out of map).
+      // Set the cameras target to be the players position
       this.camera.target.x = this.currentPlayer.center.x;
       this.camera.target.y = this.currentPlayer.center.y;
       this.camera.glideToTarget(8, deltaT);
@@ -122,19 +116,6 @@ class World {
     });
 
   }
-
-  drawEntitiesMinimap(ctx, mmX, mmY) {
-    this.players.forEach(entity =>{
-      entity.drawMinimap(ctx, mmX,mmY)
-    });
-  }
-
-
-  // drawCratesMinimap(ctx, mmX, mmY) {
-  //   this.crates.forEach(entity =>{
-  //     entity.drawMinimap(ctx, mmX,mmY)
-  //   });
-  // }
 
   drawEntities(ctx) {
     this.entities.forEach(entity => {

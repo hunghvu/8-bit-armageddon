@@ -1,5 +1,5 @@
 class Game {
-  constructor(turnLimit, timePerTurnLimit, playMode) {
+  constructor(turnLimit, timePerTurnLimit, playMode, CPUEnabled) {
     Object.assign(this, {turnLimit, timePerTurnLimit, playMode});
 
     let newMapImg = new Image();
@@ -10,11 +10,10 @@ class Game {
       // Apply play mode.
       let modes = {"1v1": 2, "2v2": 4, "3v3": 6, "4v4": 8};
       this.playerAmount = modes[this.playMode];
-      this.world = new World(destructionMap, this.playerAmount);
+      this.world = new World(destructionMap, this.playerAmount, CPUEnabled);
       this.canvas = document.getElementById('display');
 
       this.ctx = this.canvas.getContext('2d');
-
       // Set responsive size
       this.canvas.width = window.innerWidth;
       this.canvas.height = window.innerHeight;
@@ -24,6 +23,7 @@ class Game {
       window.addEventListener('resize', event => {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
+        this.world.minimap.x = window.innerWidth - 1920 / 7 - 5;
         this.ctx.mozImageSmoothingEnabled = false;
       })
 

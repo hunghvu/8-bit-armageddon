@@ -24,6 +24,14 @@ class ShootingAngle {
         return this.defaultAngle * (Math.PI / 180);
     }
 
+    get supplementaryAngle() {
+        let angle = this.radians;
+        if (angle > Math.PI / 2) {
+            return angle - Math.PI / 2;
+        }
+        return angle;
+    }
+
     updateOrigin(newX, newY) {
         this.originX = newX;
         this.originY = newY;

@@ -102,8 +102,8 @@ class Bullet extends Projectile {
   }
 
   drawMinimap(world, ctx, mmX, mmY) {
-    if ((20 <= (mmX + this.x / 7) && (mmX + this.x / 7) <= 20 + world.map.width / 7) &&
-        (600 <= (mmY + this.y / 10) && (mmY + this.y / 10) <= 600 + world.map.height / 10)) {
+    if ((world.minimap.x <= (mmX + this.x / 7) && (mmX + this.x / 7) <= world.minimap.x + world.map.width / 7) &&
+        (world.minimap.y <= (mmY + this.y / 10) && (mmY + this.y / 10) <= world.minimap.y + world.map.height / 10)) {
       this.animations[this.facing].drawFrame(.17, ctx, mmX + this.x / 7, mmY + this.y / 10, 0.5);
     }
   }
