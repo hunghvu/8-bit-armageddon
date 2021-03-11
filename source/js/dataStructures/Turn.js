@@ -4,7 +4,6 @@
  * of this game.
  */
 class Turn {
-    static inReadyPeriod = false; // Indicate if the match is in preparation period.
     constructor(timer, world, timePerTurn, controls, game) {
         this.timePerTurn = timePerTurn;
         this.world = world;
@@ -16,7 +15,8 @@ class Turn {
                             // This can be changed to a set-by-user
                             // value if needed
         this.timer.turnTime -= this.readyTime; // Start at negative value to for the first ready period.
-        this.inFirstReadyPeriod = true;
+        this.inFirstReadyPeriod = true; // Only use for the first ready period.
+        this.inReadyPeriod = false; // Indicate if the match is in preparation period.
 
         this.controls = controls;
 

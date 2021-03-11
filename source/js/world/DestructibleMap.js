@@ -17,6 +17,9 @@ class DestructibleMap {
     // Generate and draw a random map.
     this.mapGenerator = new MapGenerator(img.width, img.height);
     this.mapGenerator.drawMap(this.ctx);
+
+    // Remove any transparency related antialiasing.
+    this.removeSemiTransparentPixels();
   }
 
   /**
@@ -93,6 +96,21 @@ class DestructibleMap {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Removes all the pixels that are semitransparent leaving only hard edges
+   */
+  removeSemiTransparentPixels() {
+    let iData = this.ctx.getImageData(0, 0, this.width, this.height);
+    // Run through all the transparency values
+    for (let i = 3; i < iData.data.length; i += 4) {
+      if (iData.data[i] != 0 && iData.data[i] != 255) {
+        // If the pixel is semitransparent make it fully transparent
+        iData.data[i] = 0;
+      }
+    }
+    this.ctx.putImageData(iData, 0, 0);
   }
 
   // destroyPixelIsland(rect) {
