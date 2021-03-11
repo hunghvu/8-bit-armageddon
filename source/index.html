@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -31,6 +32,9 @@
   <script src="js/entities/weapons/GrenadeLevel2.js"></script>
   <script src="js/entities/weapons/GrenadeLevel3.js"></script>
   <script src="js/entities/weapons/OPWeapon.js"></script>
+  <script src="js/entities/weapons/PortalGun.js"></script>
+  <script src="js/entities/weapons/Portal.js"></script>
+  <script src="js/entities/weapons/TeleportGun.js"></script>
   <script src="js/entities/items/Crate.js"></script>
   <script src="js/world/MovingPlatform.js"></script>
   <script src="js/world/DestructibleMap.js"></script>
@@ -43,12 +47,9 @@
   <script src="js/AssetManager.js"></script>
   <script src="js/menu/MainMenu.js"></script>
 
-  <script src="js/entities/weapons/PortalGun.js"></script>
-  <script src="js/entities/weapons/Portal.js"></script>
-  <script src="js/entities/weapons/TeleportGun.js"></script>
+
 
   <!-- Library for main menu. -->
-  <script src="js/menu/MainMenu.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -60,7 +61,8 @@
       background-size: cover;
       background-position: center;
     }
-    body{
+
+    body {
       font-family: 'Press Start 2P', cursive;
       font-size: 14px;
     }
@@ -90,11 +92,13 @@
 
             <div class="modal-body">
               <div class="form-group">
-                <label for="limit-turn-input" class="col-form-label"><b>Turn Limit (optional):</b> Minimum is 20 turns, and is divisible by 2</label>
+                <label for="limit-turn-input" class="col-form-label"><b>Turn Limit (optional):</b> Minimum is 20 turns,
+                  and is divisible by 2</label>
                 <input type="number" class="form-control" id="limit-turn-input" min="20">
               </div>
               <div class="form-group">
-                <label for="limit-turn-time-input" class="col-form-label"><b>Time per turn:</b> Allow only integer values from 5 to 10 seconds</label>
+                <label for="limit-turn-time-input" class="col-form-label"><b>Time per turn:</b> Allow only integer
+                  values from 5 to 10 seconds</label>
                 <input type="number" class="form-control" id="limit-turn-time-input" min="5" max="10">
               </div>
               <div class="form-group">
@@ -129,6 +133,46 @@
         </div>
       </div>
     </div>
+
+    <br>
+    <br>
+    <p style="color:antiquewhite; margin-left: 100px; margin-right: 100px;">
+      Food has come to LIFE! Why? WE DON’T KNOW! But they are angry about humanity eating their kind and want to remake
+      the world. Your mission is to pick a side (Humanity Team 1, Food Team 2), and battle it out for the survival of
+      either race!
+      <br>
+      <br>
+      This game is a worm-like 2D strategy shooter local multiplayer game! You must take account of the angle, power,
+      and the wind each turn. Hitting crates in the air will give you a weapon upgrade. Each weapon upgrade will
+      increase damage to the weapon and a few will act differently. There are three different weapon levels, starting
+      out will give you weapon set level 1 to begin. (Please note, if you hit a crate, please switch to a different
+      weapon at the start of the turn to start with that new weapon set level). Try unlocking the hidden weapon!! But
+      also be careful welding all that power! When starting the game, you’ll have a choice of how many turns (20+ and
+      must be divisible by 2), how much time per match (5-10 seconds plus 3 seconds to pass the browser to your
+      opponent), and how many players you want on the field (1v1, 2v2, 3v3, 4v4). Use the minimap to your advantage to
+      see where your bullet lands and where are the crate in the sky!
+      <br>
+      <br>
+      Controls:<br>
+      a or left arrow = move left<br>
+      d or right arrow = move right<br>
+      w or up arrow = change angle upward<br>
+      s or down arrow = change angle downward<br>
+      space = jump<br>
+      q = previous weapon<br>
+      e = next weapon<br>
+      j = shoot<br>
+      m = enter portal (if your team portal is on the field)<br>
+      p = pass your turn<br>
+      f = forfeit (press Y to accept the forfeit, or escape to cancel)<br>
+      mouse scroll = zoom in/out
+      <br>
+      <br>
+      Sound credits: <br>
+      Credit to https://www.FesliyanStudios.com for the (playing) background music. <br>
+      Credit to https://freesound.org/people/Fupicat/ for the end game music.
+      
+    </p>
   </div>
 
   <div class="container" id="game-canvas" style="visibility: hidden;">

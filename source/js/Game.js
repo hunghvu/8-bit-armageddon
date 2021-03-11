@@ -35,6 +35,7 @@ class Game {
       this.controls = new Controls();
 
       this.status = "PLAYING";
+      this.musicLoaded = false;
       this.endCode = null; // Indicate match result (0 for draw, 1 means team 1 wins, 2 means team 2 wins )
       this.forfeitCode = null; // Indicate the current team that is trying to surrender (0 for team 1, 1 for team 2)
       this.forfeitVoteCounter = 0;
@@ -55,6 +56,13 @@ class Game {
     this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
 
     if (this.status == "PLAYING") {
+      if (!this.musicLoaded) {
+        MANAGER.pauseBackgroundMusic();
+        MANAGER.playAsset("./assets/sound-playing.mp3");
+        MANAGER.autoRepeat("./assets/sound-playing.mp3");
+        MANAGER.adjustVolume(0.3);
+        this.musicLoaded = true;
+      }
       this.world.update(this.timer.tick(), this.controls);
       this.turn.countdownTurn();
       this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
@@ -64,17 +72,17 @@ class Game {
       // console.log(this.canvas.width);
       // this.ctx.fillRect(0,0,this.canvas.width,100);
       this.spritesheet = MANAGER.getAsset('./assets/DisplayBar.png');
-      this.ctx.drawImage(this.spritesheet, 0, 0, 1536, 100, 0, 0, 1536, 100);
+      this.ctx.drawImage(this.spritesheet, 0, 0, 1536, 100, 0, 0, this.canvas.width, 100);
 
 
       this.ctx.fillStyle = "Black";
 
       this.ctx.font = "16px 'Press Start 2P'";
-      this.ctx.fillText('Timer: ', 60, 31);
+      this.ctx.fillText('Timer: ', 1400, 31);
       this.ctx.font = "30px 'Press Start 2P'";
       this.timer.turnTime < 0
-      ? this.ctx.fillText(Math.round(this.timer.turnTime * -1), 95, 75) // Different print text fill method for the first ready period.
-      : this.ctx.fillText(this.timePerTurnLimit - Math.round(this.timer.turnTime % this.timePerTurnLimit), 100, 75);
+      ? this.ctx.fillText(Math.round(this.timer.turnTime * -1), 1430, 75) // Different print text fill method for the first ready period.
+      : this.ctx.fillText(this.timePerTurnLimit - Math.round(this.timer.turnTime % this.timePerTurnLimit), 1420, 75);
 
       this.ctx.font = "16px 'Press Start 2P'";
       this.ctx.fillText('Weapon: ', 175, 31);
@@ -89,27 +97,27 @@ class Game {
         //Sniper
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Sniper) {
           this.ctx.drawImage(this.spritesheet, 191, 37, 33, 15, 180, 35, 99, 45);
-          this.ctx.fillText('Sniper DMG: 30', 180, 93);
+          this.ctx.fillText('Sniper DMG: 20', 180, 93);
         }
         // Laser
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Laser) {
           this.ctx.drawImage(this.spritesheet, 224, 37, 32, 19, 190, 35, 76, 45);
-          this.ctx.fillText('Laser DMG: 20', 180, 93);
+          this.ctx.fillText('Laser DMG: 25', 180, 93);
         }
         // Grenade
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == Grenade) {
           this.ctx.drawImage(this.spritesheet, 10, 7, 11, 14, 200, 35, 35, 45);
           this.ctx.fillText('Grenade DMG: 15', 180, 93);
         }
-        // Dynomite
+        // Dynamite
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == GrenadeLevel2) {
           this.ctx.drawImage(this.spritesheet, 2, 35, 28, 28, 200, 35, 33, 45);
-          this.ctx.fillText('Dynomite DMG: 30', 180, 93);
+          this.ctx.fillText('Dynamite DMG: 30', 180, 93);
         }
         // Rocket
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == GrenadeLevel3) {
           this.ctx.drawImage(this.spritesheet, 130, 261, 27, 20, 200, 35, 61, 45);
-          this.ctx.fillText('Rocket DMG: 50', 180, 93);
+          this.ctx.fillText('Rocket DMG: 45', 180, 93);
         }
         //PortalGun
         else if (this.world.currentPlayer.currentWeapon.myCurrentWeapon == PortalGun) {
@@ -173,6 +181,7 @@ class Game {
       if (this.controls.enterDownThisLoop) {
         // Allow the player to move from the playing state to the paused state
         this.status = "PAUSED";
+        MANAGER.getAsset("./assets/sound-playing.mp3").pause();
       }
     } else if (this.status === "PAUSED") {
       this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
@@ -180,14 +189,22 @@ class Game {
       if (this.controls.enterDownThisLoop) {
         // Allow the player to move from the paused state to the playing state
         this.status = "PLAYING";
+        MANAGER.getAsset("./assets/sound-playing.mp3").play();
       }
     } else if (this.status === "ENDED") {
       // Will need to implement navigation later to improve user's experience.
       this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
       this.drawEndMenu(this.ctx);
+      if (!this.musicLoaded) {
+        MANAGER.pauseBackgroundMusic();
+        MANAGER.playAsset("./assets/sound-ended.mp3");
+        this.musicLoaded = true;
+      }
+
     } else if (this.status === "FORFEIT") {
       this.world.draw(this.ctx, this.canvas.width, this.canvas.height);
       this.drawForfeitMenu(this.ctx);
+      MANAGER.getAsset("./assets/sound-playing.mp3").pause();
       if(this.controls.yes && this.controls.hasPressedKeyY) {
         this.forfeitVoteCounter ++;
         this.controls.yes = false; // This key is not reset in the new loop, so manually do that here.
@@ -195,9 +212,11 @@ class Game {
         if (this.forfeitVoteCounter > this.playerAmount / 4) {
           this.status = "ENDED";
           this.forfeitCode === 0 ? this.endCode = 2 : this.endCode = 1;
+          this.musicLoaded = false;
         }
       } else if (this.controls.cancel) {
         this.status = "PLAYING";
+        MANAGER.getAsset("./assets/sound-playing.mp3").play();
       }
     }
     this.controls.reset();
@@ -208,7 +227,7 @@ class Game {
     ctx.save();
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "red";
     let teamNumer = this.forfeitCode + 1;
     ctx.fillText("Team " + teamNumer + " want to forfeit.", ctx.canvas.width / 2, ctx.canvas.height / 2);
     ctx.fillText("Press Y to vote Yes, and Esc to cancel.", ctx.canvas.width / 2, ctx.canvas.height / 3 * 2);
@@ -220,7 +239,7 @@ class Game {
     ctx.save();
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "red";
     ctx.fillText("MATCH ENDED", ctx.canvas.width / 2, ctx.canvas.height / 2);
     if (this.endCode === 1 || this.endCode === 2) {
       ctx.fillText("Team " + this.endCode + " won!", ctx.canvas.width / 2, ctx.canvas.height / 3 * 2);
@@ -234,7 +253,7 @@ class Game {
     ctx.save();
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "red";
     ctx.fillText("PAUSED", ctx.canvas.width / 2, ctx.canvas.height / 2);
     ctx.restore();
   }

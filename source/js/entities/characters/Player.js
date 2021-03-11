@@ -200,14 +200,15 @@ class Player extends Entity { //Add button to enter portal
   }
 
   drawMinimap(ctx, mmX, mmY) {
-    if (this.team == 0)
-    {
-      ctx.fillStyle = "Red";
-      ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 10, 10);
-    } else {
-      ctx.fillStyle = "Blue";
-      ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 10, 10);
-    }
+    // console.log(mmY + this.y / 10)
+    // console.log(600 + world.height / 10);
+      if (this.team == 0) {
+        ctx.fillStyle = "Red";
+        ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 10, 10);
+      } else {
+        ctx.fillStyle = "Blue";
+        ctx.fillRect(mmX + this.x / 7, mmY + this.y / 10, 10, 10);
+      }
   }
 
   /**
