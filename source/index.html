@@ -20,6 +20,7 @@
   <script src="js/entities/EntityOnMap.js"></script>
   <script src="js/entities/characters/HealthBar.js"></script>
   <script src="js/entities/characters/Player.js"></script>
+  <script src="js/entities/characters/CPUPlayer.js"></script>
   <script src="js/entities/characters/DamageText.js"></script>
   <script src="js/entities/characters/Animator.js"></script>
   <script src="js/entities/weapons/CurrentWeapon.js"></script>
@@ -64,16 +65,30 @@
       font-family: 'Press Start 2P', cursive;
       font-size: 14px;
     }
+    .input-wrapper {
+      height: 100%;
+    }
+
+    .btn-lg {
+    }
+    .start-button-wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+
   </style>
 </head>
 
 <body>
   <!-- The menu is built upon bootstrap starter template and is modified to serve the project, for example: https://getbootstrap.com/docs/4.0/components/modal/ -->
   <div class="bg" id="main-menu" style="visibility: visible;">
-    <div class="d-flex justify-content-center">
-      <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#matchSetting">
-        Set up a match
-      </button>
+    <div class="input-wrapper d-flex justify-content-center">
+      <div class="start-button-wrapper">
+          <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#matchSetting">
+            Set up a match
+          </button>
+      </div>
 
       <!-- Modal -->
       <div class="modal fade" id="matchSetting" tabindex="-1" role="dialog" aria-labelledby="matchSettingLabel"
@@ -95,13 +110,13 @@
               </div>
               <div class="form-group">
                 <label for="limit-turn-time-input" class="col-form-label"><b>Time per turn:</b> Allow only integer values from 5 to 10 seconds</label>
-                <input type="number" class="form-control" id="limit-turn-time-input" min="5" max="10">
+                <input type="number" value="5" class="form-control" id="limit-turn-time-input" min="5" max="10">
               </div>
               <div class="form-group">
                 <label class="col-form-label"><b>Play modes:</b></label>
                 <br>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="playModeChoices" id="play-mode-1v1" value="1v1">
+                  <input checked class="form-check-input" type="radio" name="playModeChoices" id="play-mode-1v1" value="1v1">
                   <label class="form-check-label" for="play-mode-1v1">1 v 1</label>
                 </div>
                 <div class="form-check form-check-inline">
