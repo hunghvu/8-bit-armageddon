@@ -4,7 +4,6 @@
  * of this game.
  */
 class Turn {
-    static inReadyPeriod = false; // Indicate if the match is in preparation period.
     constructor(timer, world, timePerTurn, controls, game) {
         this.timePerTurn = timePerTurn;
         this.world = world;
@@ -16,11 +15,12 @@ class Turn {
                             // This can be changed to a set-by-user
                             // value if needed
         this.timer.turnTime -= this.readyTime; // Start at negative value to for the first ready period.
-        this.inFirstReadyPeriod = true;
+        this.inFirstReadyPeriod = true; // Only use for the first ready period.
+        this.inReadyPeriod = false; // Indicate if the match is in preparation period.
 
         this.controls = controls;
 
-        
+
         this.isShot = false; // Indicate if a player has shot.
 
         // console.log(new Date())
@@ -73,7 +73,7 @@ class Turn {
         //  1. We have a shot resolution.
         //  2. The player is dead.
         //  3. Key P is pressed (pass/skip a turn) during inTurn period.
-        if ((this.world.entityOnMap.isAllEntityStop() && this.isShot && !this.controls.shooting) 
+        if ((this.world.entityOnMap.isAllEntityStop() && this.isShot && !this.controls.shooting)
             || (this.world.currentPlayer.dead && !this.checkDeathStatus)
             || (this.controls.pass && !this.inReadyPeriod)) {
             this.isShot = false;
@@ -134,13 +134,6 @@ class Turn {
                         this.world.currentPlayer.upgradedOnce = 0;
                         this.inReadyPeriod = false;
                         this.playerNumber--;
-                        for(var i = 0; i < this.world.entities.length; i++)
-                        {
-                          if (this.world.entities[i] instanceof Portal)
-                          {
-                            this.world.entities[i].numOfTurns++;
-                          }
-                        }
                     } else {
                         // console.log(this.world.currentPlayer.team)
                         this.turnCounter++;
@@ -148,22 +141,41 @@ class Turn {
                         this.inReadyPeriod = true;
                         Wind.change(); // Change the wind when a turn starts (begins at ready period).
                         // console.log(referenceToRecentPlayers)
+
+                        //Updates weapon bag
+                        this.world.currentPlayer.currentWeapon.weaponUpgradeCheck(this.world.currentPlayer.upgraded, this.world.currentPlayer.opWeaponUnlock);
+                        // console.log(this.world.currentPlayer.currentWeapon.myWeaponBag);
+                        // this.world.currentPlayer.currentIndex = 0;
+                        // console.log(this.world.currentPlayer.currentWeapon.currentIndex);
+
+                        //Updates portal duration
+                        for(var i = 0; i < this.world.entities.length; i++)
+                        {
+                          if (this.world.entities[i] instanceof Portal)
+                          {
+                            this.world.entities[i].numOfTurns++;
+                          }
+                        }
+
                         this.privateShuffleTurn(); // Add player to "already-finished-turn" player.
 
                         // Match conclusion.
-                        if(!(this.game.turnLimit === "" 
-                            || this.game.turnLimit === null 
-                            || this.game.turnLimit === undefined) 
+                        if(!(this.game.turnLimit === ""
+                            || this.game.turnLimit === null
+                            || this.game.turnLimit === undefined)
                             && this.turnCounter > parseInt(this.game.turnLimit)
                             && this.world.entityOnMap.isMatchEndWithTurnLimit()[0]) { // Check if the game is out of turn and provide respective conclusion.
                                 this.game.status = "ENDED";
-                                this.game.endCode = this.world.entityOnMap.isMatchEndWithTurnLimit()[1];                        
+                                this.game.endCode = this.world.entityOnMap.isMatchEndWithTurnLimit()[1];   
+                                MANAGER.getAsset("./assets/sound-playing.mp3").pause();
+                                this.game.musicLoaded = false;                     
                         } else if(this.world.entityOnMap.isMatchEnd()[0]) { // Check if the game is ended and update Game object.
                             this.game.status = "ENDED";
                             this.game.endCode = this.world.entityOnMap.isMatchEnd()[1];
+                            MANAGER.getAsset("./assets/sound-playing.mp3").pause();
+                            this.game.musicLoaded = false;   
                         }
                     }
-
                 } else { // Extend timer.
                     this.world.currentPlayer.isInTurn = false;
                     this.timer.turnTime -= this.timer.maxStep;

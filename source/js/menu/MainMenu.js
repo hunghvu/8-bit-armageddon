@@ -66,6 +66,9 @@ window.onload = function () {
         MANAGER.queueDownload('./assets/ui-widgets.png');
         MANAGER.queueDownload('./assets/background-cloud.jpg');
         MANAGER.queueDownload('./assets/background.jpg');
+        MANAGER.queueDownload('./assets/sound-playing.mp3');
+        MANAGER.queueDownload('./assets/sound-ended.mp3');
+        MANAGER.queueDownload('./assets/sound-ready.wav');
 
         MANAGER.downloadAll(function () {
             //destructionMap = new DestructableMap('map/map.png');
