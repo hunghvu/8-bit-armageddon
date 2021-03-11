@@ -14,7 +14,6 @@ class Game {
       this.canvas = document.getElementById('display');
 
       this.ctx = this.canvas.getContext('2d');
-
       // Set responsive size
       this.canvas.width = window.innerWidth;
       this.canvas.height = window.innerHeight;
@@ -24,6 +23,7 @@ class Game {
       window.addEventListener('resize', event => {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
+        this.world.minimap.x = window.innerWidth - 1920 / 7 - 5;
         this.ctx.mozImageSmoothingEnabled = false;
       })
 

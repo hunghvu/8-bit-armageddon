@@ -11,7 +11,6 @@ class DestructibleMap {
     
     // Draw the image onto the map for further use
     this.ctx.drawImage(img, 0, 0);
-
     this.platform = null;
 
     // Generate and draw a random map.
@@ -48,7 +47,7 @@ class DestructibleMap {
 
   // Draws a minified version of the map
   drawMinimap(ctx, mmX, mmY) {
-    ctx.drawImage(this.mapCanvas, this.mapCanvas.width * 6 / 7 - 5, 105, this.mapCanvas.width/7, this.mapCanvas.height/10);
+    ctx.drawImage(this.mapCanvas, window.innerWidth - 1920 / 7 - 5, 105, 1920 / 7, this.mapCanvas.height/10);
   }
 
   // Destory a single pixel of the map by replacing it with a pixel of transparency.
@@ -112,34 +111,6 @@ class DestructibleMap {
     }
     this.ctx.putImageData(iData, 0, 0);
   }
-
-  // destroyPixelIsland(rect) {
-  //   var imgd = this.ctx.getImageData(rect.x, rect.y, 1, 1);
-  //   var pix = imgd.data;
-  //   var transparent = {r:0, g:0, b:0, a:0};
-  //
-  //   // if the turn ended and there is collision.
-  //   if (this.world.currentPlayer.isInTurn === false && this.platform.doesCollide(rect)) {
-  //     //
-  //     // if the black pixel size is smaller than size 4 (hard code for now)
-  //       for (var i = 0, n = pix.length; i < n; i+=4) {
-  //         var r = pix[i];
-  //         var g = pix[i+1];
-  //         var b = pix[i+2];
-  //
-  //         // check if alpha is anything other than transparent, change to transparent.
-  //         if (pix[i+3] > 0 ) {
-  //           pix[i] = transparent.r;
-  //           pix[i+1] = transparent.g;
-  //           pix[i+2] = transparent.b;
-  //           pix[i+3] = transparent.a;
-  //         }
-  //       }
-  //
-  //       this.ctx.putImageData(imgd, 0, 0);
-  //   }
-  // }
-
 
   get width() {
     return this.mapCanvas.width;

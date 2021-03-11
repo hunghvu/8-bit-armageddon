@@ -1,34 +1,23 @@
 class World {
   constructor(map, playerAmount, CPUEnabled) {
     this.map = map;
-    this.minimap = new Minimap(this.map.width * 6 / 7 - 5, 105, this.map.width/7, this.map.height/10);
-    //
-    // this.spritesheet = MANAGER.getAsset('./assets/character.png');
-    //
-    //
-    // this.entities = [];
+    console.log(this.map.width);
+    // Responsive to inner width.
+    // Map size is 1920 x 1080 so partially hard coded as values are affected by resize actions.
+    this.minimap = new Minimap(window.innerWidth - 1920 / 7 - 5, 105, 1920 / 7, this.map.height/10);
     this.spritesheet = MANAGER.getAsset('./assets/character.png');
-
     this.entityOnMap = new EntityOnMap(this);
     this.entityOnMap.generatePlayer(playerAmount, CPUEnabled);
     this.map.generateMovablePlatform(this.entityOnMap.highestGroundY);
-
     // parameter sets the players design
     this.players = this.entityOnMap.playerOnMapList;
-
- //   this.crates = this.entityOnMap.entityOnMapList;
-
     this.currentPlayer = this.players[this.players.length - 1];
     this.currentPlayer.isInTurn = false;
-
     this.entities = this.entityOnMap.entityOnMapList;
-
     this.camera = new Camera(500, 500, 1);
-
     // Background images.
     this.imgFar = MANAGER.getAsset('./assets/background.jpg');
     this.imgNear = MANAGER.getAsset('./assets/background-cloud.jpg')
-
     // The sX in drawImage will be updated as the player moves in a way it create an opposite movement effect.
     this.resetCrates();
 
