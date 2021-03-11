@@ -52,6 +52,8 @@ window.onload = function () {
             return;
         }
 
+        let CPUEnabled = $("#ai").is(":checked");
+
         // Hide main menu and show ingame canvas.
         document.getElementById("main-menu").style.visibility = "hidden";
         document.getElementById("game-canvas").style.visibility = "visible";
@@ -72,7 +74,7 @@ window.onload = function () {
 
         MANAGER.downloadAll(function () {
             //destructionMap = new DestructableMap('map/map.png');
-            gg = new Game(turnLimit, timePerTurnLimit, playMode);
+            gg = new Game(turnLimit, timePerTurnLimit, playMode, CPUEnabled);
         });
     }
 

@@ -13,6 +13,7 @@ class Projectile extends Entity {
     this.vel.y = -Math.sin(angle) * power;
     this.x += Math.cos(angle) * 20;
     this.y += -Math.sin(angle) * 20;
+    this.isProjectile = true;
   }
   /** 
    * Move the object until the object hits the ground or we displace 

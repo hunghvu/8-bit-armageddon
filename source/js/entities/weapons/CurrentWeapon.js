@@ -25,8 +25,6 @@ class CurrentWeapon {
         }
 
         this.myCurrentWeapon = this.myWeaponBag[this.currentIndex];
-        console.log(this.myCurrentWeapon);
-
     }
 
 
@@ -79,5 +77,10 @@ class CurrentWeapon {
               this.myWeaponBag.push(OPWeapon);
         }
       }
+    }
+
+    setIndex(index) {
+        this.currentIndex = index;
+        this.myCurrentWeapon = this.myWeaponBag[this.currentIndex];
     }
 }

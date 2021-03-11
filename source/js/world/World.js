@@ -1,5 +1,5 @@
 class World {
-  constructor(map, playerAmount) {
+  constructor(map, playerAmount, CPUEnabled) {
     this.map = map;
     this.minimap = new Minimap(20, 600, this.map.width/7, this.map.height/10);
     //
@@ -9,9 +9,8 @@ class World {
     // this.entities = [];
     this.spritesheet = MANAGER.getAsset('./assets/character.png');
 
-    this.entities = [];
     this.entityOnMap = new EntityOnMap(this);
-    this.entityOnMap.generatePlayer(playerAmount);
+    this.entityOnMap.generatePlayer(playerAmount, CPUEnabled);
     this.map.generateMovablePlatform(this.entityOnMap.highestGroundY);
 
     // parameter sets the players design
@@ -86,8 +85,14 @@ class World {
     this.currentPlayer.updateActive(this, controls, deltaT);
     this.updateEntities(deltaT);
 
-    // Set the cameras target to be the players position
-    if (!this.currentPlayer.dead) { // Not glide camera to dead player (e.g: fall out of map).
+    let projectiles = this.entities.filter((entity) => (entity.isProjectile));
+    if (projectiles.length != 0) {
+      // Focus on any fired projectiles
+      this.camera.target.x = projectiles[0].center.x;
+      this.camera.target.y = projectiles[0].center.y;
+      this.camera.snapToTarget();
+    } else if (!this.currentPlayer.dead) { // Not glide camera to dead player (e.g: fall out of map).
+      // Set the cameras target to be the players position
       this.camera.target.x = this.currentPlayer.center.x;
       this.camera.target.y = this.currentPlayer.center.y;
       this.camera.glideToTarget(8, deltaT);

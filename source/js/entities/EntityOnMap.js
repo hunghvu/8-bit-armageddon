@@ -43,7 +43,7 @@ class EntityOnMap {
      * This method generates player at random location in a way that they all stays on the surface.
      * @param {int} playerAmount number of players in this match.
      */
-    generatePlayer(playerAmount) {
+    generatePlayer(playerAmount, CPUEnabled) {
         this.numberOfPlayerPerTeam = playerAmount / 2;
         this.pixelArray.forEach(element => {
             if (element[0].y - element[1] * 2 < this.highestGroundY) this.highestGroundY = element[0].y - element[1] * 2 - 100;
@@ -56,7 +56,11 @@ class EntityOnMap {
         for (let i = 0; i < playerAmount; i++) {
             let spawnX = Math.random() * this.world.map.width;
             let spawnY = this.highestGroundY;
-            this.playerOnMapList.push(new Player(this.spritesheet, spawnX, spawnY, i % 2, i % 2, i + 1, i));
+            if (i % 2 && CPUEnabled) {
+                this.playerOnMapList.push(new CPUPlayer(this.spritesheet, spawnX, spawnY, i % 2, i % 2, i + 1, i));
+            } else {
+                this.playerOnMapList.push(new Player(this.spritesheet, spawnX, spawnY, i % 2, i % 2, i + 1, i));
+            }
         }
     }
 

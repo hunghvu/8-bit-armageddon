@@ -43,6 +43,7 @@ class CPUPlayer extends Player {
       }
       this.power = 500;
       console.log(this.angle);
+      this.startingX = this.x
     }
 
     this.timeIntoTurn += deltaT;
@@ -53,19 +54,19 @@ class CPUPlayer extends Player {
       this.airTimer += deltaT * 100;
     }
 
-    /*
-    if (controls.jump && this.airTimer < this.jumpTolerance) {
-      this.vel.y = -this.JUMP_POWER;
-      this.airTimer = this.jumpTolerance;
-    }
-    */
-
     // Start turn logic
 
     if (this.timeIntoTurn < 2) {
       // Move stage
       if (this.vel.x == 0) {
-        this.vel.x = Math.sign(Math.random() - 0.5) * this.WALK_SPEED;
+        // Pick which direction to walk in but don't walk off the edge
+        if (this.x + 100 > world.map.width) {
+            this.vel.x = -this.WALK_SPEED;
+        } else if (this.x - 100 < 0) {
+            this.vel.x = this.WALK_SPEED;
+        } else {
+            this.vel.x = Math.sign(Math.random() - 0.5) * this.WALK_SPEED;
+        }
       } else if (this.vel.x > 0) {
         this.shootingAngle.updateQuadrant(1);
       } else {
@@ -79,28 +80,49 @@ class CPUPlayer extends Player {
 
       // Was our last shot far or near?
       if (this.projectileLandingPoint) {
+        // Keep track of how far the player has moved
+        this.projectileLandingPoint += this.startingX - this.x;
+        let missDistance = Math.abs(this.projectileLandingPoint.x - this.playerToTarget.x);
+
+        // Adjust by a certain amount depending on how off the last shot was
+        if (missDistance > 500) {
+            var powerChange = 400;
+            var angleChange = Math.PI / 32;
+        } else if (missDistance > 250) {
+            var powerChange = 300;
+            var angleChange = Math.PI / 32;
+        } else if (missDistance > 100) {
+            var powerChange = 200;
+            var angleChange = Math.PI / 32;
+        } else if (missDistance > 50) {
+            var powerChange = 100;
+            var angleChange = Math.PI / 64;
+        } else {
+            var angleChange = 0;
+            var powerChange = 50;
+        }
         if (this.projectileLandingPoint.x > this.playerToTarget.x) {
           if (this.x > this.playerToTarget.x) {
             // We shot to the left and were a little short
             if (this.shootingAngle.supplementaryAngle > Math.PI / 4){
                 // If we are angling upword a little bit then let's aim down
-                this.angle -= Math.PI / 16;
-                this.power += 25;
+                this.angle -= angleChange; 
+                this.power += powerChange;
             } else {
                 // If we are angling downword a little bit then let's aim up
-                this.angle += Math.PI / 16;
-                this.power += 25;
+                this.angle += angleChange; 
+                this.power += powerChange;
             }
           } else {
             // We shot to the right and were a little far
             if (this.shootingAngle.supplementaryAngle > Math.PI / 4){
                 // If we are angling upword a little bit then let's aim more up
-                this.angle -= Math.PI / 16;
-                this.power -= 25;
+                this.angle -= angleChange;
+                this.power -= powerChange;
             } else {
                 // If we are angling downword a little bit then let's aim more down
-                this.angle += Math.PI / 16;
-                this.power -= 25;
+                this.angle += angleChange;
+                this.power -= powerChange;
             }
           }
         } else {
@@ -108,23 +130,23 @@ class CPUPlayer extends Player {
             // We shot to the left and were a little far
             if (this.shootingAngle.supplementaryAngle > Math.PI / 4){
                 // If we are angling upword a little bit then let's aim more up
-                this.angle -= Math.PI / 16;
-                this.power -= 25;
+                this.angle -= angleChange;
+                this.power -= powerChange;
             } else {
                 // If we are angling downword a little bit then let's aim more down
-                this.angle += Math.PI / 16;
-                this.power -= 25;
+                this.angle += angleChange;
+                this.power -= powerChange;
             }
           } else {
             // We shot to the right and were a little short
             if (this.shootingAngle.supplementaryAngle > Math.PI / 4){
                 // If we are angling upword a little bit then let's aim more up
-                this.angle += Math.PI / 16;
-                this.power += 25;
+                this.angle += angleChange;
+                this.power += powerChange;
             } else {
                 // If we are angling downword a little bit then let's aim more down
-                this.angle -= Math.PI / 16;
-                this.power += 25;
+                this.angle -= angleChange;
+                this.power += powerChange;
             }
           }
         }
@@ -148,23 +170,17 @@ class CPUPlayer extends Player {
           var deltaAngle = this.angle - this.shootingAngle.radians;
       }
 
-      console.log("------------");
-      console.log(this.angle);
-      console.log(deltaAngle);
-      console.log(this.shootingAngle.radians);
-
-
       if (deltaAngle > 0) {
         this.shootingAngle.increaseAngle()
-       // this.shootingAngle.right ? this.shootingAngle.increaseAngle() : this.shootingAngle.decreaseAngle();
       } else if (deltaAngle < 0) {
         this.shootingAngle.decreaseAngle()
-        //this.shootingAngle.left ? this.shootingAngle.increaseAngle() : this.shootingAngle.decreaseAngle();
       }
 
     } else {
+
+      this.currentWeapon.setIndex(Math.round(Math.random()))
       ShootingPower.power = this.power;
-      this.firedProjectile = this.currentWeapon.spawnCurrentWeapon(this.x, this.y, this.shootingAngle);
+      this.firedProjectile = this.currentWeapon.spawnCurrentWeapon(this.x - 10, this.y - 10, this.shootingAngle);
       world.spawn(this.firedProjectile);
       ShootingPower.reset()
 
@@ -175,71 +191,6 @@ class CPUPlayer extends Player {
 
     // End turn logic
 
-    /*if (controls.enterPortalDownThisLoop && this.onGround) {
-      for(var i = 0; i < world.entities.length; i++)
-      {
-        if(world.entities[i].design == this.team &&
-          i < world.entities.length - 1 &&
-          world.entities[i+1].design == this.team &&
-          (this.x < world.entities[i].x + 40 && this.x > world.entities[i].x - 40) &&
-          (this.y < world.entities[i].y + 25 && this.y > world.entities[i].y - 25))
-          {
-            this.x = world.entities[i+1].x;
-            this.y = world.entities[i+1].y;
-            break;
-          }
-          else if(world.entities[i].design == this.team &&
-            i >= 1 &&
-            world.entities[i-1].design == this.team &&
-            (this.x < world.entities[i].x + 40 && this.x > world.entities[i].x - 40) &&
-            (this.y < world.entities[i].y + 25 && this.y > world.entities[i].y - 25)) {
-              this.x = world.entities[i-1].x;
-              this.y = world.entities[i-1].y - 32;
-              break;
-          }
-       }
-       while(world.map.collideWithRectangle(this))
-       {
-         this.y--;
-       }
-    }*/
-
-    /**
-     * Adjust shooting angle
-     * @todo Have a better handler when pressing multiple button at once
-     */
-
-    /*
-    if (controls.up) {
-      this.shootingAngle.right ? this.shootingAngle.increaseAngle() : this.shootingAngle.decreaseAngle();
-    }
-    if (controls.down) {
-      this.shootingAngle.left ? this.shootingAngle.increaseAngle() : this.shootingAngle.decreaseAngle();
-    }
-
-    if(controls.shootingDownThisLoop){
-      world.spawn(this.currentWeapon.spawnCurrentWeapon(this.x, this.y, this.shootingAngle));
-      this.firstUpdate = true;
-      this.isShooting = true;
-    }
-
-
-
-    if(controls.nextWeaponDownThisLoop) {
-      this.currentWeapon.nextWeapon();
-    }
-
-    if(controls.previousWeaponDownThisLoop) {
-      this.currentWeapon.previousWeapon();
-    }
-
-    // If the user scrolls then zoom in or out
-    if (controls.scrollDelta > 0) {
-      world.camera.zoomIn();
-    } else if (controls.scrollDelta < 0) {
-      world.camera.zoomOut();
-    }
-    */
   }
 
   pickPlayerTarget(world){

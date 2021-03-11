@@ -20,6 +20,8 @@ class Entity extends Rectangle {
     // removed or not
     this.active = true;
 
+    this.isProjectile = false;
+
     // The players are locked to a single pixel with no decimal part
     // so when the player moves 1.3pixels the sub pixel position is
     // incremented by 0.3 pixel and the player is moved a single pixel.
