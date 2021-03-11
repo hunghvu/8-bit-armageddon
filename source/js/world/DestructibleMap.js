@@ -48,7 +48,7 @@ class DestructibleMap {
 
   // Draws a minified version of the map
   drawMinimap(ctx, mmX, mmY) {
-    ctx.drawImage(this.mapCanvas, 20, 600, this.mapCanvas.width/7, this.mapCanvas.height/10);
+    ctx.drawImage(this.mapCanvas, this.mapCanvas.width * 6 / 7 - 5, 105, this.mapCanvas.width/7, this.mapCanvas.height/10);
   }
 
   // Destory a single pixel of the map by replacing it with a pixel of transparency.

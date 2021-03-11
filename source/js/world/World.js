@@ -1,7 +1,7 @@
 class World {
   constructor(map, playerAmount, CPUEnabled) {
     this.map = map;
-    this.minimap = new Minimap(20, 600, this.map.width/7, this.map.height/10);
+    this.minimap = new Minimap(this.map.width * 6 / 7 - 5, 105, this.map.width/7, this.map.height/10);
     //
     // this.spritesheet = MANAGER.getAsset('./assets/character.png');
     //
@@ -55,8 +55,8 @@ class World {
 
     // After restoring, add a minimap, ratio for width is 1/7 of normal size, and ratio for height is 1/10 of normal size.
 
-    ctx.drawImage(this.imgFar, 0, 0, this.map.width, this.map.height, 20, 600, this.map.width/7, this.map.height/10);
-    ctx.drawImage(this.imgNear, 0, 0, this.map.width, this.map.height, 20, 600, this.map.width/7, this.map.height/10);
+    ctx.drawImage(this.imgFar, 0, 0, this.map.width, this.map.height, this.minimap.x, this.minimap.y, this.map.width/7, this.map.height/10);
+    ctx.drawImage(this.imgNear, 0, 0, this.map.width, this.map.height, this.minimap.x, this.minimap.y, this.map.width/7, this.map.height/10);
 
     this.map.drawMinimap(ctx, 0, 0);
     this.drawPlayersMinimap(ctx,this.minimap.x,this.minimap.y);
