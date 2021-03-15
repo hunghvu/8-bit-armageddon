@@ -31,6 +31,9 @@ When starting the game, you’ll have a choice of how many turns (20+ and must b
 
 ## Screenshot
 
+![image](https://user-images.githubusercontent.com/62678592/111222521-2dcf8f80-8599-11eb-8202-c3dc92cb632e.png)
+
+
 ## Credits
 
 Sound:
