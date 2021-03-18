@@ -2,7 +2,7 @@
 
 - A 2D turn-based strategy browser game in JavaScript inspired by Worms, with a 8-bit aesthetic.
 
-- Visit the link to start playing  (stable release): <https://hunghvu.github.io/8-bit-armageddon/>
+- Visit the link to start playing  (stable release): <https://hunghvu.github.io/8-bit-armageddon/>.
 
 - Visit the link to see a demo (pre-release) version, <https://www.youtube.com/watch?v=vXzTd2H_wnQ>. The demo version does not represent all features (e.g: AI player) in *stable release version* of the game.
 
@@ -53,6 +53,6 @@ Team Red 4:
 
 ## License
 
-Copyright (c) 2021 Team Red 4.
+Copyright (c) 2021 Team Red 4 (all team members are listed under *Contributors* section).
 
-Licensed under the [MIT License](LICENSE)
+Licensed under the [MIT License](LICENSE).
