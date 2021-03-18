@@ -1,6 +1,6 @@
 # 8-Bit Armageddon
 
-- A 2D turn-based strategy browser game in JavaScript inspired by Worms, with a 8-bit aesthetic.
+- A 2D turn-based strategy browser game in JavaScript inspired by Worms, with an 8-bit aesthetic.
 
 - Visit the link to start playing  (stable release): <https://hunghvu.github.io/8-bit-armageddon/>.
 
