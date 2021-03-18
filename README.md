@@ -50,3 +50,9 @@ Team Red 4:
 2. Daniel Machen - Project facillitator, video creator, programmer
 3. Danieyll Wilson - Art designer, programmer
 4. Duy Nguyen - Programmer
+
+## License
+
+Copyright (c) 2021 Team Red 4.
+
+Licensed under the [MIT License](LICENSE)
